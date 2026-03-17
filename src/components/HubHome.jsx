@@ -1,7 +1,9 @@
-import React from 'react';
-import { BookOpen, Lightbulb, ArrowRight } from 'lucide-react';
+import React, { useState } from 'react';
+import { BookOpen, Lightbulb, ArrowRight, X, ArrowLeft } from 'lucide-react';
 
 const HubHome = () => {
+  const [selectedApp, setSelectedApp] = useState(null);
+
   const apps = [
     {
       id: 'grammaster',
@@ -37,6 +39,40 @@ const HubHome = () => {
     }
   ];
 
+  const currentApp = selectedApp ? apps.find(app => app.id === selectedApp) : null;
+
+  // Vista de App Embebida
+  if (currentApp) {
+    return (
+      <div className="h-screen flex flex-col bg-white">
+        {/* Header con botón atrás */}
+        <div className="bg-gradient-to-r from-slate-50 to-slate-100 border-b border-slate-200 p-4 flex items-center gap-3">
+          <button
+            onClick={() => setSelectedApp(null)}
+            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white hover:bg-slate-100 transition-colors font-medium text-slate-700 border border-slate-200"
+          >
+            <ArrowLeft size={20} />
+            Volver
+          </button>
+          <h2 className="text-xl font-bold text-slate-900 flex-1">
+            {currentApp.icon} {currentApp.title}
+          </h2>
+          <span className="text-sm text-slate-600">Presiona Volver para regresar al menú</span>
+        </div>
+
+        {/* iFrame */}
+        <iframe
+          key={currentApp.id}
+          src={currentApp.url}
+          title={currentApp.title}
+          className="flex-1 border-0 w-full"
+          sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
+        />
+      </div>
+    );
+  }
+
+  // Vista Principal
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-4 py-8">
       {/* Header */}
@@ -58,12 +94,10 @@ const HubHome = () => {
         {apps.map((app) => {
           const IconComponent = app.Component;
           return (
-            <a
+            <button
               key={app.id}
-              href={app.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group bg-white rounded-xl shadow-md hover:shadow-xl transition-all hover:scale-105 border border-slate-200 overflow-hidden"
+              onClick={() => setSelectedApp(app.id)}
+              className="group bg-white rounded-xl shadow-md hover:shadow-xl transition-all hover:scale-105 border border-slate-200 overflow-hidden text-left cursor-pointer"
             >
               <div className={`h-32 bg-gradient-to-br ${app.color} flex items-center justify-center`}>
                 <span className="text-6xl">{app.icon}</span>
@@ -82,11 +116,11 @@ const HubHome = () => {
                   ))}
                 </div>
                 <div className={`w-full ${app.buttonColor} text-white py-2 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 group-hover:gap-3`}>
-                  Abrir en nueva pestaña
+                  Abrir
                   <ArrowRight size={18} />
                 </div>
               </div>
-            </a>
+            </button>
           );
         })}
       </div>
@@ -101,7 +135,7 @@ const HubHome = () => {
             <div className="text-4xl mb-3">📱</div>
             <h4 className="font-bold text-slate-900 mb-2">Instalable en móvil</h4>
             <p className="text-sm text-slate-600">
-              Instala la app en tu celular y accede fácilmente a tus herramientas
+              Instala la app en tu celular y accede a todas tus herramientas
             </p>
           </div>
           <div className="text-center">
@@ -113,9 +147,9 @@ const HubHome = () => {
           </div>
           <div className="text-center">
             <div className="text-4xl mb-3">🎯</div>
-            <h4 className="font-bold text-slate-900 mb-2">Aprendizaje Integral</h4>
+            <h4 className="font-bold text-slate-900 mb-2">Todo Integrado</h4>
             <p className="text-sm text-slate-600">
-              Acceso centralizado a dos herramientas complementarias
+              Acceso a todas las herramientas desde un único hub
             </p>
           </div>
         </div>
@@ -125,7 +159,7 @@ const HubHome = () => {
       <div className="mt-12 bg-blue-50 border-l-4 border-blue-600 rounded p-6 max-w-4xl w-full">
         <h4 className="font-bold text-blue-900 mb-2">💡 Nota</h4>
         <p className="text-blue-800 text-sm">
-          Cada app se abrirá en una nueva pestaña. Las aplicaciones están alojadas en GitHub Pages y funcionan completamente en línea.
+          Todas las aplicaciones están integradas en Grammar HUB. Haz clic en una herramienta para empezar a usarla, presiona "Volver" para regresar al menú principal.
         </p>
       </div>
     </div>

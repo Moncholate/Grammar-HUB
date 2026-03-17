@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import HeaderNav from './components/HeaderNav';
 import HubHome from './components/HubHome';
 import InstallPrompt from './components/InstallPrompt';
 
@@ -23,6 +24,9 @@ const App = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex flex-col">
+      {/* Header with Navigation */}
+      <HeaderNav />
+
       {/* Main Content */}
       <main className="flex-1 w-full">
         <HubHome />

@@ -7,9 +7,9 @@ const apps = [
     title: 'GramMaster',
     tagline: 'Construye oraciones en inglés',
     logo: 'https://moncholate.github.io/GramMaster/apple-touch-icon.png',
-    btnClass: 'bg-blue-600 hover:bg-blue-700 active:bg-blue-800',
-    ringClass: 'ring-blue-200',
-    logoBg: 'from-blue-50 to-indigo-50',
+    btnClass: 'bg-violet-600 hover:bg-violet-700 active:bg-violet-800',
+    ringClass: 'ring-violet-200',
+    logoBg: 'from-violet-50 to-purple-50',
     url: 'https://moncholate.github.io/GramMaster/',
   },
   {
@@ -17,9 +17,9 @@ const apps = [
     title: 'DesGramatizador',
     tagline: 'Analiza partes de la oración',
     logo: 'https://moncholate.github.io/DesGramatizador/apple-touch-icon.png',
-    btnClass: 'bg-violet-600 hover:bg-violet-700 active:bg-violet-800',
-    ringClass: 'ring-violet-200',
-    logoBg: 'from-violet-50 to-purple-50',
+    btnClass: 'bg-fuchsia-600 hover:bg-fuchsia-700 active:bg-fuchsia-800',
+    ringClass: 'ring-fuchsia-200',
+    logoBg: 'from-fuchsia-50 to-pink-50',
     url: 'https://moncholate.github.io/DesGramatizador/',
   },
 ];
@@ -118,9 +118,9 @@ const HubHome = () => {
         ))}
       </div>
 
-      {/* Footer hint */}
+      {/* Footer */}
       <p className="mt-8 text-xs text-slate-400 text-center">
-        Grammar HUB · Toca una app para abrirla
+        <span className="font-medium text-slate-500">Grammar HUB</span> · Hecho por Moncholate
       </p>
     </div>
   );

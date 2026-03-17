@@ -33,26 +33,15 @@ const HubHome = () => {
   if (currentApp) {
     return (
       <div className="fixed inset-0 z-50 flex flex-col bg-white">
-        <div className="flex items-center gap-3 px-4 py-3 border-b border-slate-100 flex-shrink-0">
+        <div className="px-4 py-3 border-b border-slate-100 flex-shrink-0">
           <button
             onClick={() => setSelectedApp(null)}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium text-slate-600 bg-slate-100 active:bg-slate-200 transition-colors touch-manipulation flex-shrink-0"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium text-slate-600 bg-slate-100 active:bg-slate-200 transition-colors touch-manipulation"
             style={{ WebkitTapHighlightColor: 'transparent' }}
           >
             <ArrowLeft size={16} />
             Volver
           </button>
-
-          <div className="flex items-center gap-2 min-w-0">
-            <img
-              src={currentApp.logo}
-              alt={currentApp.title}
-              className="w-6 h-6 rounded-md flex-shrink-0"
-            />
-            <span className="font-semibold text-slate-900 truncate text-sm">
-              {currentApp.title}
-            </span>
-          </div>
         </div>
 
         <div

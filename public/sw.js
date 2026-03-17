@@ -1,14 +1,14 @@
-const CACHE_VERSION = 'v1';
+const CACHE_VERSION = 'v2';
 const CACHE_NAME = `grammar-hub-${CACHE_VERSION}`;
+const BASE = '/Grammar-HUB/';
 
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/favicon.ico',
+  BASE,
+  `${BASE}index.html`,
+  `${BASE}manifest.json`,
+  `${BASE}favicon.ico`,
 ];
 
-// Install service worker
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache => {
@@ -20,25 +20,20 @@ self.addEventListener('install', event => {
   self.skipWaiting();
 });
 
-// Activate service worker
 self.addEventListener('activate', event => {
   event.waitUntil(
-    caches.keys().then(cacheNames => {
-      return Promise.all(
-        cacheNames.map(cacheName => {
-          if (cacheName !== CACHE_NAME) {
-            return caches.delete(cacheName);
-          }
+    caches.keys().then(cacheNames =>
+      Promise.all(
+        cacheNames.map(name => {
+          if (name !== CACHE_NAME) return caches.delete(name);
         })
-      );
-    })
+      )
+    )
   );
   self.clients.claim();
 });
 
-// Fetch event - Network first, fallback to cache
 self.addEventListener('fetch', event => {
-  // Skip non-GET requests
   if (event.request.method !== 'GET') return;
 
   event.respondWith(
@@ -53,20 +48,15 @@ self.addEventListener('fetch', event => {
         });
         return response;
       })
-      .catch(() => {
-        return caches.match(event.request).then(response => {
-          if (response) {
-            return response;
+      .catch(() =>
+        caches.match(event.request).then(cached => {
+          if (cached) return cached;
+          // Fallback al index para navegación SPA
+          if (event.request.mode === 'navigate') {
+            return caches.match(`${BASE}index.html`);
           }
-          // Return a custom offline page if available
-          return new Response('Offline - The requested page is not available', {
-            status: 503,
-            statusText: 'Service Unavailable',
-            headers: new Headers({
-              'Content-Type': 'text/plain'
-            })
-          });
-        });
-      })
+          return new Response('Offline', { status: 503 });
+        })
+      )
   );
 });

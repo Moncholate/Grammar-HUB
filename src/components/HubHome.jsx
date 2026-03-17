@@ -120,7 +120,7 @@ const HubHome = () => {
 
       {/* Footer */}
       <p className="mt-8 text-xs text-slate-400 text-center">
-        <span className="font-medium text-slate-500">Grammar HUB</span> · Hecho por Moncholate
+        <span className="font-medium text-slate-500">Grammar HUB</span> · By Teacher Víctor Morales
       </p>
     </div>
   );

@@ -23,22 +23,12 @@ const App = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex flex-col">
-      {/* Header with Navigation */}
+    <div className="min-h-screen bg-slate-50 flex flex-col">
       <HeaderNav />
-
-      {/* Main Content */}
       <main className="flex-1 w-full">
         <HubHome />
       </main>
-
-      {/* Install Prompt */}
       {!installedAsApp && <InstallPrompt />}
-
-      {/* Footer */}
-      <footer className="bg-white border-t border-slate-200 py-4 text-center text-sm text-slate-600 mt-auto">
-        <p>Grammar HUB v1.0.0 • {new Date().getFullYear()}</p>
-      </footer>
     </div>
   );
 };

@@ -34,7 +34,7 @@ const HubHome = () => {
         '✅ Estructura de oraciones',
         '✅ Práctica interactiva'
       ],
-      url: 'https://moncholate.github.io/Desgramatizador/',
+      url: 'https://moncholate.github.io/DesGramatizador/',
       Component: Lightbulb
     }
   ];

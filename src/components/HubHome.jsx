@@ -5,7 +5,7 @@ const apps = [
   {
     id: 'grammaster',
     title: 'GramMaster',
-    tagline: 'Construye oraciones en inglés',
+    tagline: 'Descubre la magia de construir oraciones en inglés, paso a paso.',
     logo: 'https://moncholate.github.io/GramMaster/apple-touch-icon.png',
     btnClass: 'bg-violet-600 hover:bg-violet-700 active:bg-violet-800',
     ringClass: 'ring-violet-200',

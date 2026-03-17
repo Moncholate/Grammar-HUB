@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#1e40af" />
+    <meta name="description" content="Grammar HUB - Plataforma integrada para aprender inglés. Construye oraciones, analiza partes de la oración." />
+    <meta name="keywords" content="English, Grammar, Learning, POS, Tenses" />
+    <meta property="og:title" content="Grammar HUB" />
+    <meta property="og:description" content="Plataforma integrada para aprender inglés con Grammaster y DesGramatizador" />
+    <meta property="og:type" content="website" />
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.json" />
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json">
+    
+    <title>Grammar HUB</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+    <script>
+      // Service Worker Registration
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js').then(
+            registration => console.log('SW registered:', registration),
+            err => console.log('SW registration failed:', err)
+          );
+        });
+      }
+      
+      // PWA Install Prompt
+      let deferredPrompt;
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        window.showInstallPrompt = true;
+        window.installPrompt = deferredPrompt;
+      });
+    </script>
+  </body>
+</html>

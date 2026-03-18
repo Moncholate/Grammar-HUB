@@ -87,9 +87,6 @@ const HubHome = () => {
 
       {/* Hero */}
       <div className="text-center mb-7">
-        <p className="text-xs font-semibold tracking-widest text-slate-400 uppercase mb-2">
-          Herramientas de gramática
-        </p>
         <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-1.5">
           ¿Qué quieres practicar?
         </h1>
@@ -139,7 +136,7 @@ const HubHome = () => {
 
       {/* Footer */}
       <p className="mt-8 text-xs text-slate-400 text-center">
-        <span className="font-medium text-slate-500">Grammar HUB</span> · By Besto Teacher Víctor Morales
+        <span className="font-medium text-slate-500">Grammar HUB</span> – By Besto Teacher Víctor Morales
       </p>
     </div>
   );

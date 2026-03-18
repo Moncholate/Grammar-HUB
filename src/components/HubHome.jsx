@@ -1,11 +1,11 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { ArrowLeft } from 'lucide-react';
+import { translations } from '../i18n';
 
 const apps = [
   {
     id: 'grammaster',
     title: 'GramMaster',
-    tagline: 'Arma oraciones, pieza por pieza.',
     logo: 'https://moncholate.github.io/GramMaster/apple-touch-icon.png',
     btnClass: 'bg-violet-600 hover:bg-violet-700 active:bg-violet-800',
     ringClass: 'ring-violet-200',
@@ -15,7 +15,6 @@ const apps = [
   {
     id: 'desgramatizador',
     title: 'DesGramatizador',
-    tagline: 'Desarma oraciones y descubre cómo funcionan.',
     logo: 'https://moncholate.github.io/DesGramatizador/apple-touch-icon.png',
     btnClass: 'bg-fuchsia-600 hover:bg-fuchsia-700 active:bg-fuchsia-800',
     ringClass: 'ring-fuchsia-200',
@@ -24,11 +23,27 @@ const apps = [
   },
 ];
 
-const HubHome = () => {
+const HubHome = ({ lang }) => {
   const [selectedApp, setSelectedApp] = useState(null);
+  const iframeRef = useRef(null);
+  const touchStartX = useRef(null);
+  const t = translations[lang];
+
+  // Enviar idioma al iframe cuando cambia
+  useEffect(() => {
+    if (!iframeRef.current) return;
+    const sendLang = () => {
+      iframeRef.current?.contentWindow?.postMessage(
+        { type: 'GRAMMAR_HUB_LANG', lang },
+        '*'
+      );
+    };
+    // Pequeño delay para dar tiempo al iframe de cargar
+    const timer = setTimeout(sendLang, 800);
+    return () => clearTimeout(timer);
+  }, [lang, selectedApp]);
 
   const currentApp = selectedApp ? apps.find(a => a.id === selectedApp) : null;
-  const touchStartX = useRef(null);
 
   const handleTouchStart = (e) => {
     touchStartX.current = e.touches[0].clientX;
@@ -37,7 +52,6 @@ const HubHome = () => {
   const handleTouchEnd = (e) => {
     if (touchStartX.current === null) return;
     const deltaX = e.changedTouches[0].clientX - touchStartX.current;
-    // Swipe derecha desde borde izquierdo (primeros 60px)
     if (touchStartX.current < 60 && deltaX > 80) {
       setSelectedApp(null);
     }
@@ -59,7 +73,7 @@ const HubHome = () => {
             style={{ WebkitTapHighlightColor: 'transparent' }}
           >
             <ArrowLeft size={16} />
-            Volver
+            {t.back}
           </button>
         </div>
 
@@ -69,12 +83,21 @@ const HubHome = () => {
         >
           <iframe
             key={currentApp.id}
+            ref={iframeRef}
             src={currentApp.url}
             title={currentApp.title}
             className="border-0 w-full"
             style={{ height: '100%', minHeight: '100%', display: 'block' }}
             sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
             allow="fullscreen"
+            onLoad={() => {
+              setTimeout(() => {
+                iframeRef.current?.contentWindow?.postMessage(
+                  { type: 'GRAMMAR_HUB_LANG', lang },
+                  '*'
+                );
+              }, 300);
+            }}
           />
         </div>
       </div>
@@ -88,10 +111,10 @@ const HubHome = () => {
       {/* Hero */}
       <div className="text-center mb-7">
         <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-1.5">
-          ¿Qué quieres practicar?
+          {t.hero}
         </h1>
         <p className="text-slate-500 text-sm">
-          Elige una app para empezar
+          {t.heroSub}
         </p>
       </div>
 
@@ -119,12 +142,12 @@ const HubHome = () => {
                 {app.title}
               </h2>
               <p className="text-xs text-slate-500 mb-3">
-                {app.tagline}
+                {t[app.id]?.tagline}
               </p>
               <div
                 className={`w-full ${app.btnClass} text-white text-sm font-semibold py-2 rounded-lg transition-colors flex items-center justify-center gap-1.5`}
               >
-                Abrir
+                {t.open}
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M5 12h14M12 5l7 7-7 7"/>
                 </svg>

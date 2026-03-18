@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { ArrowLeft } from 'lucide-react';
 
 const apps = [
   {
     id: 'grammaster',
     title: 'GramMaster',
-    tagline: 'Explora la ciencia detrás de cada oración en inglés.',
+    tagline: 'Arma oraciones en inglés, pieza por pieza.',
     logo: 'https://moncholate.github.io/GramMaster/apple-touch-icon.png',
     btnClass: 'bg-violet-600 hover:bg-violet-700 active:bg-violet-800',
     ringClass: 'ring-violet-200',
@@ -15,7 +15,7 @@ const apps = [
   {
     id: 'desgramatizador',
     title: 'DesGramatizador',
-    tagline: 'Desgrana y descubre los ladrillos que componen tus oraciones en inglés.',
+    tagline: 'Desarma oraciones en inglés y descubre cómo funcionan.',
     logo: 'https://moncholate.github.io/DesGramatizador/apple-touch-icon.png',
     btnClass: 'bg-fuchsia-600 hover:bg-fuchsia-700 active:bg-fuchsia-800',
     ringClass: 'ring-fuchsia-200',
@@ -28,11 +28,30 @@ const HubHome = () => {
   const [selectedApp, setSelectedApp] = useState(null);
 
   const currentApp = selectedApp ? apps.find(a => a.id === selectedApp) : null;
+  const touchStartX = useRef(null);
+
+  const handleTouchStart = (e) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = (e) => {
+    if (touchStartX.current === null) return;
+    const deltaX = e.changedTouches[0].clientX - touchStartX.current;
+    // Swipe derecha desde borde izquierdo (primeros 60px)
+    if (touchStartX.current < 60 && deltaX > 80) {
+      setSelectedApp(null);
+    }
+    touchStartX.current = null;
+  };
 
   // Vista iframe — fullscreen
   if (currentApp) {
     return (
-      <div className="fixed inset-0 z-50 flex flex-col bg-white">
+      <div
+        className="fixed inset-0 z-50 flex flex-col bg-white"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
         <div className="px-4 py-3 border-b border-slate-100 flex-shrink-0">
           <button
             onClick={() => setSelectedApp(null)}

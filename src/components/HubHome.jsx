@@ -5,7 +5,7 @@ const apps = [
   {
     id: 'grammaster',
     title: 'GramMaster',
-    tagline: 'Arma oraciones en inglés, pieza por pieza.',
+    tagline: 'Arma oraciones, pieza por pieza.',
     logo: 'https://moncholate.github.io/GramMaster/apple-touch-icon.png',
     btnClass: 'bg-violet-600 hover:bg-violet-700 active:bg-violet-800',
     ringClass: 'ring-violet-200',
@@ -15,7 +15,7 @@ const apps = [
   {
     id: 'desgramatizador',
     title: 'DesGramatizador',
-    tagline: 'Desarma oraciones en inglés y descubre cómo funcionan.',
+    tagline: 'Desarma oraciones y descubre cómo funcionan.',
     logo: 'https://moncholate.github.io/DesGramatizador/apple-touch-icon.png',
     btnClass: 'bg-fuchsia-600 hover:bg-fuchsia-700 active:bg-fuchsia-800',
     ringClass: 'ring-fuchsia-200',

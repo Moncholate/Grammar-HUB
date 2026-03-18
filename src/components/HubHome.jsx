@@ -106,7 +106,7 @@ const HubHome = ({ lang }) => {
 
   // Vista principal
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-5 py-8">
+    <div className="flex flex-col items-center justify-center px-5 py-8 h-full">
 
       {/* Hero */}
       <div className="text-center mb-7">

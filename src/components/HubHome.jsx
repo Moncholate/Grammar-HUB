@@ -15,7 +15,7 @@ const apps = [
   {
     id: 'desgramatizador',
     title: 'DesGramatizador',
-    tagline: 'Analiza la estructura de tus oraciones e identifica las partes del discurso.',
+    tagline: 'Desgrana y descubre los ladrillos que componen tus oraciones en inglés.',
     logo: 'https://moncholate.github.io/DesGramatizador/apple-touch-icon.png',
     btnClass: 'bg-fuchsia-600 hover:bg-fuchsia-700 active:bg-fuchsia-800',
     ringClass: 'ring-fuchsia-200',

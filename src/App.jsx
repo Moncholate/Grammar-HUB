@@ -6,6 +6,7 @@ import InstallPrompt from './components/InstallPrompt';
 const App = () => {
   const [installedAsApp, setInstalledAsApp] = useState(false);
   const [lang, setLang] = useState('es');
+  const [level, setLevel] = useState(null);
 
   useEffect(() => {
     // Detect if app is installed
@@ -27,7 +28,7 @@ const App = () => {
     <div className="min-h-screen bg-slate-50 flex flex-col">
       <HeaderNav lang={lang} setLang={setLang} />
       <main className="flex-1 w-full flex flex-col">
-        <HubHome lang={lang} />
+        <HubHome lang={lang} level={level} setLevel={setLevel} />
       </main>
       {!installedAsApp && <InstallPrompt />}
     </div>

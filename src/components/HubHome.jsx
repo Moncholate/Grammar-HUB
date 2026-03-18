@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { ArrowLeft } from 'lucide-react';
-import { translations } from '../i18n';
+import { translations, LEVELS } from '../i18n';
 
 const apps = [
   {
@@ -23,25 +23,29 @@ const apps = [
   },
 ];
 
-const HubHome = ({ lang }) => {
+const HubHome = ({ lang, level, setLevel }) => {
   const [selectedApp, setSelectedApp] = useState(null);
   const iframeRef = useRef(null);
   const touchStartX = useRef(null);
   const t = translations[lang];
 
+  const sendToIframe = (payload) => {
+    setTimeout(() => {
+      iframeRef.current?.contentWindow?.postMessage(payload, '*');
+    }, 300);
+  };
+
   // Enviar idioma al iframe cuando cambia
   useEffect(() => {
-    if (!iframeRef.current) return;
-    const sendLang = () => {
-      iframeRef.current?.contentWindow?.postMessage(
-        { type: 'GRAMMAR_HUB_LANG', lang },
-        '*'
-      );
-    };
-    // Pequeño delay para dar tiempo al iframe de cargar
-    const timer = setTimeout(sendLang, 800);
-    return () => clearTimeout(timer);
+    if (!iframeRef.current || !selectedApp) return;
+    sendToIframe({ type: 'GRAMMAR_HUB_LANG', lang });
   }, [lang, selectedApp]);
+
+  // Enviar nivel al iframe cuando cambia
+  useEffect(() => {
+    if (!iframeRef.current || !selectedApp || !level) return;
+    sendToIframe({ type: 'GRAMMAR_HUB_LEVEL', level });
+  }, [level, selectedApp]);
 
   const currentApp = selectedApp ? apps.find(a => a.id === selectedApp) : null;
 
@@ -52,10 +56,13 @@ const HubHome = ({ lang }) => {
   const handleTouchEnd = (e) => {
     if (touchStartX.current === null) return;
     const deltaX = e.changedTouches[0].clientX - touchStartX.current;
-    if (touchStartX.current < 60 && deltaX > 80) {
-      setSelectedApp(null);
-    }
+    if (touchStartX.current < 60 && deltaX > 80) setSelectedApp(null);
     touchStartX.current = null;
+  };
+
+  const handleIframeLoad = () => {
+    sendToIframe({ type: 'GRAMMAR_HUB_LANG', lang });
+    if (level) sendToIframe({ type: 'GRAMMAR_HUB_LEVEL', level });
   };
 
   // Vista iframe — fullscreen
@@ -90,14 +97,7 @@ const HubHome = ({ lang }) => {
             style={{ height: '100%', minHeight: '100%', display: 'block' }}
             sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
             allow="fullscreen"
-            onLoad={() => {
-              setTimeout(() => {
-                iframeRef.current?.contentWindow?.postMessage(
-                  { type: 'GRAMMAR_HUB_LANG', lang },
-                  '*'
-                );
-              }, 300);
-            }}
+            onLoad={handleIframeLoad}
           />
         </div>
       </div>
@@ -109,13 +109,34 @@ const HubHome = ({ lang }) => {
     <div className="flex flex-col items-center justify-center px-5 py-8 h-full">
 
       {/* Hero */}
-      <div className="text-center mb-7">
+      <div className="text-center mb-6">
         <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-1.5">
           {t.hero}
         </h1>
-        <p className="text-slate-500 text-sm">
-          {t.heroSub}
-        </p>
+        <p className="text-slate-500 text-sm">{t.heroSub}</p>
+      </div>
+
+      {/* Selector de nivel */}
+      <div className="w-full max-w-lg mb-5">
+        <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide px-1 mb-1.5 block">
+          {t.levelLabel}
+        </span>
+        <div className="flex flex-wrap gap-1.5">
+          {LEVELS.map((lvl) => (
+            <button
+              key={lvl.id}
+              onClick={() => setLevel(lvl.id)}
+              className={`px-3 py-1.5 rounded-lg text-sm font-semibold border transition-all touch-manipulation ${
+                level === lvl.id
+                  ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm'
+                  : 'bg-white text-slate-600 border-slate-200 hover:border-indigo-300 hover:text-indigo-600'
+              }`}
+              style={{ WebkitTapHighlightColor: 'transparent' }}
+            >
+              {lvl[lang]}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Cards */}
@@ -123,11 +144,15 @@ const HubHome = ({ lang }) => {
         {apps.map((app) => (
           <button
             key={app.id}
-            onClick={() => setSelectedApp(app.id)}
-            className="group bg-white rounded-2xl border border-slate-200 hover:border-slate-300 hover:shadow-lg active:scale-[0.98] transition-all text-left touch-manipulation overflow-hidden"
+            onClick={() => level && setSelectedApp(app.id)}
+            className={`group bg-white rounded-2xl border border-slate-200 transition-all text-left touch-manipulation overflow-hidden ${
+              level
+                ? 'hover:border-slate-300 hover:shadow-lg active:scale-[0.98] cursor-pointer'
+                : 'opacity-50 cursor-not-allowed'
+            }`}
             style={{ WebkitTapHighlightColor: 'transparent' }}
+            title={!level ? (lang === 'es' ? 'Selecciona un nivel primero' : 'Select a level first') : ''}
           >
-            {/* Logo area */}
             <div className={`flex items-center justify-center py-6 bg-gradient-to-br ${app.logoBg}`}>
               <img
                 src={app.logo}
@@ -135,18 +160,10 @@ const HubHome = ({ lang }) => {
                 className={`w-16 h-16 rounded-2xl shadow-sm ring-4 ${app.ringClass}`}
               />
             </div>
-
-            {/* Info */}
             <div className="px-4 pb-4 pt-3">
-              <h2 className="text-base font-bold text-slate-900 mb-0.5">
-                {app.title}
-              </h2>
-              <p className="text-xs text-slate-500 mb-3">
-                {t[app.id]?.tagline}
-              </p>
-              <div
-                className={`w-full ${app.btnClass} text-white text-sm font-semibold py-2 rounded-lg transition-colors flex items-center justify-center gap-1.5`}
-              >
+              <h2 className="text-base font-bold text-slate-900 mb-0.5">{app.title}</h2>
+              <p className="text-xs text-slate-500 mb-3">{t[app.id]?.tagline}</p>
+              <div className={`w-full ${app.btnClass} text-white text-sm font-semibold py-2 rounded-lg transition-colors flex items-center justify-center gap-1.5`}>
                 {t.open}
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M5 12h14M12 5l7 7-7 7"/>

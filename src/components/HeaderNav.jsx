@@ -4,19 +4,22 @@ const HeaderNav = ({ lang, setLang }) => {
       <div className="relative max-w-2xl mx-auto px-5 py-4 flex flex-col items-center gap-2">
 
         {/* Selector de idioma — esquina superior derecha */}
-        <div className="absolute top-4 right-5 flex items-center bg-slate-100 rounded-lg p-0.5 gap-0.5">
-          <button
-            onClick={() => setLang('es')}
-            className={`px-2.5 py-1 rounded-md text-xs font-bold transition-all ${lang === 'es' ? 'bg-white shadow-sm text-violet-600' : 'text-slate-400 hover:text-slate-600'}`}
-          >
-            ES
-          </button>
-          <button
-            onClick={() => setLang('en')}
-            className={`px-2.5 py-1 rounded-md text-xs font-bold transition-all ${lang === 'en' ? 'bg-white shadow-sm text-violet-600' : 'text-slate-400 hover:text-slate-600'}`}
-          >
-            EN
-          </button>
+        <div className="absolute top-4 right-5 flex flex-col items-start">
+          <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide px-1 mb-0.5">
+            {lang === 'es' ? 'Idioma' : 'Language'}
+          </span>
+          <div className="flex bg-slate-100 border border-slate-300 rounded-lg p-0.5">
+            <button
+              onClick={() => setLang('es')}
+              className={`px-3 py-1 rounded text-sm font-bold transition-all ${lang === 'es' ? 'bg-white shadow-sm text-indigo-600' : 'hover:bg-slate-50 text-slate-600'}`}
+              title="Español"
+            >ES</button>
+            <button
+              onClick={() => setLang('en')}
+              className={`px-3 py-1 rounded text-sm font-bold transition-all ${lang === 'en' ? 'bg-white shadow-sm text-indigo-600' : 'hover:bg-slate-50 text-slate-600'}`}
+              title="English"
+            >EN</button>
+          </div>
         </div>
 
         {/* Logo */}

@@ -8,6 +8,7 @@ export const translations = {
     levelLabel: 'Nivel',
     grammaster: { tagline: 'Arma oraciones, pieza por pieza.' },
     desgramatizador: { tagline: 'Desarma oraciones y descubre cómo funcionan.' },
+    questionlab: { tagline: 'Arma preguntas y respóndelas como ping pong.' },
   },
   en: {
     subtitle: 'Your English laboratory',
@@ -18,6 +19,7 @@ export const translations = {
     levelLabel: 'Level',
     grammaster: { tagline: 'Build sentences, piece by piece.' },
     desgramatizador: { tagline: 'Break down sentences and discover how they work.' },
+    questionlab: { tagline: 'Build questions and answer them like ping-pong.' },
   },
 };
 

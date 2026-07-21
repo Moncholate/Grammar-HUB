@@ -1,0 +1,36 @@
+{
+  "$description": "Grammar Hub curriculum — canonical CEFR level scale + tense→level map. Single source of truth for what grammar is taught at each level. Seeded from Grammaster/src/data/grammar.js (values match). Consumed by the hub apps via generated files (see scripts/sync-curriculum.mjs).",
+  "levels": [
+    "basico1",
+    "basico2",
+    "elemental1",
+    "elemental2",
+    "intermedio1",
+    "intermedio2",
+    "avanzado"
+  ],
+  "labels": {
+    "basico1":    { "es": "Básico I",      "en": "Basic I" },
+    "basico2":    { "es": "Básico II",     "en": "Basic II" },
+    "elemental1": { "es": "Elemental I",   "en": "Elementary I" },
+    "elemental2": { "es": "Elemental II",  "en": "Elementary II" },
+    "intermedio1":{ "es": "Intermedio I",  "en": "Intermediate I" },
+    "intermedio2":{ "es": "Intermedio II", "en": "Intermediate II" },
+    "avanzado":   { "es": "Intermedio Alto","en": "Upper-Interm." }
+  },
+  "tenses": {
+    "simple-present": "basico1",
+    "present-continuous": "basico2",
+    "simple-past": "basico2",
+    "future-going-to": "elemental2",
+    "present-perfect": "elemental2",
+    "past-continuous": "intermedio1",
+    "simple-future": "intermedio1",
+    "past-perfect": "intermedio2",
+    "used-to": "intermedio2",
+    "present-perfect-continuous": "avanzado",
+    "would-past": "avanzado",
+    "future-perfect": "avanzado",
+    "past-perfect-continuous": "avanzado"
+  }
+}

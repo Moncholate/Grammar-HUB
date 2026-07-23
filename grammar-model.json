@@ -1,0 +1,90 @@
+{
+  "$description": "Grammar Hub — canonical grammar model (taxonomy). One shared source of MEANING for how the apps identify grammatical categories. It does NOT unify the analysis engines (Desgramatizador = compromise.js NLP, Question Lab = hand-written rules / vanilla no-deps, Grammaster = generation). It defines the categories and their relationships, which each app maps onto at its own granularity, so the same word is understood the same way across apps. `colorRole` values reference the role keys in Apps/design-tokens (tokens.json).",
+  "version": "1.0.0",
+  "layers": {
+    "pos": {
+      "description": "Word class / part of speech. Finest granularity. Used by Desgramatizador POS mode.",
+      "categories": {
+        "noun":        { "label": "N",    "name": "Noun",        "def": "person, place, thing or idea",         "colorRole": null },
+        "verb":        { "label": "V",    "name": "Verb",        "def": "action or state (lexical / main verb)", "colorRole": "verb" },
+        "auxiliary":   { "label": "AUX",  "name": "Auxiliary",   "def": "helper verb (be / have / do) supporting a main verb", "colorRole": "auxiliary" },
+        "modal":       { "label": "MOD",  "name": "Modal",       "def": "can, could, will, should, must… — modality",          "colorRole": "modal", "subtypeOf": "auxiliary" },
+        "wh":          { "label": "WH",   "name": "Wh-word",     "def": "introduces a question",                "colorRole": "wh" },
+        "pronoun":     { "label": "PRO",  "name": "Pronoun",     "def": "replaces a noun",                      "colorRole": null },
+        "adjective":   { "label": "ADJ",  "name": "Adjective",   "def": "describes a noun",                     "colorRole": null },
+        "adverb":      { "label": "ADV",  "name": "Adverb",      "def": "modifies a verb, adjective or adverb", "colorRole": "adverb" },
+        "preposition": { "label": "PREP", "name": "Preposition", "def": "shows a relationship (in, on, at…)",   "colorRole": null },
+        "conjunction": { "label": "CONJ", "name": "Conjunction", "def": "connects clauses or phrases",          "colorRole": null },
+        "determiner":  { "label": "DET",  "name": "Determiner",  "def": "specifies a noun (the, a, my…)",       "colorRole": null },
+        "number":      { "label": "NUM",  "name": "Numeral",     "def": "expresses quantity or a number",       "colorRole": null }
+      }
+    },
+    "structure": {
+      "description": "Functional role in the clause — which slot a word or phrase fills. Coarser than POS. Used by Desgramatizador structure mode and Grammaster's sentence colouring.",
+      "categories": {
+        "WH":  { "name": "Wh-word",    "def": "opens the question",                                    "colorRole": "wh" },
+        "S":   { "name": "Subject",    "def": "who or what does the action",                           "colorRole": "subject" },
+        "AUX": { "name": "Auxiliary",  "def": "helper in the verb phrase (includes modals, functionally)", "colorRole": "auxiliary" },
+        "V":   { "name": "Verb",       "def": "the main action or state",                              "colorRole": "verb" },
+        "O":   { "name": "Object",     "def": "receives the action (what? / whom?)",                   "colorRole": null },
+        "C":   { "name": "Complement", "def": "everything else",                                       "colorRole": "complement" },
+        "A":   { "name": "Adverbial",  "def": "when? / where? / how? (also verb-region adverbs: ever, never, always…)", "colorRole": "adverb" }
+      }
+    },
+    "question": {
+      "description": "Pieces of a question and its answer. Question Lab's model.",
+      "categories": {
+        "wh-word":    { "name": "Wh-word",    "def": "what is asked; never bounces into the answer",           "colorRole": "wh" },
+        "auxiliary":  { "name": "Auxiliary",  "def": "carries the tense (do/does/did, be, have, will, modals)", "colorRole": "auxiliary" },
+        "semi-aux":   { "name": "Semi-aux",   "def": "going to / used to / have to — auxiliary unit; the 'to' belongs here and the main verb follows in base form", "colorRole": "auxiliary", "subtypeOf": "auxiliary", "style": "dashed" },
+        "subject":    { "name": "Subject",    "def": "who / what; bounces into the answer (you → I)",          "colorRole": "subject" },
+        "verb":       { "name": "Main verb",  "def": "the action or state",                                   "colorRole": "verb" },
+        "complement": { "name": "Complement", "def": "additional information",                                 "colorRole": "complement" },
+        "adverb":     { "name": "Adverb",     "def": "ever, never, always, often… — modifies the verb; its own piece", "colorRole": "adverb" },
+        "new-info":   { "name": "New info",   "def": "what you add when answering; not from the question",     "colorRole": "newInfo", "style": "dashed" }
+      }
+    }
+  },
+  "relationships": [
+    {
+      "id": "verb-system",
+      "rule": "Main verb + auxiliary + semi-aux form one 'verb system', shown in the same colour family (the reds). Verb carries the heavier/darker red, auxiliary the lighter rose.",
+      "appliesTo": ["pos", "structure", "question"]
+    },
+    {
+      "id": "modal-is-functional-aux",
+      "rule": "A modal is its own word class in POS (MOD), but functionally it fills the auxiliary slot. The structure and question layers show it as AUX. Teach it as 'modals are structural auxiliaries'.",
+      "appliesTo": ["structure", "question"]
+    },
+    {
+      "id": "copula",
+      "rule": "be / have / do are auxiliaries ONLY when a main verb follows. Alone (copular 'be', possessive 'have') they ARE the main verb (V), not an auxiliary.",
+      "appliesTo": ["pos", "structure", "question"]
+    },
+    {
+      "id": "semi-aux",
+      "rule": "'going to', 'used to', 'have to' are auxiliary UNITS: the 'to' belongs to the (semi-)auxiliary, and the main verb that follows is in base form. Shown as AUX (auxiliary family) everywhere — Desgramatizador (POS + structure), Grammaster, and Question Lab (which labels them 'semi-aux'). A modal is likewise a functional subtype of auxiliary.",
+      "appliesTo": ["pos", "structure", "question"]
+    },
+    {
+      "id": "subject-question",
+      "rule": "When the wh-word IS the subject (e.g. 'Who painted the Mona Lisa?') there is no auxiliary and the verb is conjugated.",
+      "appliesTo": ["question", "structure"]
+    },
+    {
+      "id": "negation-not",
+      "rule": "The negator 'not' / 'n't' stays with the auxiliary (parallel to the fused 'doesn't'), but it is a negative ADVERB — apps may signal that (Desgramatizador tints the 'not' amber inside the AUX block).",
+      "appliesTo": ["structure", "question"]
+    },
+    {
+      "id": "adverbs",
+      "rule": "Verb-region adverbs (ever, never, always, often, just…) are their own adverb category — Desgramatizador puts them in A (adverbial) / C at Básico; Question Lab shows them as an 'adverb' piece. Never dropped, never merged into the verb.",
+      "appliesTo": ["pos", "structure", "question"]
+    }
+  ],
+  "apps": {
+    "desgramatizador": { "engine": "compromise.js NLP + rules", "layers": ["pos", "structure"], "granularity": "full POS (12 classes) + functional structure (S/AUX/V/O/C/A/WH)" },
+    "questionLab":     { "engine": "hand-written rules (vanilla, no deps)", "layers": ["question"], "granularity": "question pieces only; the analyzer is universal, curated content gated by CEFR" },
+    "grammaster":      { "engine": "generation + conjugation", "layers": ["structure"], "granularity": "coarse subject / auxiliary / verb / complement colouring of the sentence it builds" }
+  }
+}

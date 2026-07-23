@@ -78,7 +78,7 @@
     },
     {
       "id": "adverbs",
-      "rule": "Verb-region adverbs (ever, never, always, often, just…) are their own adverb category — Desgramatizador puts them in A (adverbial) / C at Básico; Question Lab shows them as an 'adverb' piece. Never dropped, never merged into the verb.",
+      "rule": "Verb-region adverbs (ever, never, always, often, just…) are their own adverb category, shown at EVERY level — Desgramatizador puts them in A (adverbial); Question Lab shows them as an 'adverb' piece. Never dropped, never merged into the verb. Deliberate leveling: at Básico/Elemental only these single-word frequency adverbs get A; broader adverbial PHRASES (yesterday, at home) stay in C until Intermedio, where the O/A distinction is introduced.",
       "appliesTo": ["pos", "structure", "question"]
     }
   ],

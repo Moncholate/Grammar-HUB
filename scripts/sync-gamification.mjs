@@ -31,4 +31,17 @@ ${enginePlain}
 `;
 writeFileSync(join(apps, 'Question Lab', 'gamification.generated.js'), qlBody);
 console.log('  ✓ Question Lab/gamification.generated.js');
+
+/* ---- Hub + apps React: ESM (motor tal cual + BADGES exportadas) ---- */
+const esmBody = `${BANNER}${engine}\nexport const BADGES = ${JSON.stringify(model.badges)};\n`;
+const esmTargets = [
+  ['Grammar HUB', 'src', 'gamification.generated.js'],
+  ['Grammaster', 'src', 'gamification.generated.js'],
+  ['Desgramatizador', 'pos-highlighter', 'src', 'gamification.generated.js'],
+];
+for (const parts of esmTargets) {
+  const p = join(apps, ...parts);
+  writeFileSync(p, esmBody);
+  console.log('  ✓', parts.join('/'));
+}
 console.log('Gamificación sincronizada.');

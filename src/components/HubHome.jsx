@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { ArrowLeft } from 'lucide-react';
 import { translations, LEVELS } from '../i18n';
+import { loadProgress } from '../gamification.generated.js';
 
 const apps = [
   {
@@ -37,6 +38,12 @@ const HubHome = ({ lang, level, setLevel }) => {
   const iframeRef = useRef(null);
   const touchStartX = useRef(null);
   const t = translations[lang];
+
+  // Progreso compartido de la suite (lo escriben las apps en gh_progress)
+  const [progress, setProgress] = useState(null);
+  useEffect(() => {
+    try { setProgress(loadProgress(window.localStorage)); } catch (e) {}
+  }, [selectedApp]);
 
   const sendToIframe = (payload) => {
     setTimeout(() => {
@@ -113,6 +120,9 @@ const HubHome = ({ lang, level, setLevel }) => {
     );
   }
 
+  const dayStreak = progress?.dayStreak?.count || 0;
+  const badgeCount = progress ? Object.keys(progress.badges || {}).length : 0;
+
   // Vista principal
   return (
     <div className="flex flex-col items-center justify-center px-5 py-8 h-full">
@@ -124,6 +134,18 @@ const HubHome = ({ lang, level, setLevel }) => {
         </h1>
         <p className="text-slate-500 text-sm">{t.heroSub}</p>
       </div>
+
+      {/* Progreso compartido de la suite */}
+      {(dayStreak > 0 || badgeCount > 0) && (
+        <div className="flex items-center justify-center flex-wrap gap-2 mb-5" aria-label={lang === 'es' ? 'Tu progreso' : 'Your progress'}>
+          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-bold text-white bg-gradient-to-br from-rose-500 to-amber-400 shadow-sm">
+            🔥 {dayStreak} {lang === 'es' ? (dayStreak === 1 ? 'día' : 'días') : (dayStreak === 1 ? 'day' : 'days')}
+          </span>
+          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-semibold text-amber-700 bg-amber-100">
+            🏅 {badgeCount} {lang === 'es' ? 'logros' : 'badges'}
+          </span>
+        </div>
+      )}
 
       {/* Selector de nivel */}
       <div className="w-full max-w-lg mb-5">

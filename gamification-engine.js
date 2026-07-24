@@ -18,6 +18,7 @@ export function emptyProgress() {
     practiceDays: [],
     totalCorrect: 0,
     bestAnswerStreak: 0,
+    sentencesAnalyzed: 0,       // Desgramatizador
     tenses: {},                 // { [tenseId]: { attempts, correct, days: [ISO] } }
     appsUsed: {},               // { grammaster:true, ... }
     badges: {}                  // { [badgeId]: unlockedISO }  (perTense → `${id}:${tenseId}`)
@@ -40,11 +41,9 @@ export function saveProgress(storage, p) {
 
 /* Registra UN intento de práctica calificado. Muta y devuelve `p`.
    `answerStreak` (opcional) = racha de aciertos actual de la actividad local. */
-export function recordAttempt(p, { app, tenseId, correct, answerStreak } = {}) {
+/* Marca "practiqué hoy" y actualiza la racha de días. Devuelve la fecha de hoy. */
+function markDay(p) {
   const today = todayISO();
-  if (app) p.appsUsed[app] = true;
-
-  // Racha de días: cualquier práctica cuenta como "practiqué hoy".
   if (p.dayStreak.lastDay !== today) {
     const gap = p.dayStreak.lastDay ? dayGap(p.dayStreak.lastDay, today) : null;
     p.dayStreak.count = gap === 1 ? p.dayStreak.count + 1 : 1;
@@ -52,6 +51,12 @@ export function recordAttempt(p, { app, tenseId, correct, answerStreak } = {}) {
     p.dayStreak.best = Math.max(p.dayStreak.best, p.dayStreak.count);
     if (!p.practiceDays.includes(today)) p.practiceDays.push(today);
   }
+  return today;
+}
+
+export function recordAttempt(p, { app, tenseId, correct, answerStreak } = {}) {
+  if (app) p.appsUsed[app] = true;
+  const today = markDay(p);
 
   if (correct) p.totalCorrect += 1;
   if (typeof answerStreak === 'number') p.bestAnswerStreak = Math.max(p.bestAnswerStreak, answerStreak);
@@ -65,6 +70,15 @@ export function recordAttempt(p, { app, tenseId, correct, answerStreak } = {}) {
   return p;
 }
 
+/* Registra UN análisis de oración (Desgramatizador): cuenta para racha de días,
+   apps usadas y el contador de oraciones analizadas. */
+export function recordAnalysis(p, { app } = {}) {
+  if (app) p.appsUsed[app] = true;
+  markDay(p);
+  p.sentencesAnalyzed = (p.sentencesAnalyzed || 0) + 1;
+  return p;
+}
+
 function meets(p, criteria, tenseId) {
   const c = criteria;
   switch (c.type) {
@@ -72,6 +86,7 @@ function meets(p, criteria, tenseId) {
     case 'totalCorrect':     return p.totalCorrect >= c.gte;
     case 'bestAnswerStreak': return p.bestAnswerStreak >= c.gte;
     case 'appsUsed':         return Object.values(p.appsUsed).filter(Boolean).length >= c.gte;
+    case 'sentencesAnalyzed':return (p.sentencesAnalyzed || 0) >= c.gte;
     case 'tenseFamiliar': {
       const t = p.tenses[tenseId];
       return !!t && t.correct >= c.correctGte;

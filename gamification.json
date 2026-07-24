@@ -1,6 +1,6 @@
 {
   "$description": "Grammar Hub — canonical gamification model shared by the 3 apps + Hub. One coherent reward layer: a suite-wide day-streak + accumulated stats + badges (stored in same-origin localStorage under storage.sharedKey), plus a per-activity answer-streak that stays local to each app. Consumed per app (generate like curriculum.json / grammar-model.json). Thresholds are tunable. DUA: every reward = colour (design-tokens foundation.play) + icon + label + number, never colour alone.",
-  "version": "1.0.0",
+  "version": "1.1.0",
 
   "storage": {
     "sharedKey": "gh_progress",
@@ -15,6 +15,7 @@
     "practiceDays": "array of ISO dates (yyyy-mm-dd) the student practiced in ANY app",
     "totalCorrect": 0,
     "bestAnswerStreak": 0,
+    "sentencesAnalyzed": 0,
     "tenses": "{ [tenseId]: { attempts, correct, days: [ISO dates] } } — fed ONLY by practice activities (QL Identifica, Grammaster practice), NOT the sentence builder (no right/wrong there)",
     "appsUsed": { "grammaster": false, "desgramatizador": false, "questionlab": false },
     "badges": "{ [badgeId]: unlockedDateISO }  (for perTense badges the key is `${badgeId}:${tenseId}`)"
@@ -55,6 +56,9 @@
     { "id": "correct-100", "category": "volumen",  "icon": "💯", "scope": "suite",
       "name": { "es": "Centenario", "en": "Centurion" },      "desc": { "es": "100 respuestas correctas", "en": "100 correct answers" },
       "criteria": { "type": "totalCorrect", "gte": 100 } },
+    { "id": "analyst",     "category": "volumen",  "icon": "🔍", "scope": "suite",
+      "name": { "es": "Analista", "en": "Analyst" },          "desc": { "es": "50 oraciones analizadas", "en": "50 sentences analyzed" },
+      "criteria": { "type": "sentencesAnalyzed", "gte": 50 } },
 
     { "id": "precision-5", "category": "precision", "icon": "🎯", "scope": "activity",
       "name": { "es": "Puntería", "en": "Sharp aim" }, "desc": { "es": "5 aciertos seguidos", "en": "5 in a row" },
@@ -74,9 +78,7 @@
       "criteria": { "type": "appsUsed", "gte": 3 } }
   ],
 
-  "deferred": [
-    { "id": "analyst", "icon": "🔍", "note": "Analista — 50 oraciones analizadas (Desgramatizador). Needs a new per-app counter; add in S2 when filling Desgramatizador's gamification." }
-  ],
+  "deferred": [],
 
   "visual": {
     "accent": "design-tokens foundation.play (--play / --play-warm / --play-gold)",

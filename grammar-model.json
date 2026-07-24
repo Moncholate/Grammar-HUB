@@ -1,6 +1,6 @@
 {
   "$description": "Grammar Hub — canonical grammar model (taxonomy). One shared source of MEANING for how the apps identify grammatical categories. It does NOT unify the analysis engines (Desgramatizador = compromise.js NLP, Question Lab = hand-written rules / vanilla no-deps, Grammaster = generation). It defines the categories and their relationships, which each app maps onto at its own granularity, so the same word is understood the same way across apps. `colorRole` values reference the role keys in Apps/design-tokens (tokens.json).",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "layers": {
     "pos": {
       "description": "Word class / part of speech. Finest granularity. Used by Desgramatizador POS mode.",
@@ -80,6 +80,11 @@
       "id": "adverbs",
       "rule": "Verb-region adverbs (ever, never, always, often, just…) are their own adverb category, shown at EVERY level — Desgramatizador puts them in A (adverbial); Question Lab shows them as an 'adverb' piece. Never dropped, never merged into the verb. Deliberate leveling: at Básico/Elemental only these single-word frequency adverbs get A; broader adverbial PHRASES (yesterday, at home) stay in C until Intermedio, where the O/A distinction is introduced.",
       "appliesTo": ["pos", "structure", "question"]
+    },
+    {
+      "id": "would-placement",
+      "rule": "'would' has two didactic placements kept consistent across apps. As a MODAL (offers/invitations 'Would you like…?', conditional, politeness) it is introduced at Elemental I and available from there — Question Lab has its own 'would' Identify category (cefr elemental1); Grammaster's 'would' modal is cefr elemental1. Its PAST-HABIT use ('I would work every day') is a SEPARATE item that stays at Avanzado (Grammaster's 'would-past' tense). 'could' is introduced at Elemental II alongside would (Grammaster's 'could' modal is cefr elemental2). Desgramatizador tags would/could as modal POS — its layers have no tense concept, so no level split applies there.",
+      "appliesTo": ["question", "structure"]
     }
   ],
   "apps": {

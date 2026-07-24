@@ -25,7 +25,7 @@ const App = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col">
+    <div className="min-h-screen bg-[#f5f6fb] flex flex-col">
       <HeaderNav lang={lang} setLang={setLang} />
       <main className="flex-1 w-full flex flex-col">
         <HubHome lang={lang} level={level} setLevel={setLevel} />

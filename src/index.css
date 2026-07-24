@@ -6,6 +6,8 @@
 @media (prefers-color-scheme: dark) {
   html, body { background-color: #0c0e15; color: #eceff8; }
   .bg-white { background-color: #141826 !important; }
+  .bg-white\/80 { background-color: rgba(20,24,38,.82) !important; }
+  .applogo { background-image: none !important; background-color: #1a1f2e !important; }
   .bg-\[\#f5f6fb\] { background-color: #0c0e15 !important; }
   .bg-gray-50, .bg-slate-50 { background-color: #1a1f2e !important; }
   .bg-gray-100, .bg-slate-100 { background-color: #222839 !important; }

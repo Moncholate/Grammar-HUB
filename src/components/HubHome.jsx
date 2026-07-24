@@ -194,7 +194,7 @@ const HubHome = ({ lang, level, setLevel }) => {
             style={{ WebkitTapHighlightColor: 'transparent' }}
             title={!level ? (lang === 'es' ? 'Selecciona un nivel primero' : 'Select a level first') : ''}
           >
-            <div className={`flex items-center justify-center py-6 bg-gradient-to-br ${app.logoBg}`}>
+            <div className={`applogo flex items-center justify-center py-6 bg-gradient-to-br ${app.logoBg}`}>
               <img
                 src={app.logo}
                 alt={app.title}

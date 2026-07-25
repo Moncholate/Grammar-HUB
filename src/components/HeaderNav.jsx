@@ -18,11 +18,11 @@ const HeaderNav = ({ lang, setLang }) => {
           </span>
           <button
             onClick={cycleTheme}
-            className="flex items-center gap-1.5 px-3 py-1 rounded-lg text-sm font-bold bg-slate-100 border border-slate-300 text-slate-600 hover:bg-slate-50 transition-all"
+            className="flex items-center justify-center w-10 h-8 rounded-lg text-lg leading-none bg-slate-100 border border-slate-300 hover:bg-slate-50 transition-all"
             title={`${lang === 'es' ? 'Tema' : 'Theme'}: ${themeName[lang][theme]}`}
+            aria-label={`${lang === 'es' ? 'Tema' : 'Theme'}: ${themeName[lang][theme]}`}
           >
-            <span className="text-base leading-none">{THEME_ICON[theme]}</span>
-            <span className="capitalize">{themeName[lang][theme]}</span>
+            {THEME_ICON[theme]}
           </button>
         </div>
 

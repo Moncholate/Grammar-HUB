@@ -1,11 +1,25 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
-const THEME_ICON = { auto: '🌗', light: '☀️', dark: '🌙' };
+const THEME_ICON = { light: '☀️', dark: '🌙' };
+const THEME_NAME = { es: { light: 'Claro', dark: 'Oscuro' }, en: { light: 'Light', dark: 'Dark' } };
 
 const HeaderNav = ({ lang, setLang }) => {
-  const [theme, setTheme] = useState(() => (typeof window !== 'undefined' && window.ghTheme ? window.ghTheme.get() : 'auto'));
-  const cycleTheme = () => { if (window.ghTheme) setTheme(window.ghTheme.cycle()); };
-  const themeName = { es: { auto: 'automático', light: 'claro', dark: 'oscuro' }, en: { auto: 'auto', light: 'light', dark: 'dark' } };
+  // Arranca en auto (sigue al SO). El toggle es binario y ofrece el modo destino.
+  const [eff, setEff] = useState(() => (typeof window !== 'undefined' && window.ghTheme ? window.ghTheme.effective() : 'light'));
+  useEffect(() => {
+    if (!window.ghTheme) return;
+    const sync = () => setEff(window.ghTheme.effective());
+    const mq = window.matchMedia('(prefers-color-scheme: dark)');
+    mq.addEventListener ? mq.addEventListener('change', sync) : mq.addListener(sync);
+    const onStorage = (e) => { if (e.key === 'gh_theme') sync(); };
+    window.addEventListener('storage', onStorage);
+    return () => {
+      mq.removeEventListener ? mq.removeEventListener('change', sync) : mq.removeListener(sync);
+      window.removeEventListener('storage', onStorage);
+    };
+  }, []);
+  const target = eff === 'dark' ? 'light' : 'dark';   // el modo al que puedes cambiar
+  const toggleTheme = () => { if (window.ghTheme) setEff(window.ghTheme.toggle()); };
 
   return (
     <header className="bg-white/80 backdrop-blur-sm border-b border-slate-100 sticky top-0 z-40">
@@ -17,12 +31,13 @@ const HeaderNav = ({ lang, setLang }) => {
             {lang === 'es' ? 'Tema' : 'Theme'}
           </span>
           <button
-            onClick={cycleTheme}
-            className="flex items-center justify-center w-10 h-8 rounded-lg text-lg leading-none bg-slate-100 border border-slate-300 hover:bg-slate-50 transition-all"
-            title={`${lang === 'es' ? 'Tema' : 'Theme'}: ${themeName[lang][theme]}`}
-            aria-label={`${lang === 'es' ? 'Tema' : 'Theme'}: ${themeName[lang][theme]}`}
+            onClick={toggleTheme}
+            className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-sm font-bold bg-slate-100 border border-slate-300 text-slate-600 hover:bg-slate-50 transition-all"
+            title={`${lang === 'es' ? 'Cambiar a modo' : 'Switch to'} ${THEME_NAME[lang][target].toLowerCase()}`}
+            aria-label={`${lang === 'es' ? 'Cambiar a modo' : 'Switch to'} ${THEME_NAME[lang][target].toLowerCase()}`}
           >
-            {THEME_ICON[theme]}
+            <span className="text-base leading-none">{THEME_ICON[target]}</span>
+            <span>{THEME_NAME[lang][target]}</span>
           </button>
         </div>
 

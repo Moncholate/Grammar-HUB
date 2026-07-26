@@ -6,7 +6,7 @@ import { loadProgress, BADGES } from '../gamification.generated.js';
 const apps = [
   {
     id: 'grammaster',
-    title: 'GramMaster',
+    title: 'Grammaster',
     logo: 'https://moncholate.github.io/GramMaster/apple-touch-icon.png',
     btnClass: 'bg-violet-600 hover:bg-violet-700 active:bg-violet-800',
     ringClass: 'ring-violet-200',
@@ -15,7 +15,7 @@ const apps = [
   },
   {
     id: 'desgramatizador',
-    title: 'DesGramatizador',
+    title: 'Desgramatizador',
     logo: 'https://moncholate.github.io/DesGramatizador/apple-touch-icon.png',
     btnClass: 'bg-fuchsia-600 hover:bg-fuchsia-700 active:bg-fuchsia-800',
     ringClass: 'ring-fuchsia-200',

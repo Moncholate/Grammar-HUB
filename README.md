@@ -42,7 +42,7 @@ Grammar HUB/
 ├── public/
 │   ├── manifest.json      ← Configuración PWA
 │   ├── sw.js              ← Service Worker
-│   └── favicon (4)/       ← Iconos
+│   └── favicon.svg, ...   ← Iconos (plano para pestaña, 3D para PWA)
 ├── src/
 │   ├── App.jsx
 │   ├── main.jsx

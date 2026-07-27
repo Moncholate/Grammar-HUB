@@ -10,7 +10,7 @@ Grammar HUB/
 ├── public/
 │   ├── manifest.json
 │   ├── sw.js
-│   └── favicon (4)/
+│   └── favicon.svg, favicon.ico, apple-touch-icon.png, ...
 ├── src/
 │   ├── App.jsx
 │   ├── main.jsx
@@ -81,7 +81,7 @@ Si necesitas cambiar las URLs:
 - **Colores**: Definidos en `tailwind.config.js`
 - **Theme color**: #1e40af (azul)
 - **App name**: "Grammar HUB"
-- **Icons**: En `public/favicon (4)/`
+- **Icons**: En `public/` (favicon plano para pestañas, íconos 3D para PWA y `maskable-*` para Android)
 
 ## 📦 Tecnologías
 

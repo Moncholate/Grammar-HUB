@@ -25,7 +25,7 @@ const apps = [
   {
     id: 'questionlab',
     title: 'Question Lab',
-    logo: 'https://moncholate.github.io/Question-Lab/favicon.svg',
+    logo: 'https://moncholate.github.io/Question-Lab/apple-touch-icon.png',
     btnClass: 'bg-teal-600 hover:bg-teal-700 active:bg-teal-800',
     ringClass: 'ring-teal-200',
     logoBg: 'from-teal-50 to-cyan-50',

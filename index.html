@@ -41,23 +41,13 @@
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
     <script>
-      // Service Worker Registration
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/sw.js').then(
-            registration => console.log('SW registered:', registration),
-            err => console.log('SW registration failed:', err)
-          );
-        });
-      }
-      
-      // PWA Install Prompt
-      let deferredPrompt;
+      // Guarda el evento de instalación apenas ocurre (puede dispararse antes
+      // de que React monte) para que el botón "Instalar" lo pueda usar después.
+      window.__ghInstall = null;
       window.addEventListener('beforeinstallprompt', (e) => {
         e.preventDefault();
-        deferredPrompt = e;
-        window.showInstallPrompt = true;
-        window.installPrompt = deferredPrompt;
+        window.__ghInstall = e;
+        window.dispatchEvent(new Event('gh-installable'));
       });
     </script>
   </body>

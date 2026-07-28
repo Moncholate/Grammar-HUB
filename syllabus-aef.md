@@ -193,19 +193,67 @@ presente simple · there is/are · **pasado simple** (be, regulares, irregulares
 
 ---
 
+## ⚠️ Cómo leer este temario
+
+Las tablas recogen **solo la columna "Gramática" de cada unidad**. Los libros
+traen además unidades de **Practical English**, donde se enseñan estructuras como
+fórmulas para repetir, sin analizarlas gramaticalmente. Ese contenido **no está
+en estas tablas**.
+
+Consecuencia práctica: que algo no figure aquí significa *"no se enseña como ítem
+gramatical"*, **no** *"no aparece en el curso"*. Antes de sacar contenido de una
+app por no encontrarlo en estas tablas, hay que preguntarle al profesor.
+
+Casos ya confirmados que viven en Practical English (aportados por el profesor,
+2026-07-28):
+
+| Estructura | Nivel | Cómo se enseña |
+|---|---|---|
+| `could` | Elemental | Pedir algo — *Could I have…?* Fórmula, no gramática |
+| `would` | Elemental | Invitar / ofrecer — *Would you like…?* Fórmula, no gramática |
+
+Y dos modales que el temario no lista como unidad propia pero **sí se nombran en
+clase**, como alternativas de otro:
+
+| Modal | Se nombra como alternativa de | Nivel de su par |
+|---|---|---|
+| `may` | `might` | Intermedio II (11B) |
+| `shall` | `should` | Intermedio II (8A) |
+
 ## Notas para el contenido de las apps
 
 Contrastando este temario con lo que hoy ofrecen las apps (revisión 2026-07-28):
 
-**Tiempos que las apps ofrecen y NO aparecen en ningún curso:**
+**Tiempos que las apps ofrecen y no figuran como ítem gramatical** (pendiente de
+confirmar con el profesor si aparecen en Practical English — ver la advertencia
+de arriba):
 - `future-perfect` (Futuro Perfecto) — no figura en ninguna unidad.
 - `past-perfect-continuous` (Pasado Perfecto Continuo) — AEF 3 5A cubre
   "simple, continuous, perfect", sin el perfecto continuo.
 
-**Sobre `would`:** el temario lo nombra explícitamente **solo para la segunda
-condicional** (Intermedio II 9A y AEF 3 7B). El hábito pasado aparece como unidad
-(AEF 3 5B "Past and present habits and states") pero sin nombrar `would`; el ítem
-explícito de hábito pasado es **`used to`**, en Intermedio II 11A.
+**Sobre `would`:** como ítem gramatical aparece **solo en la segunda condicional**
+(Intermedio II 9A y AEF 3 7B). En Practical English de Elemental se enseña antes,
+como fórmula para invitar/ofrecer — por eso el modal está disponible desde
+Elemental I y esa es la ubicación correcta. El hábito pasado tiene unidad propia
+(AEF 3 5B "Past and present habits and states") pero **sin nombrar `would`**: el
+ítem explícito de hábito pasado es **`used to`**, en Intermedio II 11A.
+
+**Niveles de los modales**, ya contrastados uno a uno:
+
+| Modal | Respaldo en el temario |
+|---|---|
+| `can` Básico II | Básico II 8A *Can / can't* |
+| `would` Elemental I | Practical English (invitar/ofrecer) |
+| `could` Elemental II | Practical English (pedir); como gramática, AEF 3 4B |
+| `will` Intermedio I | Intermedio I 6A *Will / won't* |
+| `must` Intermedio II | Intermedio II 7C *have to, must, must not* |
+| `should` Intermedio II | Intermedio II 8A *Should* |
+| `might` Intermedio II | Intermedio II 11B *Might* |
+| `may` Intermedio II | se nombra junto a `might` |
+| `shall` Intermedio II | se nombra junto a `should` |
+
+Falta en las apps: **`have to` / `don't have to`**, explícito en Intermedio II 7C
+junto a *must*. Es el contraste clásico obligación externa vs. interna.
 
 **Contenido del temario que las apps NO cubren todavía:**
 - Condicionales: primera (Int. II 8B), segunda (Int. II 9A), tercera (AEF 3 9A).

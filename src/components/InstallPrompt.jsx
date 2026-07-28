@@ -3,7 +3,7 @@ import { X, Download, Share } from 'lucide-react';
 import { usePwaInstall } from '../usePwaInstall';
 
 const InstallPrompt = () => {
-  const { canPrompt, needsManualSteps, dismiss, install, markSeen } = usePwaInstall();
+  const { canPrompt, needsManualSteps, dismiss, install } = usePwaInstall();
   const ios = needsManualSteps;
   // En iOS no hay evento del navegador, así que el aviso se muestra tras un
   // momento; en el resto solo cuando el navegador confirma que es instalable.
@@ -16,10 +16,6 @@ const InstallPrompt = () => {
   }, [ios]);
 
   const visible = delayPassed && (canPrompt || ios);
-
-  // Se registra en cuanto aparece: este aviso se muestra una sola vez por
-  // navegador, se haya instalado la app o no.
-  useEffect(() => { if (visible) markSeen(); }, [visible]);
 
   const handleInstall = async () => {
     const ok = await install();

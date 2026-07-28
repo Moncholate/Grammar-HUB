@@ -1,5 +1,5 @@
 {
-  "$description": "Grammar Hub curriculum — canonical CEFR level scale + tense→level map. Single source of truth for what grammar is taught at each level. Seeded from Grammaster/src/data/grammar.js (values match). Consumed by the hub apps via generated files (see scripts/sync-curriculum.mjs).",
+  "$description": "Grammar Hub curriculum — canonical CEFR level scale + tense→level map, consumed by the hub apps via generated files (see scripts/sync-curriculum.mjs). OJO: este archivo fue sembrado desde Grammaster/src/data/grammar.js, así que NO es una fuente independiente: describe lo que la app ofrece, no lo que enseñan los cursos. La fuente real del temario es syllabus-aef.md (American English File 3rd ed., unidad por unidad); ante cualquier desacuerdo, manda ese archivo.",
   "levels": [
     "basico1",
     "basico2",

@@ -134,7 +134,12 @@ const HubHome = ({ lang, level, setLevel }) => {
             title={currentApp.title}
             className="border-0 w-full"
             style={{ height: '100%', minHeight: '100%', display: 'block' }}
-            sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
+            /* allow-downloads: sin esto el navegador bloquea las descargas de
+               las apps embebidas (el "Exportar" del historial de Grammaster no
+               hacía nada). allow-modals: sin esto confirm() devuelve false al
+               instante dentro del iframe, así que los "¿Seguro?" nunca
+               confirmaban. */
+            sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-downloads allow-modals"
             allow="fullscreen"
             onLoad={handleIframeLoad}
           />

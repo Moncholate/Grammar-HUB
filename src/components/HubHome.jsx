@@ -1,53 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
-import { ArrowLeft, Download } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { translations, LEVELS } from '../i18n';
 import { loadProgress, BADGES } from '../gamification.generated.js';
-
-/**
- * Botón para instalar la suite como app. Solo aparece cuando el navegador
- * confirma que es instalable (evento `beforeinstallprompt`, capturado en
- * index.html porque suele dispararse antes de que React monte). Se oculta si ya
- * está instalada o cuando termina la instalación.
- */
-function InstallButton({ lang }) {
-  const [ready, setReady] = useState(() => !!window.__ghInstall);
-
-  useEffect(() => {
-    const onReady = () => setReady(true);
-    const onInstalled = () => { window.__ghInstall = null; setReady(false); };
-    window.addEventListener('gh-installable', onReady);
-    window.addEventListener('appinstalled', onInstalled);
-    return () => {
-      window.removeEventListener('gh-installable', onReady);
-      window.removeEventListener('appinstalled', onInstalled);
-    };
-  }, []);
-
-  // Ya corriendo como app instalada: no tiene sentido ofrecerlo
-  const standalone = window.matchMedia?.('(display-mode: standalone)').matches
-    || window.navigator.standalone === true;
-  if (!ready || standalone) return null;
-
-  const install = async () => {
-    const e = window.__ghInstall;
-    if (!e) return;
-    e.prompt();
-    await e.userChoice;
-    window.__ghInstall = null;   // el evento sirve una sola vez
-    setReady(false);
-  };
-
-  return (
-    <button
-      onClick={install}
-      className="inline-flex items-center gap-2 mb-5 px-4 py-2 rounded-full text-sm font-semibold text-indigo-700 bg-indigo-100 hover:bg-indigo-200 transition-colors touch-manipulation"
-      style={{ WebkitTapHighlightColor: 'transparent' }}
-    >
-      <Download className="w-4 h-4" />
-      {lang === 'es' ? 'Instalar app' : 'Install app'}
-    </button>
-  );
-}
 
 const apps = [
   {
@@ -186,7 +140,6 @@ const HubHome = ({ lang, level, setLevel }) => {
         <p className="text-slate-500 text-sm">{t.heroSub}</p>
       </div>
 
-      <InstallButton lang={lang} />
 
       {/* Progreso compartido de la suite */}
       <div className="flex items-center justify-center flex-wrap gap-2 mb-5" aria-label={lang === 'es' ? 'Tu progreso' : 'Your progress'}>

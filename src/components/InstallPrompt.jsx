@@ -1,46 +1,28 @@
 import { useState, useEffect } from 'react';
 import { X, Download, Share } from 'lucide-react';
-
-const isIOS = () =>
-  /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-
-const isInStandaloneMode = () =>
-  window.navigator.standalone === true ||
-  window.matchMedia('(display-mode: standalone)').matches;
+import { usePwaInstall } from '../usePwaInstall';
 
 const InstallPrompt = () => {
-  const [show, setShow] = useState(false);
-  const [deferredPrompt, setDeferredPrompt] = useState(null);
-  const ios = isIOS();
+  const { canPrompt, needsManualSteps, dismissed, dismiss, install } = usePwaInstall();
+  const ios = needsManualSteps;
+  // En iOS no hay evento del navegador, así que el aviso se muestra tras un
+  // momento; en el resto solo cuando el navegador confirma que es instalable.
+  const [delayPassed, setDelayPassed] = useState(!ios);
 
   useEffect(() => {
-    if (isInStandaloneMode()) return;
-
-    if (ios) {
-      // En iOS mostramos instrucciones manuales con un pequeño delay
-      const timer = setTimeout(() => setShow(true), 2000);
-      return () => clearTimeout(timer);
-    }
-
-    // Android / Chrome
-    const handler = (e) => {
-      e.preventDefault();
-      setDeferredPrompt(e);
-      setShow(true);
-    };
-    window.addEventListener('beforeinstallprompt', handler);
-    return () => window.removeEventListener('beforeinstallprompt', handler);
-  }, []);
+    if (!ios) return;
+    const t = setTimeout(() => setDelayPassed(true), 2000);
+    return () => clearTimeout(t);
+  }, [ios]);
 
   const handleInstall = async () => {
-    if (!deferredPrompt) return;
-    deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
-    if (outcome === 'accepted') setShow(false);
-    setDeferredPrompt(null);
+    const ok = await install();
+    if (!ok) dismiss();   // si lo rechaza, no insistir en cada recarga
   };
 
-  if (!show) return null;
+  // Se oculta si ya está instalada, si se descartó antes (recordado entre
+  // sesiones) o si el navegador no ofrece instalarla.
+  if (dismissed || !delayPassed || (!canPrompt && !ios)) return null;
 
   return (
     <div className="fixed bottom-4 left-4 right-4 z-50 sm:left-auto sm:right-4 sm:w-80">
@@ -56,7 +38,8 @@ const InstallPrompt = () => {
             <span className="font-bold text-slate-900 text-sm">Grammar HUB</span>
           </div>
           <button
-            onClick={() => setShow(false)}
+            onClick={dismiss}
+            aria-label="No volver a mostrar"
             className="text-slate-400 hover:text-slate-600 transition-colors touch-manipulation p-1"
             style={{ WebkitTapHighlightColor: 'transparent' }}
           >

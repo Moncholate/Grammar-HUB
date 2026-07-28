@@ -45,5 +45,11 @@
       "purpose": "any"
     }
   ],
-  "categories": ["education", "productivity"]
+  "categories": ["education", "productivity"],
+  "related_applications": [
+    {
+      "platform": "webapp",
+      "url": "https://moncholate.github.io/Grammar-HUB/manifest.json"
+    }
+  ]
 }

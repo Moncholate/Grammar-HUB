@@ -2,8 +2,27 @@ import { useState, useEffect } from 'react';
 import { X, Download, Share } from 'lucide-react';
 import { usePwaInstall } from '../usePwaInstall';
 
+/**
+ * Panel de diagnóstico en pantalla, visible solo con `?debugInstall` en la URL.
+ * Va en la pantalla y no en la consola del navegador para poder revisarlo desde
+ * el celular, donde abrir las herramientas de desarrollo no es practico.
+ */
+const InstallDebug = ({ data, visible }) => (
+  <div className="fixed top-2 left-2 right-2 z-50 rounded-xl bg-slate-900 text-slate-100 text-xs p-3 shadow-xl font-mono leading-relaxed">
+    <div className="font-bold mb-1">Diagnóstico de instalación</div>
+    <div>¿se muestra el aviso?: <b>{visible ? 'SÍ' : 'no'}</b></div>
+    <div>corriendo como app: {String(data.standalone)}</div>
+    <div>la damos por instalada: {String(data.instalada)}</div>
+    <div>aviso pospuesto: {String(data.pospuesta)}</div>
+    <div>el navegador ofrece instalar: {String(data.eventoDelNavegador)}</div>
+    <div>API de consulta disponible: {String(data.apiDisponible)}</div>
+    <div>guardado: {JSON.stringify(data.guardado)}</div>
+  </div>
+);
+
 const InstallPrompt = () => {
-  const { canPrompt, needsManualSteps, dismiss, install } = usePwaInstall();
+  const { canPrompt, needsManualSteps, snooze, install, debug } = usePwaInstall();
+  const showDebug = typeof location !== 'undefined' && location.search.includes('debugInstall');
   const ios = needsManualSteps;
   // En iOS no hay evento del navegador, así que el aviso se muestra tras un
   // momento; en el resto solo cuando el navegador confirma que es instalable.
@@ -19,9 +38,10 @@ const InstallPrompt = () => {
 
   const handleInstall = async () => {
     const ok = await install();
-    if (!ok) dismiss();   // si lo rechaza, no insistir
+    if (!ok) snooze();   // si lo rechaza, no insistir por un buen tiempo
   };
 
+  if (showDebug) return <InstallDebug data={debug} visible={visible} />;
   if (!visible) return null;
 
   return (
@@ -38,8 +58,8 @@ const InstallPrompt = () => {
             <span className="font-bold text-slate-900 text-sm">Grammar HUB</span>
           </div>
           <button
-            onClick={dismiss}
-            aria-label="No volver a mostrar"
+            onClick={snooze}
+            aria-label="Ahora no"
             className="text-slate-400 hover:text-slate-600 transition-colors touch-manipulation p-1"
             style={{ WebkitTapHighlightColor: 'transparent' }}
           >

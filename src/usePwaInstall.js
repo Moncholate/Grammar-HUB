@@ -1,7 +1,18 @@
 import { useEffect, useState } from 'react';
 
-const DISMISS_KEY = 'gh_install_dismissed';
-const INSTALLED_KEY = 'gh_installed';
+// v2: nombre nuevo a proposito. El estado guardado por la version anterior se
+// ignora, porque podia quedar atascado en "descartado para siempre".
+const KEY = 'gh_pwa_v2';
+
+const SNOOZE_DAYS = 90;
+const DAY = 24 * 60 * 60 * 1000;
+
+const load = () => {
+  try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch { return {}; }
+};
+const save = patch => {
+  try { localStorage.setItem(KEY, JSON.stringify({ ...load(), ...patch })); } catch { /* modo privado */ }
+};
 
 /** Corriendo como app instalada (no en una pestaña del navegador). */
 const isStandalone = () =>
@@ -11,83 +22,71 @@ const isStandalone = () =>
 export const isIOS = () =>
   /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
-const read = key => {
-  try { return localStorage.getItem(key) === '1'; } catch { return false; }
-};
-const write = (key, on) => {
-  try { on ? localStorage.setItem(key, '1') : localStorage.removeItem(key); } catch { /* modo privado */ }
-};
-
 /**
- * Estado único de instalación de la PWA.
+ * Estado de instalación de la PWA.
  *
- * Reconocer que la app YA está instalada es el punto difícil, porque las señales
- * obvias no sirven desde una pestaña del navegador:
- *   - `appinstalled` solo avisa en la sesión donde ocurrió la instalación.
- *   - `display-mode: standalone` solo es cierto DENTRO de la app instalada.
+ * Reglas, después de varias vueltas aprendiendo qué señal sirve para qué:
  *
- * La clave: la app instalada y el navegador comparten localStorage, porque es el
- * mismo origen. Así que al abrir la app instalada se deja una marca, y esa marca
- * queda visible después desde la pestaña normal. Se combina con
- * `getInstalledRelatedApps()`, que le pregunta directo al sistema, y esa consulta
- * tambien sirve para LIMPIAR la marca si la app se desinstalo.
+ *  - `beforeinstallprompt` es la palabra del propio navegador diciendo "esto se
+ *    puede instalar aquí". Si se dispara, se BORRA cualquier marca previa de
+ *    instalada: el navegador sabe más que nuestra memoria.
+ *  - `display-mode: standalone` solo es cierto DENTRO de la app instalada, pero
+ *    como la app y el navegador comparten localStorage (mismo origen), al
+ *    abrirla queda una marca que la pestaña normal después puede leer.
+ *  - `getInstalledRelatedApps()` se usa SOLO en positivo: varios navegadores de
+ *    escritorio devuelven vacío aunque la app esté instalada, y Brave la
+ *    restringe por privacidad, así que un vacío no prueba nada.
+ *  - La X no oculta para siempre: pospone. Un "nunca más" es justo lo que dejó
+ *    el aviso bloqueado sin manera de recuperarlo.
  */
-/**
- * `?resetInstall` en la URL borra el estado guardado. Sirve para volver a probar
- * el aviso despues de desinstalar la app, porque la marca de instalada ya no se
- * borra sola (ver arriba: el vacio de getInstalledRelatedApps no prueba nada).
- */
-function maybeReset() {
-  if (typeof location === 'undefined') return;
-  if (!location.search.includes('resetInstall')) return;
-  write(INSTALLED_KEY, false);
-  write(DISMISS_KEY, false);
-}
-
 export function usePwaInstall() {
-  maybeReset();
-  // El evento puede dispararse antes de que React monte; index.html lo guarda.
   const [event, setEvent] = useState(() => window.__ghInstall || null);
-  const [installed, setInstalled] = useState(() => isStandalone() || read(INSTALLED_KEY));
-  const [dismissed, setDismissed] = useState(() => read(DISMISS_KEY));
-  // Evita que el aviso parpadee antes de saber si ya está instalada.
+  const [installed, setInstalled] = useState(() => isStandalone() || load().installed === true);
+  const [snoozeUntil, setSnoozeUntil] = useState(() => load().snoozeUntil || 0);
   const [checked, setChecked] = useState(() => !navigator.getInstalledRelatedApps);
 
   useEffect(() => {
-    // Si estamos dentro de la app instalada, dejar la marca para que la pestaña
-    // del navegador tambien sepa que existe.
-    if (isStandalone()) write(INSTALLED_KEY, true);
+    if (location.search.includes('resetInstall')) {
+      try { localStorage.removeItem(KEY); } catch { /* ignore */ }
+      setInstalled(isStandalone());
+      setSnoozeUntil(0);
+    }
 
-    const onReady = () => setEvent(window.__ghInstall);
+    // Dentro de la app instalada: dejar constancia para la pestaña del navegador
+    if (isStandalone()) { setInstalled(true); save({ installed: true }); }
+
+    // El navegador dice que se puede instalar => no está instalada aquí
+    const markInstallable = () => {
+      setEvent(window.__ghInstall);
+      setInstalled(false);
+      save({ installed: false });
+    };
+    if (window.__ghInstall && !isStandalone()) markInstallable();
+
     const onInstalled = () => {
       window.__ghInstall = null;
       setEvent(null);
       setInstalled(true);
-      write(INSTALLED_KEY, true);
+      save({ installed: true });
     };
-    window.addEventListener('gh-installable', onReady);
+    window.addEventListener('gh-installable', markInstallable);
     window.addEventListener('appinstalled', onInstalled);
 
-    // Consulta al sistema. Se usa SOLO como señal positiva: varios navegadores
-    // de escritorio devuelven vacío aunque la app esté instalada (Brave restringe
-    // esta API por privacidad), así que un vacío no prueba nada y no debe borrar
-    // lo que ya sabemos por las otras señales.
     navigator.getInstalledRelatedApps?.()
-      .then(apps => {
-        if (apps && apps.length) { setInstalled(true); write(INSTALLED_KEY, true); }
-      })
+      .then(apps => { if (apps && apps.length) { setInstalled(true); save({ installed: true }); } })
       .catch(() => {})
       .finally(() => setChecked(true));
 
     return () => {
-      window.removeEventListener('gh-installable', onReady);
+      window.removeEventListener('gh-installable', markInstallable);
       window.removeEventListener('appinstalled', onInstalled);
     };
   }, []);
 
-  const dismiss = () => {
-    write(DISMISS_KEY, true);
-    setDismissed(true);
+  const snooze = () => {
+    const until = Date.now() + SNOOZE_DAYS * DAY;
+    save({ snoozeUntil: until });
+    setSnoozeUntil(until);
   };
 
   const install = async () => {
@@ -97,34 +96,31 @@ export function usePwaInstall() {
     const { outcome } = await e.userChoice;   // el evento sirve una sola vez
     window.__ghInstall = null;
     setEvent(null);
-    if (outcome === 'accepted') { setInstalled(true); write(INSTALLED_KEY, true); }
+    if (outcome === 'accepted') { setInstalled(true); save({ installed: true }); }
     return outcome === 'accepted';
   };
 
-  const blocked = installed || dismissed || !checked;
-
-  // `?debugInstall` en la URL explica en consola por que se muestra o no.
-  useEffect(() => {
-    if (!location.search.includes('debugInstall')) return;
-    console.log('[install]', {
-      standalone: isStandalone(),
-      marcaGuardada: read(INSTALLED_KEY),
-      instalada: installed,
-      descartada: dismissed,
-      eventoDelNavegador: !!event,
-      apiDisponible: !!navigator.getInstalledRelatedApps,
-      seMuestra: !blocked && (!!event || isIOS()),
-    });
-  }, [installed, dismissed, event, checked]);
+  const snoozed = Date.now() < snoozeUntil;
+  const blocked = installed || snoozed || !checked;
 
   return {
     installed,
-    dismissed,
-    dismiss,
+    snoozed,
+    snooze,
     install,
     /** Hay un evento real del navegador para lanzar la instalación. */
     canPrompt: !blocked && !!event,
     /** iOS no expone ese evento: solo se pueden dar instrucciones manuales. */
     needsManualSteps: !blocked && !event && isIOS(),
+    /** Para el panel de diagnóstico */
+    debug: {
+      standalone: isStandalone(),
+      guardado: load(),
+      instalada: installed,
+      pospuesta: snoozed,
+      eventoDelNavegador: !!event,
+      apiDisponible: !!navigator.getInstalledRelatedApps,
+      consultaLista: checked,
+    },
   };
 }

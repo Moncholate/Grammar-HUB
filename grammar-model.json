@@ -83,7 +83,7 @@
     },
     {
       "id": "would-placement",
-      "rule": "'would' has two didactic placements kept consistent across apps. As a MODAL (offers/invitations 'Would you like…?', conditional, politeness) it is introduced at Elemental I and available from there — Question Lab has its own 'would' Identify category (cefr elemental1); Grammaster's 'would' modal is cefr elemental1. Its PAST-HABIT use ('I would work every day') is a SEPARATE item that stays at Avanzado (Grammaster's 'would-past' tense). 'could' is introduced at Elemental II alongside would (Grammaster's 'could' modal is cefr elemental2). Desgramatizador tags would/could as modal POS — its layers have no tense concept, so no level split applies there.",
+      "rule": "REVISADO 2026-07-28 contra syllabus-aef.md. 'would' existe SOLO como modal, en Elemental I: ahí lo enseñan en Practical English como fórmula para invitar/ofrecer ('Would you like…?'), sin analizarlo gramaticalmente. Su uso condicional llega en Intermedio II 9A, pero eso es la 2ª CONDICIONAL — una estructura completa (If + pasado, would + base), no el modal suelto, y todavía no está implementada. Se ELIMINÓ el ítem 'would-past' (hábito pasado) que existía como tiempo en Grammaster: no es un tiempo (would + base = misma forma que cualquier modal), el temario no lo nombra, y el hábito pasado ya lo cubre 'used to' (Intermedio II 11A). 'could' va en Elemental II por la misma razón que 'would': Practical English, para pedir algo. Desgramatizador etiqueta would/could como POS modal — sus capas no tienen concepto de tiempo, así que no aplica el corte por nivel.",
       "appliesTo": ["question", "structure"]
     }
   ],

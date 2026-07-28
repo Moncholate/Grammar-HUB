@@ -28,9 +28,7 @@
     "simple-future": "intermedio1",
     "past-perfect": "intermedio2",
     "used-to": "intermedio2",
-    "present-perfect-continuous": "avanzado",
-    "would-past": "avanzado",
-    "future-perfect": "avanzado",
-    "past-perfect-continuous": "avanzado"
-  }
+    "present-perfect-continuous": "avanzado"
+  },
+  "$removed": "2026-07-28, contrastado contra syllabus-aef.md: would-past (no es un tiempo — would + base; el temario solo nombra `would` para la 2ª condicional y el hábito pasado lo cubre `used to`), future-perfect y past-perfect-continuous (no se enseñan en ningún curso)."
 }

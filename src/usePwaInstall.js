@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
 const DISMISS_KEY = 'gh_install_dismissed';
+const SEEN_KEY = 'gh_install_seen';
 
 /** Corriendo como app instalada (no en una pestaña del navegador). */
 const isStandalone = () =>
@@ -28,6 +29,15 @@ export function usePwaInstall() {
   const [event, setEvent] = useState(() => window.__ghInstall || null);
   const [installed, setInstalled] = useState(isStandalone);
   const [dismissed, setDismissed] = useState(readDismissed);
+  // `checked` evita que el aviso parpadee antes de saber si ya está instalada.
+  const [checked, setChecked] = useState(() => !navigator.getInstalledRelatedApps);
+  // Se captura AL MONTAR: si ya se mostró alguna vez en este navegador, no se
+  // vuelve a mostrar nunca. Es la única garantía real de no ser insistente,
+  // porque cada navegador lleva su propio registro de apps instaladas: si se
+  // instaló con uno y se navega con otro, el segundo no puede saberlo.
+  const [seenBefore] = useState(() => {
+    try { return localStorage.getItem(SEEN_KEY) === '1'; } catch { return false; }
+  });
 
   useEffect(() => {
     const onReady = () => setEvent(window.__ghInstall);
@@ -40,17 +50,23 @@ export function usePwaInstall() {
     window.addEventListener('appinstalled', onInstalled);
 
     // Chrome/Android: preguntar al sistema si la app ya está instalada. Requiere
-    // `related_applications` en el manifest. Es la única señal fiable cuando se
-    // abre el sitio en el navegador teniendo la app ya instalada.
+    // `related_applications` en el manifest. Es la mejor señal disponible, pero
+    // solo ve las apps instaladas desde ESTE navegador.
     navigator.getInstalledRelatedApps?.()
       .then(apps => { if (apps && apps.length) setInstalled(true); })
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => setChecked(true));
 
     return () => {
       window.removeEventListener('gh-installable', onReady);
       window.removeEventListener('appinstalled', onInstalled);
     };
   }, []);
+
+  /** Marca que el aviso ya se mostró, para no repetirlo en futuras visitas. */
+  const markSeen = () => {
+    try { localStorage.setItem(SEEN_KEY, '1'); } catch { /* modo privado */ }
+  };
 
   const dismiss = () => {
     try { localStorage.setItem(DISMISS_KEY, '1'); } catch { /* modo privado */ }
@@ -68,14 +84,18 @@ export function usePwaInstall() {
     return outcome === 'accepted';
   };
 
+  // Bloqueos que aplican pase lo que pase
+  const blocked = installed || dismissed || seenBefore || !checked;
+
   return {
     installed,
     dismissed,
     dismiss,
     install,
+    markSeen,
     /** Hay un evento real del navegador para lanzar la instalación. */
-    canPrompt: !installed && !!event,
+    canPrompt: !blocked && !!event,
     /** iOS no expone ese evento: solo se pueden dar instrucciones manuales. */
-    needsManualSteps: !installed && !event && isIOS(),
+    needsManualSteps: !blocked && !event && isIOS(),
   };
 }

@@ -2,6 +2,7 @@
   "name": "Grammar HUB",
   "short_name": "Grammar HUB",
   "description": "Plataforma integrada para aprender inglés. Construye oraciones y analiza partes de la oración.",
+  "id": "/Grammar-HUB/",
   "start_url": "/Grammar-HUB/",
   "scope": "/Grammar-HUB/",
   "display": "standalone",

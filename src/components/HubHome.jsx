@@ -181,7 +181,7 @@ const HubHome = ({ lang, level, setLevel }) => {
       </div>
 
       {/* Paso 1 · Selector de nivel por etapas */}
-      <div className={`w-full max-w-lg mb-6 rounded-2xl transition-shadow ${needLevel ? 'gh-nudge' : ''}`}>
+      <div className={`w-full max-w-2xl mb-6 rounded-2xl transition-shadow ${needLevel ? 'gh-nudge' : ''}`}>
         <div className="flex items-center gap-2 mb-2 px-1">
           <span className="w-5 h-5 rounded-full bg-indigo-600 text-white text-[11px] font-bold flex items-center justify-center flex-shrink-0">1</span>
           <span className="text-sm font-bold text-slate-700">{t.step1}</span>
@@ -223,13 +223,13 @@ const HubHome = ({ lang, level, setLevel }) => {
         </div>
       </div>
 
-      {/* Paso 2 · Cards */}
-      <div className="w-full max-w-lg">
+      {/* Paso 2 · Cards — 3 columnas en PC: las tres apps son pares */}
+      <div className="w-full max-w-2xl">
         <div className="flex items-center gap-2 mb-2 px-1">
           <span className={`w-5 h-5 rounded-full text-[11px] font-bold flex items-center justify-center flex-shrink-0 ${level ? 'bg-indigo-600 text-white' : 'bg-slate-300 text-white'}`}>2</span>
           <span className={`text-sm font-bold ${level ? 'text-slate-700' : 'text-slate-400'}`}>{t.step2}</span>
         </div>
-      <div className="grid sm:grid-cols-2 gap-3 w-full">
+      <div className="grid sm:grid-cols-3 gap-3 w-full">
         {apps.map((app) => (
           <button
             key={app.id}
@@ -265,7 +265,7 @@ const HubHome = ({ lang, level, setLevel }) => {
 
       {/* Galería de insignias */}
       {showBadges && (
-        <div className="w-full max-w-lg mt-5">
+        <div className="w-full max-w-2xl mt-5">
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
             {BADGES.map((b) => {
               const unlocked = isUnlocked(b);

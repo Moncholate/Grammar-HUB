@@ -6,6 +6,9 @@ export const translations = {
     open: 'Abrir',
     back: 'Volver',
     levelLabel: 'Nivel',
+    step1: 'Elige tu nivel',
+    step2: 'Elige tu app',
+    needLevel: 'Primero elige tu nivel aquí arriba 👆',
     grammaster: { tagline: 'Arma oraciones, pieza por pieza.' },
     desgramatizador: { tagline: 'Desarma oraciones y descubre cómo funcionan.' },
     questionlab: { tagline: 'Arma preguntas y respóndelas como ping pong.' },
@@ -17,6 +20,9 @@ export const translations = {
     open: 'Open',
     back: 'Back',
     levelLabel: 'Level',
+    step1: 'Choose your level',
+    step2: 'Choose your app',
+    needLevel: 'First choose your level up here 👆',
     grammaster: { tagline: 'Build sentences, piece by piece.' },
     desgramatizador: { tagline: 'Break down sentences and discover how they work.' },
     questionlab: { tagline: 'Build questions and answer them like ping-pong.' },
@@ -31,4 +37,17 @@ export const LEVELS = [
   { id: 'intermedio1', es: 'Intermedio I',    en: 'Intermediate I' },
   { id: 'intermedio2', es: 'Intermedio II',   en: 'Intermediate II' },
   { id: 'avanzado',    es: 'Intermedio Alto', en: 'Upper-Interm.' },
+];
+
+// Los 7 niveles agrupados en sus 3 etapas, para el selector del Hub.
+// `short` es lo que va en el botón (la etiqueta de la etapa ya dice el resto);
+// los ids son los mismos de LEVELS — las apps los reciben igual que siempre.
+export const STAGES = [
+  { id: 'basico',     es: 'Básico',     en: 'Basic',
+    levels: [ { id: 'basico1', short: 'I' }, { id: 'basico2', short: 'II' } ] },
+  { id: 'elemental',  es: 'Elemental',  en: 'Elementary',
+    levels: [ { id: 'elemental1', short: 'I' }, { id: 'elemental2', short: 'II' } ] },
+  { id: 'intermedio', es: 'Intermedio', en: 'Intermediate',
+    levels: [ { id: 'intermedio1', short: 'I' }, { id: 'intermedio2', short: 'II' },
+              { id: 'avanzado', short: { es: 'Alto', en: 'Upper' } } ] },
 ];

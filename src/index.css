@@ -16,6 +16,24 @@
 :root[data-theme="dark"] .text-gray-700, :root[data-theme="dark"] .text-gray-600, :root[data-theme="dark"] .text-slate-700, :root[data-theme="dark"] .text-slate-600 { color: #c7cdda !important; }
 :root[data-theme="dark"] .text-gray-500, :root[data-theme="dark"] .text-gray-400, :root[data-theme="dark"] .text-slate-500, :root[data-theme="dark"] .text-slate-400 { color: #9aa2b6 !important; }
 :root[data-theme="dark"] .border-gray-100, :root[data-theme="dark"] .border-gray-200, :root[data-theme="dark"] .border-slate-100, :root[data-theme="dark"] .border-slate-200, :root[data-theme="dark"] .border-slate-300 { border-color: #2a3042 !important; }
+/* Cajas del selector de nivel por etapas (tinte índigo progresivo) */
+:root[data-theme="dark"] .bg-indigo-50\/50 { background-color: #191e33 !important; }
+:root[data-theme="dark"] .bg-indigo-50 { background-color: #1e2440 !important; }
+:root[data-theme="dark"] .bg-indigo-100\/70 { background-color: #252c4e !important; }
+:root[data-theme="dark"] .border-indigo-100 { border-color: #2a3152 !important; }
+:root[data-theme="dark"] .border-indigo-200 { border-color: #333b61 !important; }
+:root[data-theme="dark"] .border-indigo-300 { border-color: #404a77 !important; }
+
+/* Pulso del selector de nivel al tocar una app sin nivel elegido */
+@keyframes ghNudge {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(244,63,94,0); }
+  25%      { transform: scale(1.015); box-shadow: 0 0 0 4px rgba(244,63,94,.28); }
+  60%      { transform: scale(1); box-shadow: 0 0 0 4px rgba(244,63,94,.16); }
+}
+.gh-nudge { animation: ghNudge .9s ease 2; }
+@media (prefers-reduced-motion: reduce) {
+  .gh-nudge { animation: none; box-shadow: 0 0 0 3px rgba(244,63,94,.35); }
+}
 
 @tailwind base;
 @tailwind components;

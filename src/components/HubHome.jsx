@@ -1,36 +1,47 @@
 import { useState, useRef, useEffect } from 'react';
 import { ArrowLeft } from 'lucide-react';
-import { translations, LEVELS } from '../i18n';
+import { translations, STAGES } from '../i18n';
 import { loadProgress, BADGES } from '../gamification.generated.js';
 
+// Colores alineados a la identidad de los logos de bloques:
+// Grammaster índigo (#6366F1) · Desgramatizador coral (#FB7185 = rose-400) ·
+// Question Lab turquesa (#2DD4BF = teal-400).
 const apps = [
   {
     id: 'grammaster',
     title: 'Grammaster',
     logo: 'https://moncholate.github.io/GramMaster/apple-touch-icon.png',
-    btnClass: 'bg-violet-600 hover:bg-violet-700 active:bg-violet-800',
-    ringClass: 'ring-violet-200',
-    logoBg: 'from-violet-50 to-purple-50',
+    btnClass: 'bg-indigo-500 hover:bg-indigo-600 active:bg-indigo-700',
+    ringClass: 'ring-indigo-200',
+    logoBg: 'from-indigo-50 to-violet-50',
     url: 'https://moncholate.github.io/GramMaster/',
   },
   {
     id: 'desgramatizador',
     title: 'Desgramatizador',
     logo: 'https://moncholate.github.io/DesGramatizador/apple-touch-icon.png',
-    btnClass: 'bg-fuchsia-600 hover:bg-fuchsia-700 active:bg-fuchsia-800',
-    ringClass: 'ring-fuchsia-200',
-    logoBg: 'from-fuchsia-50 to-pink-50',
+    btnClass: 'bg-rose-500 hover:bg-rose-600 active:bg-rose-700',
+    ringClass: 'ring-rose-200',
+    logoBg: 'from-rose-50 to-pink-50',
     url: 'https://moncholate.github.io/DesGramatizador/',
   },
   {
     id: 'questionlab',
     title: 'Question Lab',
     logo: 'https://moncholate.github.io/Question-Lab/apple-touch-icon.png',
-    btnClass: 'bg-teal-600 hover:bg-teal-700 active:bg-teal-800',
+    btnClass: 'bg-teal-500 hover:bg-teal-600 active:bg-teal-700',
     ringClass: 'ring-teal-200',
     logoBg: 'from-teal-50 to-cyan-50',
     url: 'https://moncholate.github.io/Question-Lab/',
   },
+];
+
+// Tinte progresivo por etapa: más intensidad = más avanzado (mismo lenguaje
+// que las familias de tiempos: la intensidad codifica progresión).
+const STAGE_TINTS = [
+  { box: 'bg-indigo-50/50 border-indigo-100',  label: 'text-indigo-400' },
+  { box: 'bg-indigo-50 border-indigo-200',     label: 'text-indigo-500' },
+  { box: 'bg-indigo-100/70 border-indigo-300', label: 'text-indigo-600' },
 ];
 
 const HubHome = ({ lang, level, setLevel }) => {
@@ -42,6 +53,17 @@ const HubHome = ({ lang, level, setLevel }) => {
   // Progreso compartido de la suite (lo escriben las apps en gh_progress)
   const [progress, setProgress] = useState(null);
   const [showBadges, setShowBadges] = useState(false);
+
+  // Aviso activo al tocar una app sin nivel elegido (en móvil el tooltip de
+  // title no existe; esto sí se ve): pulso en el selector + mensaje, 2.5 s.
+  const [needLevel, setNeedLevel] = useState(false);
+  const nudgeTimer = useRef(null);
+  const nudge = () => {
+    clearTimeout(nudgeTimer.current);
+    setNeedLevel(true);
+    nudgeTimer.current = setTimeout(() => setNeedLevel(false), 2500);
+  };
+  useEffect(() => () => clearTimeout(nudgeTimer.current), []);
   useEffect(() => {
     try { setProgress(loadProgress(window.localStorage)); } catch (e) {}
   }, [selectedApp]);
@@ -158,42 +180,66 @@ const HubHome = ({ lang, level, setLevel }) => {
         </button>
       </div>
 
-      {/* Selector de nivel */}
-      <div className="w-full max-w-lg mb-5">
-        <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide px-1 mb-1.5 block">
-          {t.levelLabel}
-        </span>
-        <div className="flex flex-wrap gap-1.5">
-          {LEVELS.map((lvl) => (
-            <button
-              key={lvl.id}
-              onClick={() => setLevel(lvl.id)}
-              className={`px-3 py-1.5 rounded-lg text-sm font-semibold border transition-all touch-manipulation ${
-                level === lvl.id
-                  ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm'
-                  : 'bg-white text-slate-600 border-slate-200 hover:border-indigo-300 hover:text-indigo-600'
-              }`}
-              style={{ WebkitTapHighlightColor: 'transparent' }}
+      {/* Paso 1 · Selector de nivel por etapas */}
+      <div className={`w-full max-w-lg mb-6 rounded-2xl transition-shadow ${needLevel ? 'gh-nudge' : ''}`}>
+        <div className="flex items-center gap-2 mb-2 px-1">
+          <span className="w-5 h-5 rounded-full bg-indigo-600 text-white text-[11px] font-bold flex items-center justify-center flex-shrink-0">1</span>
+          <span className="text-sm font-bold text-slate-700">{t.step1}</span>
+          {needLevel && (
+            <span role="alert" className="text-xs font-semibold text-rose-600 ml-auto">{t.needLevel}</span>
+          )}
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {STAGES.map((stage, i) => (
+            <fieldset
+              key={stage.id}
+              className={`flex-1 min-w-[136px] rounded-xl border px-2 pt-1.5 pb-2 ${STAGE_TINTS[i].box}`}
             >
-              {lvl[lang]}
-            </button>
+              <legend className={`text-[10px] font-bold uppercase tracking-wide px-1 ${STAGE_TINTS[i].label}`}>
+                {stage[lang]}
+              </legend>
+              <div className="flex gap-1.5">
+                {stage.levels.map((lvl) => {
+                  const label = typeof lvl.short === 'string' ? lvl.short : lvl.short[lang];
+                  return (
+                    <button
+                      key={lvl.id}
+                      onClick={() => setLevel(lvl.id)}
+                      aria-pressed={level === lvl.id}
+                      className={`flex-1 px-2 py-1.5 rounded-lg text-sm font-semibold border transition-all touch-manipulation ${
+                        level === lvl.id
+                          ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm'
+                          : 'bg-white text-slate-600 border-slate-200 hover:border-indigo-300 hover:text-indigo-600'
+                      }`}
+                      style={{ WebkitTapHighlightColor: 'transparent' }}
+                    >
+                      {label}
+                    </button>
+                  );
+                })}
+              </div>
+            </fieldset>
           ))}
         </div>
       </div>
 
-      {/* Cards */}
-      <div className="grid sm:grid-cols-2 gap-3 w-full max-w-lg">
+      {/* Paso 2 · Cards */}
+      <div className="w-full max-w-lg">
+        <div className="flex items-center gap-2 mb-2 px-1">
+          <span className={`w-5 h-5 rounded-full text-[11px] font-bold flex items-center justify-center flex-shrink-0 ${level ? 'bg-indigo-600 text-white' : 'bg-slate-300 text-white'}`}>2</span>
+          <span className={`text-sm font-bold ${level ? 'text-slate-700' : 'text-slate-400'}`}>{t.step2}</span>
+        </div>
+      <div className="grid sm:grid-cols-2 gap-3 w-full">
         {apps.map((app) => (
           <button
             key={app.id}
-            onClick={() => level && setSelectedApp(app.id)}
+            onClick={() => (level ? setSelectedApp(app.id) : nudge())}
             className={`group bg-white rounded-2xl border border-slate-200 transition-all text-left touch-manipulation overflow-hidden ${
               level
                 ? 'hover:border-slate-300 hover:shadow-lg active:scale-[0.98] cursor-pointer'
-                : 'opacity-50 cursor-not-allowed'
+                : 'opacity-60'
             }`}
             style={{ WebkitTapHighlightColor: 'transparent' }}
-            title={!level ? (lang === 'es' ? 'Selecciona un nivel primero' : 'Select a level first') : ''}
           >
             <div className={`applogo flex items-center justify-center py-6 bg-gradient-to-br ${app.logoBg}`}>
               <img
@@ -214,6 +260,7 @@ const HubHome = ({ lang, level, setLevel }) => {
             </div>
           </button>
         ))}
+      </div>
       </div>
 
       {/* Galería de insignias */}

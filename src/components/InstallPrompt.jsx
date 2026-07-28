@@ -21,7 +21,7 @@ const InstallDebug = ({ data, visible }) => (
 );
 
 const InstallPrompt = () => {
-  const { canPrompt, needsManualSteps, snooze, install, debug } = usePwaInstall();
+  const { canPrompt, needsManualSteps, snooze, markInstalled, install, debug } = usePwaInstall();
   const showDebug = typeof location !== 'undefined' && location.search.includes('debugInstall');
   const ios = needsManualSteps;
   // En iOS no hay evento del navegador, así que el aviso se muestra tras un
@@ -110,6 +110,16 @@ const InstallPrompt = () => {
               </button>
             </>
           )}
+
+          {/* Salida definitiva: algunos navegadores ofrecen instalar aunque la
+              app ya esté instalada, y no hay forma de detectarlo desde la web. */}
+          <button
+            onClick={markInstalled}
+            className="w-full mt-2 text-xs text-slate-400 hover:text-slate-600 py-1.5 touch-manipulation"
+            style={{ WebkitTapHighlightColor: 'transparent' }}
+          >
+            Ya la tengo instalada
+          </button>
         </div>
       </div>
     </div>

@@ -27,17 +27,20 @@ export const isIOS = () =>
  *
  * Reglas, después de varias vueltas aprendiendo qué señal sirve para qué:
  *
- *  - `beforeinstallprompt` es la palabra del propio navegador diciendo "esto se
- *    puede instalar aquí". Si se dispara, se BORRA cualquier marca previa de
- *    instalada: el navegador sabe más que nuestra memoria.
- *  - `display-mode: standalone` solo es cierto DENTRO de la app instalada, pero
- *    como la app y el navegador comparten localStorage (mismo origen), al
- *    abrirla queda una marca que la pestaña normal después puede leer.
- *  - `getInstalledRelatedApps()` se usa SOLO en positivo: varios navegadores de
- *    escritorio devuelven vacío aunque la app esté instalada, y Brave la
- *    restringe por privacidad, así que un vacío no prueba nada.
- *  - La X no oculta para siempre: pospone. Un "nunca más" es justo lo que dejó
- *    el aviso bloqueado sin manera de recuperarlo.
+ *  - `beforeinstallprompt` NO prueba que la app no esté instalada. Comprobado en
+ *    Edge sobre Android: lo dispara igual con la app ya instalada desde ese mismo
+ *    Edge. Por eso solo se usa para saber que hay un evento con el que lanzar la
+ *    instalación, nunca para borrar la marca de instalada.
+ *  - `getInstalledRelatedApps()` se usa SOLO en positivo: en ese mismo caso
+ *    devuelve vacío aunque la app esté instalada, y Brave la restringe por
+ *    privacidad. Un vacío no prueba nada.
+ *  - `display-mode: standalone` es la señal fiable: solo es cierto DENTRO de la
+ *    app instalada, y como la app y el navegador comparten localStorage (mismo
+ *    origen), al abrirla queda una marca que la pestaña normal después lee.
+ *  - Cuando ninguna señal alcanza, decide la persona: el aviso ofrece "ya la
+ *    tengo instalada", que fija la marca a mano.
+ *  - La X no oculta para siempre: pospone. Un "nunca más" dejó el aviso
+ *    bloqueado sin manera de recuperarlo.
  */
 export function usePwaInstall() {
   const [event, setEvent] = useState(() => window.__ghInstall || null);
@@ -55,13 +58,10 @@ export function usePwaInstall() {
     // Dentro de la app instalada: dejar constancia para la pestaña del navegador
     if (isStandalone()) { setInstalled(true); save({ installed: true }); }
 
-    // El navegador dice que se puede instalar => no está instalada aquí
-    const markInstallable = () => {
-      setEvent(window.__ghInstall);
-      setInstalled(false);
-      save({ installed: false });
-    };
-    if (window.__ghInstall && !isStandalone()) markInstallable();
+    // Solo guarda el evento con el que se puede lanzar la instalación. NO se
+    // toma como prueba de que la app no esté instalada (ver comentario arriba).
+    const markInstallable = () => setEvent(window.__ghInstall);
+    if (window.__ghInstall) markInstallable();
 
     const onInstalled = () => {
       window.__ghInstall = null;
@@ -89,6 +89,12 @@ export function usePwaInstall() {
     setSnoozeUntil(until);
   };
 
+  /** "Ya la tengo instalada": la última palabra cuando el navegador no ayuda. */
+  const markInstalled = () => {
+    setInstalled(true);
+    save({ installed: true });
+  };
+
   const install = async () => {
     const e = window.__ghInstall;
     if (!e) return false;
@@ -107,6 +113,7 @@ export function usePwaInstall() {
     installed,
     snoozed,
     snooze,
+    markInstalled,
     install,
     /** Hay un evento real del navegador para lanzar la instalación. */
     canPrompt: !blocked && !!event,

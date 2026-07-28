@@ -32,7 +32,20 @@ const write = (key, on) => {
  * `getInstalledRelatedApps()`, que le pregunta directo al sistema, y esa consulta
  * tambien sirve para LIMPIAR la marca si la app se desinstalo.
  */
+/**
+ * `?resetInstall` en la URL borra el estado guardado. Sirve para volver a probar
+ * el aviso despues de desinstalar la app, porque la marca de instalada ya no se
+ * borra sola (ver arriba: el vacio de getInstalledRelatedApps no prueba nada).
+ */
+function maybeReset() {
+  if (typeof location === 'undefined') return;
+  if (!location.search.includes('resetInstall')) return;
+  write(INSTALLED_KEY, false);
+  write(DISMISS_KEY, false);
+}
+
 export function usePwaInstall() {
+  maybeReset();
   // El evento puede dispararse antes de que React monte; index.html lo guarda.
   const [event, setEvent] = useState(() => window.__ghInstall || null);
   const [installed, setInstalled] = useState(() => isStandalone() || read(INSTALLED_KEY));
@@ -55,12 +68,13 @@ export function usePwaInstall() {
     window.addEventListener('gh-installable', onReady);
     window.addEventListener('appinstalled', onInstalled);
 
-    // Consulta al sistema. Requiere `related_applications` e `id` en el manifest.
+    // Consulta al sistema. Se usa SOLO como señal positiva: varios navegadores
+    // de escritorio devuelven vacío aunque la app esté instalada (Brave restringe
+    // esta API por privacidad), así que un vacío no prueba nada y no debe borrar
+    // lo que ya sabemos por las otras señales.
     navigator.getInstalledRelatedApps?.()
       .then(apps => {
-        const yes = !!(apps && apps.length);
-        setInstalled(yes);
-        write(INSTALLED_KEY, yes);   // tambien limpia la marca si se desinstalo
+        if (apps && apps.length) { setInstalled(true); write(INSTALLED_KEY, true); }
       })
       .catch(() => {})
       .finally(() => setChecked(true));
@@ -88,6 +102,20 @@ export function usePwaInstall() {
   };
 
   const blocked = installed || dismissed || !checked;
+
+  // `?debugInstall` en la URL explica en consola por que se muestra o no.
+  useEffect(() => {
+    if (!location.search.includes('debugInstall')) return;
+    console.log('[install]', {
+      standalone: isStandalone(),
+      marcaGuardada: read(INSTALLED_KEY),
+      instalada: installed,
+      descartada: dismissed,
+      eventoDelNavegador: !!event,
+      apiDisponible: !!navigator.getInstalledRelatedApps,
+      seMuestra: !blocked && (!!event || isIOS()),
+    });
+  }, [installed, dismissed, event, checked]);
 
   return {
     installed,

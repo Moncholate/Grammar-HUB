@@ -13,6 +13,27 @@ Estos son los únicos ítems del banco entero que hablan de **la evaluación rea
 del alumno** y no de un estándar internacional. Fuente: sus propias rúbricas, que
 además es la fuente más verificable de todas — el alumno la tiene en la mano.
 
+## La regla que gobierna esta área
+
+> **La rúbrica sirve para revelar lo que el alumno subestima, nunca para
+> contradecir una buena práctica.**
+
+Estas rúbricas tienen partes mal diseñadas, y el docente lo sabe. Dos ejemplos
+que él mismo levantó:
+
+- **Las autocorrecciones cuentan como interrupciones** en el criterio de fluidez.
+  Corregirse es monitoreo — la señal de que el hablante está controlando su
+  producción — y penalizarlo es al revés de lo que se quiere enseñar.
+- **El 100% de gramática y pronunciación en el oral de intermedio alto exige cero
+  errores.** Eso no lo cumple un hablante nativo: la conversación espontánea está
+  llena de reparaciones y falsos arranques.
+
+Un docente con criterio no aplica eso a rajatabla. Así que **donde la rúbrica y
+la pedagogía chocan, gana la pedagogía y el ítem no se escribe.** Lo que sí se
+usa de la rúbrica es lo que el alumno de verdad ignora y le cuesta puntos con
+razón: que la extensión pesa más que la gramática, que la ortografía es un
+criterio propio, y que el vocabulario de la unidad se cuenta.
+
 ---
 
 ## Las rúbricas, en limpio
@@ -71,16 +92,16 @@ Umbrales del 100%: básico 40 · elemental 60 · intermedio 80 · intermedio alt
 *Fuente:* Rúbrica de writing, criterio de coherencia y extensión.
 `estructura: general` | `nivel: básico` | `tag: rubrica_extension`
 
-**R4.** ES: "Pasa el umbral de palabras con holgura, pero no escribas el doble: cada palabra de más es también una oportunidad más de error, y los errores se cuentan uno a uno."
-*Fuente:* Rúbrica de writing — extensión sin tope superior, gramática y ortografía por conteo.
+**R4.** ES: "Llegar al número de palabras no es rellenar. Repetir la misma idea con otras palabras no suma extensión: suma incoherencia, que se evalúa en el mismo criterio."
+*Fuente:* Rúbrica de writing — el criterio es "coherencia y extensión", las dos cosas juntas.
 `estructura: general` | `nivel: intermedio` | `tag: rubrica_extension`
 
 ---
 
 ## BLOQUE B — El conteo de errores
 
-**R5.** ES: "Tu rúbrica cuenta errores, no los pesa. Ocho descuidos menores puntúan igual que ocho errores graves. Por eso conviene cazar los fáciles primero."
-*Fuente:* Rúbrica de writing y speaking, criterio de gramática.
+**R5.** ES: "Empieza por los errores fáciles. En tu rúbrica cada error suma al conteo, así que el descuido más tonto te cuesta lo mismo que el más difícil de arreglar."
+*Fuente:* Rúbrica de writing y speaking, criterio de gramática por número de casos.
 `estructura: general` | `nivel: básico` | `tag: rubrica_conteo`
 
 **R6.** ES: "Corregir UN error puede valer hasta 0,9 puntos. Pasar de 6 errores a 5 te sube de 0,9 a 1,8 en gramática. Un error, casi un punto."
@@ -141,21 +162,62 @@ Cálculo: vocabulario de 4 palabras = 1,8 → 6 palabras = 3,0
 
 ## BLOQUE E — Oral
 
-**R17.** ES: "En el oral, autocorregirte una o dos veces no cuesta nada. Hacerlo todo el rato sí: las autocorrecciones cuentan como interrupciones en el criterio de fluidez."
-*Fuente:* Rúbrica de speaking — el 100% admite hasta 3 interrupciones **o autocorrecciones** (hasta 2 en intermedio alto).
+**R17.** ES: "Si te equivocas hablando, corrígete y sigue. Darte cuenta del error mientras hablas es control del idioma, no debilidad: es la señal de que te estás escuchando."
+*Fuente:* MCER — la capacidad de monitorear y reparar es parte de la competencia estratégica. (Reemplaza al D2 del Área 7, y **contradice a propósito** el criterio de fluidez de la rúbrica: ver "La regla que gobierna esta área".)
 `estructura: general` | `nivel: básico` | `tag: rubrica_oral`
 
-**R18.** ES: "Si no te sale la estructura compleja, dila simple. Tu rúbrica no premia el riesgo gramatical: cuenta errores. Dos frases simples correctas ganan."
-*Fuente:* Rúbrica de speaking y writing — no hay criterio de rango gramatical, solo de precisión por conteo.
+**R18.** ES: "Si en la prueba no te sale la estructura compleja, dila simple y sigue adelante. Trabarte cuesta más que simplificar. Guárdate el riesgo para practicar, no para el examen."
+*Fuente:* MCER — estrategias de compensación; rúbrica de speaking (coherencia y fluidez, 4 puntos).
 `estructura: general` | `nivel: básico` | `tag: rubrica_oral`
 
 **R19.** ES: "Coherencia y fluidez valen 4 puntos en el oral; la gramática, 3. Trabarte buscando la forma perfecta te cuesta más que decirlo con un error."
 *Fuente:* Rúbrica de speaking, distribución de puntajes.
 `estructura: general` | `nivel: básico` | `tag: rubrica_oral`
 
-**R20.** ES: "En intermedio alto el oral sube la vara: el 100% de gramática exige cero errores, no 'pocos'. En los niveles anteriores se permite uno."
-*Fuente:* Rúbrica de speaking — intermedio alto y pre-avanzado: "las oraciones son gramaticalmente correctas en todos los casos".
-`estructura: general` | `nivel: avanzado` | `tag: rubrica_oral`
+**R20.** ES: "En el oral no se espera que hables perfecto. Ni los hablantes nativos hablan sin repetirse, corregirse ni empezar de nuevo. Se espera que se entienda lo que dices."
+*Fuente:* MCER — descriptores de precisión gramatical; literatura sobre disfluencias y auto-reparación en habla espontánea nativa.
+`estructura: general` | `nivel: básico` | `tag: rubrica_oral`
+
+---
+
+## BLOQUE F — Responder lo que se pregunta
+
+*El criterio de más peso (4 de 12 puntos) incluye "todas las ideas requeridas y
+de forma coherente con el estímulo". Según el docente, ahí se pierde puntaje por
+dos fallos concretos: responder cerrado una pregunta abierta, y contestar otra
+pregunta (preguntan la hora, el alumno habla de su edad). No es un problema de
+inglés: es de lectura del enunciado, y es la forma más cara y más evitable de
+perder puntos.*
+
+**R23.** ES: "Antes de responder, subraya la palabra con que empieza la pregunta. What, when, where, how much, how old: cada una pide un dato distinto y solo ese."
+Ejemplo: *How old are you?* pide una edad · *What time is it?* pide una hora
+*Fuente:* Rúbrica de writing y speaking, criterio de coherencia con el estímulo.
+`estructura: wh_questions` | `nivel: básico` | `tag: rubrica_coherencia`
+
+**R24.** ES: "Cuenta cuántas cosas te pide el enunciado antes de escribir. Si son tres, tu texto necesita tres respuestas. Es el error más caro de la prueba y el más fácil de evitar."
+*Fuente:* Rúbrica de writing — "presentando todas las ideas requeridas" es parte del criterio de 4 puntos.
+`estructura: general` | `nivel: básico` | `tag: rubrica_coherencia`
+
+**R25.** ES: "Fíjate si la pregunta es abierta o cerrada. Si dice 'and explain why' o 'give details', un 'Yes, I do' no alcanza: pierdes en coherencia, no en gramática."
+*Fuente:* Rúbrica de writing y speaking — cobertura de los temas requeridos.
+`estructura: questions_do` | `nivel: básico` | `tag: rubrica_coherencia`
+
+**R26.** ES: "Responder muy bien una pregunta que no te hicieron vale cero. La coherencia con el enunciado pesa 4 de 12 puntos, más que la gramática."
+*Fuente:* Rúbrica de writing y speaking, distribución de puntajes.
+`estructura: general` | `nivel: básico` | `tag: rubrica_coherencia`
+
+**R27.** ES: "Al terminar, vuelve al enunciado y marca cada cosa que pedía. Lo que quede sin marcar son los puntos que ibas a perder sin darte cuenta."
+*Fuente:* Rúbrica de writing (cobertura de los temas requeridos) + Zimmerman (2002), automonitoreo.
+`estructura: general` | `nivel: básico` | `tag: rubrica_coherencia`
+
+**R28.** ES: "Si dudas de qué te están preguntando, la pregunta misma te lo dice. Desarma el enunciado antes de contestarlo: primero entiéndelo, después responde."
+*Fuente:* Rúbrica de writing y speaking, criterio de coherencia. Enlaza con Question Lab.
+`estructura: wh_questions` | `nivel: básico` | `tag: rubrica_coherencia`
+
+> **Nota:** la versión oral de este consejo **ya existe** — es el **D10 del Área
+> 7** ("si te preguntan algo que no entendiste, pide que repitan"). No lo repito
+> aquí; sube de prioridad, porque ahora sabemos que ese es el fallo que más
+> puntos cuesta.
 
 ---
 
@@ -184,13 +246,25 @@ rúbrica con la que se evalúa al alumno.
 | **E3** | Suavizar: quitar la implicación de que "pesa más". El error de tiempo verbal altera el sentido, pero en la rúbrica cuenta igual que cualquier otro. |
 | **E4** | Sustituido por **R9** — se da vuelta para que abra con el argumento de rentabilidad, no con la minimización del error. |
 
-### Se ajustan (3, fuera de los 13)
+### Se ajustan (1, fuera de los 13)
 
 | Ítem | Ajuste |
 |---|---|
-| **B4** | Cortar la segunda frase (*"las rúbricas distinguen entre las dos"*): esta rúbrica **premia jugar seguro** — menos errores, más puntos, sin castigo por simplicidad. |
-| **D1** *"en el oral no se espera perfección gramatical"* | Cierto en básico, elemental e intermedio. **Falso en intermedio alto.** Requiere filtro por nivel. |
-| **D2** *"autocorregirse suma"* | Sustituido por **R17**: las autocorrecciones cuentan en el criterio de fluidez. |
+| **B4** | Cortar la segunda frase (*"las rúbricas distinguen entre las dos"*): esta rúbrica **premia jugar seguro** — menos errores, más puntos, sin castigo por simplicidad. La primera frase se queda: la distinción entre dominar y no arriesgar sigue siendo cierta y útil. |
+
+### Dos correcciones mías que quedaron sin efecto
+
+En una primera pasada propuse ajustar **D1** (*"en el oral no se espera
+perfección gramatical"*) con un filtro por nivel, y sustituir **D2**
+(*"autocorregirse suma"*) porque la rúbrica cuenta las autocorrecciones en
+fluidez. **Las dos quedan revertidas**: eran correcciones que seguían la rúbrica
+en vez del criterio pedagógico, exactamente lo que la regla de esta área prohíbe.
+
+- **D1 se queda como está**, sin filtro. Que el 100% de intermedio alto pida cero
+  errores es un problema de la rúbrica, no una meta que valga la pena transmitir.
+  **R20** lo dice explícito: ni los nativos hablan sin corregirse.
+- **D2 se queda**, reforzado en **R17** con el argumento correcto: auto-repararse
+  es competencia estratégica, no un desliz que se descuenta.
 
 ### Se quedan y suben de prioridad (3)
 
@@ -214,14 +288,24 @@ Reformulado como **R21** más abajo.
 
 ## Notas de implementación
 
-**Tensión que conviene que decidas tú.** Varios de estos ítems enseñan a leer la
-rúbrica como un sistema de puntos, y eso roza el "optimizar la nota" en vez de
-"aprender inglés". Mi criterio al escribirlos fue: **la rúbrica es un contrato
-público, y enseñar a leerla es enseñar autorregulación** (Zimmerman), no hacer
-trampa — R22 dice exactamente eso. Pero el ítem que más se acerca al borde es
-**R4** ("no escribas el doble"), porque desincentiva producir más lengua, que es
-justo lo que hace aprender (Swain). Está redactado en equilibrio, pero si
-prefieres máxima coherencia pedagógica, ese es el primero que sacaría.
+**Sobre optimizar la nota.** Varios ítems enseñan a leer la rúbrica como un
+sistema de puntos, y eso roza el "sacar más nota" en vez de "aprender inglés". El
+criterio al escribirlos fue: **la rúbrica es un contrato público, y enseñar a
+leerla es enseñar autorregulación** (Zimmerman), no hacer trampa — R22 dice
+exactamente eso. El único ítem que se pasaba de ese borde era el **R4** original
+("no escribas el doble"), que desincentivaba producir más lengua, o sea justo lo
+que hace aprender (Swain). Reescrito: ahora habla de no rellenar, que es un
+problema real de coherencia y no una estrategia de puntaje.
+
+**Los ítems del BLOQUE F son los de mayor retorno del área.** Atacan un fallo que
+no es de inglés sino de lectura del enunciado, en el criterio que más pesa. Un
+alumno que responde sobre su edad cuando le preguntaron la hora puede tener la
+gramática impecable y perder igual los 4 puntos más caros.
+
+Y hay una coincidencia que vale la pena mirar: ese fallo es de **comprensión de
+la palabra interrogativa**, y en la suite existe una app dedicada exactamente a
+eso. Si algún día Question Lab suma una actividad de "¿qué te está preguntando
+esta pregunta?", el R28 es su puerta de entrada natural.
 
 **Las cifras están comprobadas.** Cada número de R1, R2, R6, R7, R10, R11, R14 y
 R19 se verificó calculándolo contra las tablas de arriba, no a ojo. Si cambian

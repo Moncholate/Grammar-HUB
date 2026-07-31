@@ -23,6 +23,10 @@
 :root[data-theme="dark"] .border-indigo-100 { border-color: #2a3152 !important; }
 :root[data-theme="dark"] .border-indigo-200 { border-color: #333b61 !important; }
 :root[data-theme="dark"] .border-indigo-300 { border-color: #404a77 !important; }
+/* Aviso de la frase del día (ítem en debate o sin fuente primaria) */
+:root[data-theme="dark"] .bg-amber-50 { background-color: #2e2410 !important; }
+:root[data-theme="dark"] .border-amber-200 { border-color: #4a3a15 !important; }
+:root[data-theme="dark"] .text-amber-900 { color: #f0d9a8 !important; }
 
 /* Pulso del selector de nivel al tocar una app sin nivel elegido */
 @keyframes ghNudge {

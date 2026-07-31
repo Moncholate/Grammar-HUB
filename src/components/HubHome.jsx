@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { ArrowLeft } from 'lucide-react';
 import { translations, STAGES } from '../i18n';
 import { loadProgress, BADGES } from '../gamification.generated.js';
+import DailyPhrase from './DailyPhrase';
 
 // Colores alineados a la identidad de los logos de bloques:
 // Grammaster índigo (#6366F1) · Desgramatizador coral (#FB7185 = rose-400) ·
@@ -157,7 +158,10 @@ const HubHome = ({ lang, level, setLevel }) => {
 
   // Vista principal
   return (
-    <div className={`flex flex-col items-center px-5 py-8 ${showBadges ? 'justify-start min-h-full' : 'justify-center h-full'}`}>
+    /* min-h-full y no h-full: con la frase del día el contenido puede pasarse
+       del alto de la pantalla, y `justify-center` sobre una caja de alto fijo
+       recorta por arriba (el scroll del body empieza en 0 y no alcanza). */
+    <div className={`flex flex-col items-center px-5 py-8 min-h-full ${showBadges ? 'justify-start' : 'justify-center'}`}>
 
       {/* Hero */}
       <div className="text-center mb-6">
@@ -184,6 +188,9 @@ const HubHome = ({ lang, level, setLevel }) => {
           🏅 {unlockedCount}/{BADGES.length} {lang === 'es' ? 'logros' : 'badges'} <span className="text-[10px]">{showBadges ? '▲' : '▼'}</span>
         </button>
       </div>
+
+      {/* Frase del día · dato con fuente, antes de elegir nada */}
+      <DailyPhrase lang={lang} />
 
       {/* Paso 1 · Selector de nivel por etapas */}
       <div className={`w-full max-w-2xl mb-6 rounded-2xl transition-shadow ${needLevel ? 'gh-nudge' : ''}`}>

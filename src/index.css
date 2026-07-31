@@ -28,6 +28,21 @@
 :root[data-theme="dark"] .border-amber-200 { border-color: #4a3a15 !important; }
 :root[data-theme="dark"] .text-amber-900 { color: #f0d9a8 !important; }
 
+/* Superficie del aviso de la frase del día.
+   Va aparte de .bg-white porque el panel necesita separarse del fondo velado y
+   eso se resuelve distinto en cada tema (medido con el velo a 65%):
+   · claro  → blanco sobre el velo da 5,8:1; el borde solo remata.
+   · oscuro → por luminancia el máximo posible es 1,5:1, o sea invisible. La
+              separación tiene que venir del borde, y la superficie se sube un
+              punto (#1b2133) para que se lea como panel elevado. */
+.gh-dialog  { background: #ffffff; border: 1px solid #e2e8f0; }
+.gh-grabber { background: #e2e8f0; }
+/* #525d85 y no el #2a3042 de los bordes normales: contra el velo da 2,85:1 y
+   contra el panel 2,49:1, o sea un canto que de verdad se ve. Con el borde
+   habitual quedaba en 1,6:1 — invisible, que es el problema que se arregla. */
+:root[data-theme="dark"] .gh-dialog  { background: #1b2133; border-color: #525d85; }
+:root[data-theme="dark"] .gh-grabber { background: #525d85; }
+
 /* Aviso de la frase del día: hoja desde abajo en celular, aparición suave en PC */
 @keyframes ghFade { from { opacity: 0; } to { opacity: 1; } }
 @keyframes ghSheet { from { transform: translateY(24px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }

@@ -113,7 +113,7 @@ const DailyPhrase = ({ lang, onOpenChange }) => {
 
       {open && (
         <div
-          className="fixed inset-0 z-[60] flex items-end sm:items-center justify-center bg-slate-900/50 gh-fade"
+          className="fixed inset-0 z-[60] flex items-end sm:items-center justify-center bg-slate-900/65 backdrop-blur-sm gh-fade"
           onClick={close}
         >
           <div
@@ -122,10 +122,13 @@ const DailyPhrase = ({ lang, onOpenChange }) => {
             aria-modal="true"
             aria-labelledby="gh-phrase-title"
             onClick={(e) => e.stopPropagation()}
-            className="gh-sheet w-full sm:max-w-lg max-h-[88vh] overflow-y-auto bg-white rounded-t-3xl sm:rounded-3xl px-5 pt-4 pb-5 sm:p-6 shadow-2xl"
+            /* gh-dialog lleva la superficie y el borde: en modo oscuro un panel
+               no se puede separar del fondo por luminancia (el máximo medido es
+               1,5:1 y baja junto con el velo), así que el borde no es adorno. */
+            className="gh-sheet gh-dialog w-full sm:max-w-lg max-h-[88vh] overflow-y-auto rounded-t-3xl sm:rounded-3xl px-5 pt-4 pb-5 sm:p-6 shadow-2xl"
           >
             {/* Agarradera: en celular esto se abre desde abajo y conviene que se lea como tal */}
-            <div className="sm:hidden mx-auto mb-3 h-1 w-10 rounded-full bg-slate-200" aria-hidden="true" />
+            <div className="gh-grabber sm:hidden mx-auto mb-3 h-1 w-10 rounded-full" aria-hidden="true" />
 
             <div id="gh-phrase-title" className="flex items-baseline gap-2 flex-wrap mb-3">
               {eyebrow}

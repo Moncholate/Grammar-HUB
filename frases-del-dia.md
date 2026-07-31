@@ -13,6 +13,25 @@ punto: que el estudiante vea que lo que se le dice tiene respaldo.
 Origen: compilación bilingüe encargada por el docente (Víctor Morales, Duoc UC),
 en 8 categorías + un bloque de refuerzo diario, con verificación de atribución.
 
+## Dónde se muestra
+
+Dos sitios, a propósito:
+
+- **Un aviso que salta solo la primera visita del día** (hoja desde abajo en
+  celular, modal centrado en PC). Es el momento de leerla: el alumno recién
+  llegó y todavía no iba a ninguna parte.
+- **Una línea plegada que queda en la home todo el día** y la vuelve a abrir.
+  Lo que se muestra en un aviso se cierra por reflejo; sin la línea, quien lo
+  cerró sin leer perdía la frase hasta el día siguiente. Además deja la frase
+  disponible para comentarla en clase.
+
+El aviso **no** se puede volver bloqueante ni retrasar su cierre: con
+estudiantes eso se paga caro. El botón dice "Entendido" en vez de ser solo una
+X porque una X invita a descartar y un botón con texto invita a terminar de
+leer. Mientras el aviso está abierto, el de instalar la app (`InstallPrompt`,
+panel fijo abajo) espera su turno vía la prop `paused` — dos paneles
+superpuestos en la misma carga se cierran sin leer ninguno.
+
 ## Cómo rota
 
 - Una frase por **día calendario local** (no UTC — en Chile `toISOString()`
@@ -27,7 +46,8 @@ en 8 categorías + un bloque de refuerzo diario, con verificación de atribució
   2. Técnica de estudio (ciencia del aprendizaje, tips prácticos).
   3. Fundamento y sentido (SLA, estrategias, bilingüismo, empleabilidad, citas).
 
-Estado en `localStorage` bajo `gh_daily_phrase`.
+Estado en `localStorage` bajo `gh_daily_phrase`: `{ day, id, queue, seen }`.
+`seen` es lo que evita que el aviso vuelva a saltar el mismo día.
 
 ## Qué se puede afirmar y qué no
 

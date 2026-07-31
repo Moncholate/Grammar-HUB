@@ -20,7 +20,9 @@ const InstallDebug = ({ data, visible }) => (
   </div>
 );
 
-const InstallPrompt = () => {
+/* `paused`: hay otro panel encima (la frase del día). No se cancela el aviso,
+   solo espera a que se cierre, para no apilar dos interrupciones. */
+const InstallPrompt = ({ paused = false }) => {
   const { canPrompt, needsManualSteps, snooze, markInstalled, install, debug } = usePwaInstall();
   const showDebug = typeof location !== 'undefined' && location.search.includes('debugInstall');
   const ios = needsManualSteps;
@@ -34,7 +36,7 @@ const InstallPrompt = () => {
     return () => clearTimeout(t);
   }, [ios]);
 
-  const visible = delayPassed && (canPrompt || ios);
+  const visible = !paused && delayPassed && (canPrompt || ios);
 
   const handleInstall = async () => {
     const ok = await install();

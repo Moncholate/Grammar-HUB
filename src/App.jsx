@@ -18,6 +18,9 @@ const loadLevel = () => {
 const App = () => {
   const [lang, setLang] = useState('es');
   const [level, setLevelState] = useState(loadLevel);
+  // Con el aviso de la frase del día abierto, el de instalar espera su turno:
+  // dos paneles superpuestos en la misma carga se cierran sin leer ninguno.
+  const [phraseOpen, setPhraseOpen] = useState(false);
 
   const setLevel = (id) => {
     setLevelState(id);
@@ -28,10 +31,10 @@ const App = () => {
     <div className="min-h-screen bg-[#f5f6fb] flex flex-col">
       <HeaderNav lang={lang} setLang={setLang} />
       <main className="flex-1 w-full flex flex-col">
-        <HubHome lang={lang} level={level} setLevel={setLevel} />
+        <HubHome lang={lang} level={level} setLevel={setLevel} onPhraseOpenChange={setPhraseOpen} />
       </main>
       {/* Decide solo si corresponde mostrarse (ver usePwaInstall) */}
-      <InstallPrompt />
+      <InstallPrompt paused={phraseOpen} />
     </div>
   );
 };

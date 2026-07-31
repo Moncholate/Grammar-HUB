@@ -28,6 +28,15 @@
 :root[data-theme="dark"] .border-amber-200 { border-color: #4a3a15 !important; }
 :root[data-theme="dark"] .text-amber-900 { color: #f0d9a8 !important; }
 
+/* Aviso de la frase del día: hoja desde abajo en celular, aparición suave en PC */
+@keyframes ghFade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes ghSheet { from { transform: translateY(24px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+.gh-fade  { animation: ghFade .18s ease-out; }
+.gh-sheet { animation: ghSheet .26s cubic-bezier(.22,1,.36,1); }
+@media (prefers-reduced-motion: reduce) {
+  .gh-fade, .gh-sheet { animation: none; }
+}
+
 /* Pulso del selector de nivel al tocar una app sin nivel elegido */
 @keyframes ghNudge {
   0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(244,63,94,0); }

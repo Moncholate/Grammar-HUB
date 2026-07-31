@@ -45,7 +45,7 @@ const STAGE_TINTS = [
   { box: 'bg-indigo-100/70 border-indigo-300', label: 'text-indigo-600' },
 ];
 
-const HubHome = ({ lang, level, setLevel }) => {
+const HubHome = ({ lang, level, setLevel, onPhraseOpenChange }) => {
   const [selectedApp, setSelectedApp] = useState(null);
   const iframeRef = useRef(null);
   const touchStartX = useRef(null);
@@ -189,8 +189,8 @@ const HubHome = ({ lang, level, setLevel }) => {
         </button>
       </div>
 
-      {/* Frase del día · dato con fuente, antes de elegir nada */}
-      <DailyPhrase lang={lang} />
+      {/* Frase del día · aviso la 1ª visita del día + línea plegada todo el día */}
+      <DailyPhrase lang={lang} onOpenChange={onPhraseOpenChange} />
 
       {/* Paso 1 · Selector de nivel por etapas */}
       <div className={`w-full max-w-2xl mb-6 rounded-2xl transition-shadow ${needLevel ? 'gh-nudge' : ''}`}>

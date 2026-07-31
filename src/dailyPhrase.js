@@ -70,8 +70,11 @@ function read(storage) {
 }
 
 /* Devuelve la frase de hoy (y la fija, si aún no estaba fijada).
+   `seen` = ya se abrió el aviso hoy; es lo que decide si el modal salta solo.
+
    `storage` puede ser null: se degrada a "una frase estable para hoy" sin
-   memoria entre días, que es lo mejor posible sin almacenamiento. */
+   memoria entre días, y con seen=true, porque sin dónde anotar que ya se vio
+   el modal saltaría en cada recarga. Esos usuarios la leen desde la línea. */
 export function pickToday(storage, { now = new Date(), rnd = Math.random } = {}) {
   const pool = eligible();
   if (!pool.length) return null;
@@ -81,12 +84,12 @@ export function pickToday(storage, { now = new Date(), rnd = Math.random } = {})
   if (!storage) {
     // Sin almacenamiento: índice derivado de la fecha. Estable dentro del día.
     const n = Math.floor(Date.parse(today) / 86400000);
-    return { phrase: pool[((n % pool.length) + pool.length) % pool.length], day: today, left: null };
+    return { phrase: pool[((n % pool.length) + pool.length) % pool.length], day: today, left: null, seen: true };
   }
 
   let s = read(storage);
   if (s && s.day === today && byId(s.id)) {
-    return { phrase: byId(s.id), day: today, left: s.queue.length };
+    return { phrase: byId(s.id), day: today, left: s.queue.length, seen: !!s.seen };
   }
 
   // Día nuevo (o primer uso): sacar la siguiente carta.
@@ -95,7 +98,17 @@ export function pickToday(storage, { now = new Date(), rnd = Math.random } = {})
   if (!queue.length) queue = buildDeck(rnd);
   const id = queue.shift();
 
-  const next = { v: SCHEMA_V, day: today, id, queue };
+  const next = { v: SCHEMA_V, day: today, id, queue, seen: false };
   try { storage.setItem(KEY, JSON.stringify(next)); } catch (e) { /* modo privado */ }
-  return { phrase: byId(id), day: today, left: queue.length };
+  return { phrase: byId(id), day: today, left: queue.length, seen: false };
+}
+
+/* Anota que el aviso de hoy ya se mostró, para que no vuelva a saltar solo.
+   Solo marca si el registro guardado sigue siendo el de hoy: si el usuario
+   dejó la pestaña abierta y cruzó la medianoche, no se pisa el día nuevo. */
+export function markSeen(storage, { now = new Date() } = {}) {
+  if (!storage) return;
+  const s = read(storage);
+  if (!s || s.day !== localDayISO(now) || s.seen) return;
+  try { storage.setItem(KEY, JSON.stringify({ ...s, seen: true })); } catch (e) { /* modo privado */ }
 }

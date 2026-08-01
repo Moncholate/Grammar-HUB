@@ -29,17 +29,11 @@
    como canal no cromático para el DUA, pero aquí no hay nada codificado por
    color que reforzar; y una tarjeta cuyo argumento es "esto tiene respaldo"
    pierde al abrir con un dibujito. Los emoji se quedan en las insignias, que
-   son juego.
-
-   Los nombres se separan por OBJETO, no por disciplina: "cómo se aprende un
-   idioma" (SLA) y "cómo funciona la memoria" (ciencia cognitiva) antes se
-   llamaban "adquisición del idioma" y "ciencia del aprendizaje", que para un
-   alumno eran la misma frase con otras palabras. Igual con "estrategias" y
-   "técnica práctica": ahora una dirige el proceso y la otra dice qué hacer. */
+   son juego. */
 export const CATEGORIES = {
-  sla:          { es: 'Cómo se aprende un idioma',  en: 'How languages are learned' },
-  estrategias:  { es: 'Cómo dirigir tu aprendizaje', en: 'Steering your own learning' },
-  ciencia:      { es: 'Cómo funciona la memoria',   en: 'How memory works' },
+  sla:          { es: 'Adquisición del idioma',     en: 'Language acquisition' },
+  estrategias:  { es: 'Estrategias de aprendizaje', en: 'Learning strategies' },
+  ciencia:      { es: 'Ciencia del aprendizaje',    en: 'Science of learning' },
   bilinguismo:  { es: 'Bilingüismo',                en: 'Bilingualism' },
   ansiedad:     { es: 'Nervios y bienestar',        en: 'Anxiety and well-being' },
   empleabilidad:{ es: 'Inglés y trabajo',           en: 'English and work' },

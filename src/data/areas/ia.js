@@ -30,10 +30,13 @@
    · A1 (id 800) = Barcaui (2025). OJO: el documento original lo atribuía a
      "Computers in Human Behavior: Artificial Humans" y **está mal** — salió en
      Social Sciences & Humanities Open. La cita corregida es la que va aquí.
-   · A7 (id 805) = Education Sciences 16(3), 481 (2026), doi 10.3390/educsci16030481.
-     No se pudo recuperar la lista de autores (MDPI bloquea la descarga), pero el
-     DOI identifica el artículo sin ambigüedad. La muestra es de Corea del Sur y
-     eso queda dicho en la fuente: importa para generalizar a Chile.
+   · A7 (id 805) = Je-Young Lee (2026), Education Sciences 16(3), 481,
+     doi 10.3390/educsci16030481. La muestra es de Corea del Sur y eso queda
+     dicho en la fuente: importa para generalizar a Chile.
+
+   Las dos citas quedan completas: autor, año, revista, volumen, artículo y DOI.
+   Con eso el alumno o un colega llega al paper en un clic, que es el estándar
+   que el banco se puso a sí mismo.
    ========================================================================== */
 export default [
   /* ── A · Por qué copiar te perjudica ───────────────────────────────── */
@@ -59,7 +62,7 @@ export default [
 
   { id: 805, tramo: 2, tag: 'ia_evidencia',
     es: 'Estudiar con IA sube mucho la confianza y poco lo que aprendes. Un meta-análisis de 22 estudios midió un efecto casi cuatro veces mayor en lo emocional que en lo cognitivo.',
-    source: '“Beyond Language Gains” (2026), Education Sciences 16(3), 481 · 22 estudios, N = 1.303, muestra de Corea del Sur: afectivo g = 0,67 · cognitivo g = 0,17 · doi 10.3390/educsci16030481' },
+    source: 'Lee, J.-Y. (2026), “Beyond Language Gains”, Education Sciences 16(3), 481 · 22 estudios, N = 1.303, muestra de Corea del Sur: afectivo g = 0,67 · cognitivo g = 0,17 · doi 10.3390/educsci16030481' },
 
   /* ── B · Cómo usar la IA para ENTENDER gramática ───────────────────── */
   { id: 810, tramo: 1, tag: 'ia_prompt',

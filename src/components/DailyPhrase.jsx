@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { X } from 'lucide-react';
+import { Check, Copy, X } from 'lucide-react';
 import { CATEGORIES } from '../data/phrases';
 import { pickToday, markSeen } from '../dailyPhrase';
 import { translations } from '../i18n';
@@ -29,12 +29,46 @@ import { translations } from '../i18n';
 
 const storage = () => { try { return window.localStorage; } catch (e) { return null; } };
 
+/* Prompt copiable (área de IA). Sin el botón el alumno tendría que transcribir
+   a mano una frase en inglés desde la pantalla, y no lo va a hacer: es lo que
+   convierte el bloque de prompts de "buen consejo" a "herramienta". */
+const PromptBox = ({ text, t }) => {
+  const [copiado, setCopiado] = useState(false);
+  const copiar = async () => {
+    try { await navigator.clipboard.writeText(text); } catch (e) { return; }
+    setCopiado(true);
+    setTimeout(() => setCopiado(false), 1800);
+  };
+  return (
+    <div className="mt-3 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5">
+      <p
+        lang="en"
+        className="text-[13px] leading-snug text-slate-700"
+        style={{ fontFamily: "'Atkinson Hyperlegible', system-ui, sans-serif" }}
+      >
+        {text}
+      </p>
+      <button
+        onClick={copiar}
+        className="mt-2 inline-flex items-center gap-1.5 rounded-lg bg-white border border-slate-200 px-2.5 py-1 text-[11px] font-semibold text-slate-600 hover:border-slate-300 transition-colors touch-manipulation"
+        style={{ WebkitTapHighlightColor: 'transparent' }}
+      >
+        {copiado ? <Check size={12} aria-hidden="true" /> : <Copy size={12} aria-hidden="true" />}
+        {copiado ? t.phraseCopied : t.phraseCopy}
+      </button>
+      <span role="status" aria-live="polite" className="sr-only">{copiado ? t.phraseCopied : ''}</span>
+    </div>
+  );
+};
+
 /* Cuerpo compartido por la línea desplegada y el aviso. */
 const PhraseBody = ({ p, t, lang, big }) => (
   <>
     <blockquote className={`${big ? 'text-lg sm:text-xl' : 'text-[15px] sm:text-base'} leading-snug text-slate-800 font-medium`}>
       {p.es}
     </blockquote>
+
+    {p.prompt && <PromptBox text={p.prompt} t={t} />}
 
     {p.en && (
       <p

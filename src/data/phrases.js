@@ -27,6 +27,8 @@
    ========================================================================== */
 import AREA_MICRO from './areas/micro.js';
 import AREA_EVALUACION from './areas/evaluacion.js';
+import AREA_IA from './areas/ia.js';
+import AREA_HISTORIA from './areas/historia.js';
 
 /* La categoría se imprime al pie, encabezando la fuente: es contexto de la
    fuente, no un rótulo de la tarjeta. Por eso los nombres son cortos y dicen de
@@ -53,6 +55,8 @@ export const CATEGORIES = {
      alumno vive como fracaso— sin animarlo desde arriba. */
   refuerzo:     { es: 'Perspectiva',                en: 'Perspective' },
   micro:        { es: 'Rutinas cortas',             en: 'Short routines' },
+  ia:           { es: 'Inglés con IA',              en: 'English with AI' },
+  historia:     { es: 'Historia del inglés',        en: 'History of English' },
   evaluacion:   { es: 'Tu evaluación',              en: 'Your assessment' },
 };
 
@@ -574,5 +578,7 @@ export const PHRASES = [
     ...p,
   })),
   ...conArea(AREA_MICRO, 6, 'micro'),
+  ...conArea(AREA_IA, 8, 'ia'),
+  ...conArea(AREA_HISTORIA, 10, 'historia'),
   ...conArea(AREA_EVALUACION, 11, 'evaluacion'),
 ];

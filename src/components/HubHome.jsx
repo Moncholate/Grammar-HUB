@@ -282,7 +282,12 @@ const HubHome = ({ lang, level, setLevel, onPhraseOpenChange }) => {
             {BADGES.map((b) => {
               const unlocked = isUnlocked(b);
               const name = (lang === 'es' ? b.name.es : b.name.en).replace('{tense}', lang === 'es' ? 'un tiempo' : 'a tense');
-              const desc = lang === 'es' ? b.desc.es : b.desc.en;
+              // Bloqueada y con pista → se muestra DÓNDE se consigue en vez de qué
+              // pide. Un candado sin camino frustra; con la pista invita a probar
+              // la app que falta (hoy: 🔍 Analista vive en Desgramatizador).
+              const desc = (!unlocked && b.where)
+                ? (lang === 'es' ? b.where.es : b.where.en)
+                : (lang === 'es' ? b.desc.es : b.desc.en);
               return (
                 <div
                   key={b.id}

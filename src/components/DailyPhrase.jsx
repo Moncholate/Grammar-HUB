@@ -67,11 +67,12 @@ const PhraseBody = ({ p, t, lang, big }) => (
   </>
 );
 
-const DailyPhrase = ({ lang, onOpenChange }) => {
+const DailyPhrase = ({ lang, level, onOpenChange }) => {
   const t = translations[lang];
 
   // Una sola vez por montaje: pickToday escribe en localStorage al cambiar el día.
-  const today = useMemo(() => pickToday(storage()), []);
+  // `level` filtra los ítems que nombran una estructura que el alumno aún no ve.
+  const today = useMemo(() => pickToday(storage(), { level }), [level]);
   const [open, setOpen] = useState(() => !!today?.phrase && !today.seen);
   const closeRef = useRef(null);
   const panelRef = useRef(null);

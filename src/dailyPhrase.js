@@ -33,12 +33,26 @@ export function localDayISO(d = new Date()) {
   return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;
 }
 
-/* Tramo de prioridad: 0 sale primero. */
-function tier(p) {
-  if (p.cat === 'ansiedad' || p.cat === 'refuerzo') return 0;
-  if (p.tag === 'meta_mindset' || p.tag === 'tip_constancia') return 0;
-  if (p.cat === 'ciencia' || p.cat === 'tips') return 1;
-  return 2;
+/* Tramo de prioridad: 1 sale primero. Lo declara cada ítem (ver phrases.js).
+   Antes había además un override por `tag` que adelantaba meta_mindset y
+   tip_constancia: se quitó porque contradecía los podios de la deduplicación
+   (subía a la entrada dos ítems de espaciamiento que el podio manda al fondo).
+   `tramo` es la única fuente. */
+const tier = (p) => p.tramo || 2;
+
+/* Orden de los niveles del curso, para el filtro. Un ítem con `nivel` es el
+   curso MÍNIMO en que su estructura se enseña: se oculta a quien va más abajo,
+   pero NUNCA a quien va más arriba. Los errores y las estructuras básicas
+   siguen sirviendo en niveles avanzados; filtrar hacia abajo sería asumir que
+   lo básico ya está resuelto, y no lo está. */
+export const NIVELES = ['basico1', 'basico2', 'elemental1', 'elemental2',
+                        'intermedio1', 'intermedio2', 'avanzado'];
+
+export function visibleEn(p, level) {
+  if (!p.nivel) return true;                       // sin estructura concreta → siempre
+  if (!level) return true;                         // sin nivel elegido → no se oculta nada
+  const i = NIVELES.indexOf(level), j = NIVELES.indexOf(p.nivel);
+  return i < 0 || j < 0 || j <= i;
 }
 
 function shuffle(arr, rnd) {
@@ -56,9 +70,9 @@ export function eligible() {
 
 /* Baraja completa de ids: mezclada dentro de cada tramo, tramos en orden. */
 export function buildDeck(rnd = Math.random) {
-  const byTier = [[], [], []];
-  for (const p of eligible()) byTier[tier(p)].push(p.id);
-  return byTier.flatMap(ids => shuffle(ids, rnd));
+  const byTier = { 1: [], 2: [], 3: [] };
+  for (const p of eligible()) (byTier[tier(p)] || byTier[2]).push(p.id);
+  return [1, 2, 3].flatMap(t => shuffle(byTier[t], rnd));
 }
 
 function read(storage) {
@@ -75,16 +89,18 @@ function read(storage) {
    `storage` puede ser null: se degrada a "una frase estable para hoy" sin
    memoria entre días, y con seen=true, porque sin dónde anotar que ya se vio
    el modal saltaría en cada recarga. Esos usuarios la leen desde la línea. */
-export function pickToday(storage, { now = new Date(), rnd = Math.random } = {}) {
+export function pickToday(storage, { now = new Date(), rnd = Math.random, level = null } = {}) {
   const pool = eligible();
   if (!pool.length) return null;
   const today = localDayISO(now);
   const byId = (id) => pool.find(p => p.id === id);
+  const sirve = (id) => { const p = byId(id); return p && visibleEn(p, level); };
 
   if (!storage) {
     // Sin almacenamiento: índice derivado de la fecha. Estable dentro del día.
+    const vis = pool.filter(p => visibleEn(p, level));
     const n = Math.floor(Date.parse(today) / 86400000);
-    return { phrase: pool[((n % pool.length) + pool.length) % pool.length], day: today, left: null, seen: true };
+    return { phrase: vis[((n % vis.length) + vis.length) % vis.length], day: today, left: null, seen: true };
   }
 
   let s = read(storage);
@@ -96,7 +112,17 @@ export function pickToday(storage, { now = new Date(), rnd = Math.random } = {})
   // Se descartan ids que ya no existan en el banco, por si se editó.
   let queue = (s?.queue || []).filter(byId);
   if (!queue.length) queue = buildDeck(rnd);
-  const id = queue.shift();
+
+  /* Los ítems por encima del nivel del alumno se saltan, pero vuelven AL FINAL
+     de la cola en vez de descartarse: si más adelante sube de nivel, los ve.
+     El tope evita el bucle si ninguno sirve (nivel muy bajo, banco muy alto). */
+  let id = null;
+  for (let i = 0; i < queue.length; i++) {
+    const cand = queue.shift();
+    if (sirve(cand)) { id = cand; break; }
+    queue.push(cand);
+  }
+  if (id === null) id = queue.shift();   // nada calza: mejor una frase que ninguna
 
   const next = { v: SCHEMA_V, day: today, id, queue, seen: false };
   try { storage.setItem(KEY, JSON.stringify(next)); } catch (e) { /* modo privado */ }

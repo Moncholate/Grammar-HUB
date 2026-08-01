@@ -19,7 +19,14 @@
              'apocrifa' → sin ninguna fuente primaria; NO entra en la rotación
                           (ver INCLUIR_APOCRIFAS en dailyPhrase.js)
      note    advertencia que se imprime bajo la fuente cuando status ≠ 'ok'
+     tramo   1 entrada · 2 método · 3 fondo — define cuándo entra en la baraja
+     area    de qué banco viene (1 = original, 6 = rutinas cortas, 11 = rúbricas)
+     estructura / nivel   opcionales: si el ítem nombra una estructura concreta,
+             `nivel` es el curso MÍNIMO en que se enseña (según syllabus-aef.md)
+             y el ítem no se muestra a alguien por debajo de ese nivel
    ========================================================================== */
+import AREA_MICRO from './areas/micro.js';
+import AREA_EVALUACION from './areas/evaluacion.js';
 
 /* La categoría se imprime al pie, encabezando la fuente: es contexto de la
    fuente, no un rótulo de la tarjeta. Por eso los nombres son cortos y dicen de
@@ -45,13 +52,15 @@ export const CATEGORIES = {
      "Perspectiva" nombra lo que estas frases hacen —dar vuelta algo que el
      alumno vive como fracaso— sin animarlo desde arriba. */
   refuerzo:     { es: 'Perspectiva',                en: 'Perspective' },
+  micro:        { es: 'Rutinas cortas',             en: 'Short routines' },
+  evaluacion:   { es: 'Tu evaluación',              en: 'Your assessment' },
 };
 
 /* Advertencias que se repiten, en un solo lugar. */
 const N_RETRO = 'Estudio retrospectivo: es una asociación observada, no una relación causal probada. No significa que aprender inglés de adulto prevenga el Alzheimer.';
 const N_SIN_FUENTE = 'Atribución muy difundida, pero sin fuente escrita primaria confirmada.';
 
-export const PHRASES = [
+const ORIGINAL = [
   /* ── Cómo se adquiere un idioma (SLA) ───────────────────────────────── */
   { id: 1, cat: 'sla', tag: 'sla_input',
     es: 'Aprendemos un idioma cuando entendemos mensajes un poquito por encima de nuestro nivel actual (lo que Krashen llama i+1).',
@@ -507,4 +516,63 @@ export const PHRASES = [
   { id: 105, cat: 'refuerzo', tag: 'refuerzo_empleo',
     es: 'No aprendes inglés para el examen. Lo aprendes para tu futuro.',
     source: 'Mensaje alineado con datos de empleabilidad (British Council, 2015)' },
+];
+
+/* ============================================================================
+   Áreas de expansión
+   ----------------------------------------------------------------------------
+   Cada área vive en su archivo y declara su `tramo` por ítem. Aquí se les
+   estampa `area` y `cat`, para que los archivos de área queden limpios.
+   Rangos de id: 1-105 original · 6xx área 6 · 11xx área 11. Los ids son
+   ESTABLES: la baraja guardada en localStorage recuerda ids, no posiciones.
+   ========================================================================== */
+
+/* El banco original no trae `tramo` por ítem (son 105), así que se deriva de la
+   categoría. 1 = entrada (bajar la guardia y dar algo que hacer hoy),
+   2 = método, 3 = fondo. */
+const TRAMO_POR_CAT = {
+  ansiedad: 1, refuerzo: 1,
+  ciencia: 2, tips: 2,
+  sla: 3, estrategias: 3, bilinguismo: 3, empleabilidad: 3, cita: 3,
+};
+
+/* Deduplicación · podios.
+   El banco completo repite unos pocos principios muchas veces (18 ítems dicen
+   "poco y seguido le gana a mucho de una vez"). La regla acordada: cada
+   principio entra al tramo de entrada con SUS TRES MEJORES versiones, y gana la
+   aplicada sobre la abstracta. Los demás bajan al fondo — no se borran: los ve
+   quien sigue usando la app pasado el semestre, y ahí repetir ya no cansa.
+
+   Aquí van solo los ítems del banco ORIGINAL afectados. Los podios que dependen
+   de áreas todavía no transcritas se completarán al integrarlas. */
+const TRAMO_POR_ID = {
+  // espaciamiento — podio: 6-A5 (605) · orig 26 · 6-B2 (611)
+  26: 1,   25: 3, 33: 3, 35: 3, 68: 3, 74: 3, 78: 3, 99: 3, 100: 3,
+  // mentalidad de crecimiento — podio: orig 20 · 6-F2 (651) · orig 97
+  20: 1, 97: 1,   19: 3, 93: 3,
+  // output / producir — podio: 6-B6 (615) · orig 4 · 6-C5 (624)
+  4: 1,    5: 3, 66: 3, 67: 3,
+  // nervios — podio: orig 44 · orig 43 · (7-F4, pendiente)
+  3: 3, 51: 3,
+  // recuperación — podio: 6-B2 (611) · (7-F1 y 5-F2, pendientes)
+  27: 3, 28: 3, 103: 3,
+  // generación — podio: 6-B1 (610) · (8-B6, pendiente)
+  32: 3,
+  // dificultades deseables — podio: orig 34 · (8-F2, pendiente)
+  34: 1,
+  // autorregulación — podio: 6-D1 (630) · orig 24 · (7-C11, pendiente)
+  24: 1,
+};
+
+const conArea = (items, area, cat) =>
+  items.map(p => ({ area, cat, ...p }));
+
+export const PHRASES = [
+  ...ORIGINAL.map(p => ({
+    area: 1,
+    tramo: TRAMO_POR_ID[p.id] || TRAMO_POR_CAT[p.cat] || 2,
+    ...p,
+  })),
+  ...conArea(AREA_MICRO, 6, 'micro'),
+  ...conArea(AREA_EVALUACION, 11, 'evaluacion'),
 ];

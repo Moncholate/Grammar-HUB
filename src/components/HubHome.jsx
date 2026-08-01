@@ -190,7 +190,7 @@ const HubHome = ({ lang, level, setLevel, onPhraseOpenChange }) => {
       </div>
 
       {/* Frase del día · aviso la 1ª visita del día + línea plegada todo el día */}
-      <DailyPhrase lang={lang} onOpenChange={onPhraseOpenChange} />
+      <DailyPhrase lang={lang} level={level} onOpenChange={onPhraseOpenChange} />
 
       {/* Paso 1 · Selector de nivel por etapas */}
       <div className={`w-full max-w-2xl mb-6 rounded-2xl transition-shadow ${needLevel ? 'gh-nudge' : ''}`}>

@@ -39,7 +39,7 @@ export default [
   /* ── A · Por qué copiar te perjudica ───────────────────────────────── */
   { id: 800, tramo: 2, tag: 'ia_evidencia',
     es: 'En un experimento con 120 universitarios, quienes estudiaron con IA sin restricciones respondieron 57,5% en una prueba sorpresa 45 días después. Quienes estudiaron sin IA: 68,5%.',
-    source: 'Barcaui, A. (2025), “ChatGPT as a cognitive crutch: Evidence from a randomized controlled trial on knowledge retention”, Social Sciences & Humanities Open — n = 120, d = 0,68' },
+    source: 'Barcaui, A. (2025), “ChatGPT as a cognitive crutch”, Social Sciences & Humanities Open 12, 102287 · d = 0,68 · doi 10.1016/j.ssaho.2025.102287' },
 
   { id: 801, tramo: 3, tag: 'ia_evidencia',
     es: 'La IA baja el esfuerzo mental. El problema es que ese esfuerzo era justamente lo que fijaba el aprendizaje.',
@@ -59,7 +59,7 @@ export default [
 
   { id: 805, tramo: 2, tag: 'ia_evidencia',
     es: 'Estudiar con IA sube mucho la confianza y poco lo que aprendes. Un meta-análisis de 22 estudios midió un efecto casi cuatro veces mayor en lo emocional que en lo cognitivo.',
-    source: '“Beyond Language Gains: A Meta-Analysis of Non-Linguistic Outcomes of ChatGPT-Integrated English Instruction in South Korea” (2026), Education Sciences 16(3), 481 — 22 estudios, N = 1.303: afectivo g = 0,67 · cognitivo/metacognitivo g = 0,17. La muestra es de Corea del Sur.' },
+    source: '“Beyond Language Gains” (2026), Education Sciences 16(3), 481 · 22 estudios, N = 1.303, muestra de Corea del Sur: afectivo g = 0,67 · cognitivo g = 0,17 · doi 10.3390/educsci16030481' },
 
   /* ── B · Cómo usar la IA para ENTENDER gramática ───────────────────── */
   { id: 810, tramo: 1, tag: 'ia_prompt',

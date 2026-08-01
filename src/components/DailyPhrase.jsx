@@ -17,14 +17,20 @@ import { translations } from '../i18n';
      un aviso se cierra por reflejo; sin la línea, quien lo cerró sin leer
      perdía la frase hasta mañana.
 
-   Sin color por categoría a propósito: en esta suite el color ya significa
-   otra cosa (familias de tiempos, tipos de palabra). La categoría se distingue
-   por icono + nombre, que es además el canal que pide el DUA. */
+   Sin color por categoría: en esta suite el color ya significa otra cosa
+   (familias de tiempos, tipos de palabra) y no conviene diluirlo.
+
+   La categoría va AL PIE, encabezando la fuente, y no arriba junto al rótulo.
+   Arriba chocaba: "Frase del día · Para hoy", "Frase del día · Cita". Eran dos
+   etiquetas peleando por decir lo mismo, y renombrarlas solo tapaba un caso a
+   la vez. Abajo el problema no puede volver a aparecer, la frase queda como lo
+   primero que se lee, y la categoría hace su trabajo real: decir de qué tipo
+   de respaldo se trata. */
 
 const storage = () => { try { return window.localStorage; } catch (e) { return null; } };
 
 /* Cuerpo compartido por la línea desplegada y el aviso. */
-const PhraseBody = ({ p, t, big }) => (
+const PhraseBody = ({ p, t, lang, big }) => (
   <>
     <blockquote className={`${big ? 'text-lg sm:text-xl' : 'text-[15px] sm:text-base'} leading-snug text-slate-800 font-medium`}>
       {p.es}
@@ -41,10 +47,17 @@ const PhraseBody = ({ p, t, big }) => (
       </p>
     )}
 
-    <p className="mt-3 pt-2.5 border-t border-slate-100 text-[11px] leading-snug text-slate-500">
-      <span className="font-semibold text-slate-400">{t.phraseSource}: </span>
-      <cite className="not-italic">{p.source}</cite>
-    </p>
+    <div className="mt-3 pt-2.5 border-t border-slate-100">
+      <p className="text-[11px] font-semibold text-slate-500 leading-snug">
+        {CATEGORIES[p.cat][lang]}
+      </p>
+      <p className="text-[11px] text-slate-400 leading-snug">
+        {/* "Fuente" no se imprime: la posición y el separador ya lo dicen, y una
+            tercera etiqueta volvería a cargar la tarjeta. Pero sí se anuncia. */}
+        <span className="sr-only">{t.phraseSource}: </span>
+        <cite className="not-italic">{p.source}</cite>
+      </p>
+    </div>
 
     {p.note && (
       <p className="mt-2 rounded-lg bg-amber-50 border border-amber-200 px-2.5 py-1.5 text-[11px] leading-snug text-amber-900">
@@ -85,29 +98,21 @@ const DailyPhrase = ({ lang, onOpenChange }) => {
 
   if (!today?.phrase) return null;
   const p = today.phrase;
-  const cat = CATEGORIES[p.cat];
-
-  const eyebrow = (
-    <>
-      <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">{t.phraseTitle}</span>
-      <span className="text-slate-400" aria-hidden="true">·</span>
-      <span className="text-[11px] font-semibold text-slate-500">
-        <span aria-hidden="true">{cat.icon}</span> {cat[lang]}
-      </span>
-    </>
-  );
 
   return (
     <>
-      {/* Línea plegada: queda en la home todo el día */}
+      {/* Línea plegada: queda en la home todo el día. Una sola etiqueta —
+          la categoría vive abajo, dentro del aviso, junto a la fuente. */}
       <button
         onClick={() => setOpen(true)}
         aria-haspopup="dialog"
         aria-expanded={open}
-        className="w-full max-w-2xl mb-5 flex items-center gap-2 flex-wrap bg-white rounded-xl border border-slate-200 px-3.5 py-2.5 text-left shadow-sm hover:border-slate-300 transition-colors touch-manipulation"
+        className="w-full max-w-2xl mb-5 flex items-center gap-2 bg-white rounded-xl border border-slate-200 px-3.5 py-2.5 text-left shadow-sm hover:border-slate-300 transition-colors touch-manipulation"
         style={{ WebkitTapHighlightColor: 'transparent' }}
       >
-        {eyebrow}
+        <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
+          {t.phraseTitle}
+        </span>
         <span className="ml-auto text-slate-400 text-xs font-bold" aria-hidden="true">›</span>
       </button>
 
@@ -130,11 +135,11 @@ const DailyPhrase = ({ lang, onOpenChange }) => {
             {/* Agarradera: en celular esto se abre desde abajo y conviene que se lea como tal */}
             <div className="gh-grabber sm:hidden mx-auto mb-3 h-1 w-10 rounded-full" aria-hidden="true" />
 
-            <div id="gh-phrase-title" className="flex items-baseline gap-2 flex-wrap mb-3">
-              {eyebrow}
-            </div>
+            <p id="gh-phrase-title" className="mb-3 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+              {t.phraseTitle}
+            </p>
 
-            <PhraseBody p={p} t={t} big />
+            <PhraseBody p={p} t={t} lang={lang} big />
 
             {/* Botón con texto y no solo una X: una X invita a descartar,
                 un botón con texto invita a terminar de leer. */}

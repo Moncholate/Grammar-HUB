@@ -21,16 +21,25 @@
      note    advertencia que se imprime bajo la fuente cuando status ≠ 'ok'
    ========================================================================== */
 
+/* La categoría se imprime al pie, encabezando la fuente: es contexto de la
+   fuente, no un rótulo de la tarjeta. Por eso los nombres son cortos y dicen de
+   qué TIPO de respaldo se trata.
+
+   Sin emoji a propósito. Los tenía y se fueron por dos razones: los justifiqué
+   como canal no cromático para el DUA, pero aquí no hay nada codificado por
+   color que reforzar; y una tarjeta cuyo argumento es "esto tiene respaldo"
+   pierde al abrir con un dibujito. Los emoji se quedan en las insignias, que
+   son juego. */
 export const CATEGORIES = {
-  sla:          { icon: '🧠', es: 'Cómo se adquiere un idioma', en: 'How language is acquired' },
-  estrategias:  { icon: '🧭', es: 'Estrategias de aprendizaje', en: 'Learning strategies' },
-  ciencia:      { icon: '🔬', es: 'Ciencia del aprendizaje',    en: 'Science of learning' },
-  bilinguismo:  { icon: '🗣️', es: 'Bilingüismo',                en: 'Bilingualism' },
-  ansiedad:     { icon: '💛', es: 'Nervios y bienestar',        en: 'Anxiety and well-being' },
-  empleabilidad:{ icon: '💼', es: 'Inglés y trabajo',           en: 'English and work' },
-  tips:         { icon: '🛠️', es: 'Técnica práctica',           en: 'Practical technique' },
-  cita:         { icon: '📖', es: 'Cita',                       en: 'Quote' },
-  refuerzo:     { icon: '🌱', es: 'Para hoy',                   en: 'For today' },
+  sla:          { es: 'Adquisición del idioma',    en: 'Language acquisition' },
+  estrategias:  { es: 'Estrategias de aprendizaje', en: 'Learning strategies' },
+  ciencia:      { es: 'Ciencia del aprendizaje',    en: 'Science of learning' },
+  bilinguismo:  { es: 'Bilingüismo',                en: 'Bilingualism' },
+  ansiedad:     { es: 'Nervios y bienestar',        en: 'Anxiety and well-being' },
+  empleabilidad:{ es: 'Inglés y trabajo',           en: 'English and work' },
+  tips:         { es: 'Técnica práctica',           en: 'Practical technique' },
+  cita:         { es: 'Cita',                       en: 'Quote' },
+  refuerzo:     { es: 'Ánimo',                      en: 'Encouragement' },
 };
 
 /* Advertencias que se repiten, en un solo lugar. */
@@ -441,7 +450,7 @@ export const PHRASES = [
     es: 'Aprender nunca agota la mente.',
     source: 'Atribuida a Leonardo da Vinci' },
 
-  /* ── Para hoy (refuerzo diario, nivel básico) ────────────────────────── */
+  /* ── Ánimo (refuerzo diario, nivel básico) ───────────────────────────── */
   { id: 93, cat: 'refuerzo', tag: 'refuerzo_mindset',
     es: 'Hoy sabes más inglés que ayer. Eso ya es avanzar.',
     source: 'Mensaje basado en Dweck (2006), mentalidad de crecimiento' },

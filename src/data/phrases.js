@@ -29,17 +29,26 @@
    como canal no cromático para el DUA, pero aquí no hay nada codificado por
    color que reforzar; y una tarjeta cuyo argumento es "esto tiene respaldo"
    pierde al abrir con un dibujito. Los emoji se quedan en las insignias, que
-   son juego. */
+   son juego.
+
+   Los nombres se separan por OBJETO, no por disciplina: "cómo se aprende un
+   idioma" (SLA) y "cómo funciona la memoria" (ciencia cognitiva) antes se
+   llamaban "adquisición del idioma" y "ciencia del aprendizaje", que para un
+   alumno eran la misma frase con otras palabras. Igual con "estrategias" y
+   "técnica práctica": ahora una dirige el proceso y la otra dice qué hacer. */
 export const CATEGORIES = {
-  sla:          { es: 'Adquisición del idioma',    en: 'Language acquisition' },
-  estrategias:  { es: 'Estrategias de aprendizaje', en: 'Learning strategies' },
-  ciencia:      { es: 'Ciencia del aprendizaje',    en: 'Science of learning' },
+  sla:          { es: 'Cómo se aprende un idioma',  en: 'How languages are learned' },
+  estrategias:  { es: 'Cómo dirigir tu aprendizaje', en: 'Steering your own learning' },
+  ciencia:      { es: 'Cómo funciona la memoria',   en: 'How memory works' },
   bilinguismo:  { es: 'Bilingüismo',                en: 'Bilingualism' },
   ansiedad:     { es: 'Nervios y bienestar',        en: 'Anxiety and well-being' },
   empleabilidad:{ es: 'Inglés y trabajo',           en: 'English and work' },
-  tips:         { es: 'Técnica práctica',           en: 'Practical technique' },
+  tips:         { es: 'Técnicas de estudio',        en: 'Study techniques' },
   cita:         { es: 'Cita',                       en: 'Quote' },
-  refuerzo:     { es: 'Ánimo',                      en: 'Encouragement' },
+  /* "Ánimo" no: en Chile se entiende como estado de ánimo (cómo te sientes),
+     no como aliento. Estas frases no describen cómo estás, sirven para no
+     soltar la cuerda. */
+  refuerzo:     { es: 'Para seguir',                en: 'Keep going' },
 };
 
 /* Advertencias que se repiten, en un solo lugar. */
@@ -450,7 +459,7 @@ export const PHRASES = [
     es: 'Aprender nunca agota la mente.',
     source: 'Atribuida a Leonardo da Vinci' },
 
-  /* ── Ánimo (refuerzo diario, nivel básico) ───────────────────────────── */
+  /* ── Para seguir (refuerzo diario, nivel básico) ─────────────────────── */
   { id: 93, cat: 'refuerzo', tag: 'refuerzo_mindset',
     es: 'Hoy sabes más inglés que ayer. Eso ya es avanzar.',
     source: 'Mensaje basado en Dweck (2006), mentalidad de crecimiento' },

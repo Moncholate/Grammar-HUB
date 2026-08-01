@@ -39,10 +39,12 @@ export const CATEGORIES = {
   empleabilidad:{ es: 'Inglés y trabajo',           en: 'English and work' },
   tips:         { es: 'Técnicas de estudio',        en: 'Study techniques' },
   cita:         { es: 'Cita',                       en: 'Quote' },
-  /* "Ánimo" no: en Chile se entiende como estado de ánimo (cómo te sientes),
-     no como aliento. Estas frases no describen cómo estás, sirven para no
-     soltar la cuerda. */
-  refuerzo:     { es: 'Para seguir',                en: 'Keep going' },
+  /* Ni "Ánimo" ni "Para seguir". "Ánimo" en Chile se entiende como estado de
+     ánimo (cómo te sientes), no como aliento. "Para seguir" era la única de las
+     nueve que no es un sustantivo y desentonaba en la lista.
+     "Perspectiva" nombra lo que estas frases hacen —dar vuelta algo que el
+     alumno vive como fracaso— sin animarlo desde arriba. */
+  refuerzo:     { es: 'Perspectiva',                en: 'Perspective' },
 };
 
 /* Advertencias que se repiten, en un solo lugar. */
@@ -453,7 +455,7 @@ export const PHRASES = [
     es: 'Aprender nunca agota la mente.',
     source: 'Atribuida a Leonardo da Vinci' },
 
-  /* ── Para seguir (refuerzo diario, nivel básico) ─────────────────────── */
+  /* ── Perspectiva (refuerzo diario, nivel básico) ─────────────────────── */
   { id: 93, cat: 'refuerzo', tag: 'refuerzo_mindset',
     es: 'Hoy sabes más inglés que ayer. Eso ya es avanzar.',
     source: 'Mensaje basado en Dweck (2006), mentalidad de crecimiento' },

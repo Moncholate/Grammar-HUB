@@ -32,6 +32,7 @@ export function emptyProgress() {
     sentencesAnalyzed: 0,       // Desgramatizador
     tenses: {},                 // { [tenseId]: { attempts, correct, days: [ISO] } }
     appsUsed: {},               // { grammaster:true, ... }
+    modesUsed: {},              // { [app]: { [mode]:true } } — actividades distintas dentro de una app
     badges: {}                  // { [badgeId]: unlockedISO }  (perTense → `${id}:${tenseId}`)
   };
 }
@@ -65,8 +66,16 @@ function markDay(p) {
   return today;
 }
 
-export function recordAttempt(p, { app, tenseId, correct, answerStreak } = {}) {
+/* `mode` (opcional) = la actividad dentro de la app (Question Lab:
+   build / identify / respond). Sirve para premiar variedad DENTRO de una app,
+   no solo entre apps. Se registra aunque la respuesta sea incorrecta: lo que
+   cuenta es haber probado la actividad. */
+export function recordAttempt(p, { app, mode, tenseId, correct, answerStreak } = {}) {
   if (app) p.appsUsed[app] = true;
+  if (app && mode) {
+    if (!p.modesUsed) p.modesUsed = {};       // progreso guardado antes de v1.2
+    (p.modesUsed[app] || (p.modesUsed[app] = {}))[mode] = true;
+  }
   const today = markDay(p);
 
   if (correct) p.totalCorrect += 1;
@@ -97,6 +106,7 @@ function meets(p, criteria, tenseId) {
     case 'totalCorrect':     return p.totalCorrect >= c.gte;
     case 'bestAnswerStreak': return p.bestAnswerStreak >= c.gte;
     case 'appsUsed':         return Object.values(p.appsUsed).filter(Boolean).length >= c.gte;
+    case 'modesUsed':        return Object.values((p.modesUsed || {})[c.app] || {}).filter(Boolean).length >= c.gte;
     case 'sentencesAnalyzed':return (p.sentencesAnalyzed || 0) >= c.gte;
     case 'tenseFamiliar': {
       const t = p.tenses[tenseId];

@@ -1,7 +1,7 @@
 {
   "$description": "Grammar Hub — canonical gamification model shared by the 3 apps + Hub. One coherent reward layer: a suite-wide day-streak + accumulated stats + badges (stored in same-origin localStorage under storage.sharedKey), plus a per-activity answer-streak that stays local to each app. Consumed per app (generate like curriculum.json / grammar-model.json). Thresholds are tunable. DUA: every reward = colour (design-tokens foundation.play) + icon + label + number, never colour alone.",
-  "version": "1.2.0",
-  "$badgeFields": "name/desc/icon/criteria son obligatorios. `where` es opcional y solo va donde la descripción no basta para saber DÓNDE se consigue (hoy: 'analyst', que se gana en Desgramatizador). Se muestra únicamente cuando la insignia está bloqueada: un candado sin camino es frustración; con la pista es descubrimiento.",
+  "version": "1.3.0",
+  "$badgeFields": "name/desc/icon/criteria son obligatorios. `where` es opcional y solo va donde la descripción no basta para saber DÓNDE se consigue. Se muestra únicamente cuando la insignia está bloqueada: un candado sin camino es frustración; con la pista es descubrimiento. `app` marca las insignias que solo se pueden conseguir en UNA app ('analyst' en Desgramatizador, 'ql-trio' en Question Lab); esas SIEMPRE deben traer `where`, porque se muestran en las galerías de todas las apps.",
 
   "storage": {
     "sharedKey": "gh_progress",
@@ -19,6 +19,7 @@
     "sentencesAnalyzed": 0,
     "tenses": "{ [tenseId]: { attempts, correct, days: [ISO dates] } } — fed ONLY by practice activities (QL Identifica, Grammaster practice), NOT the sentence builder (no right/wrong there)",
     "appsUsed": { "grammaster": false, "desgramatizador": false, "questionlab": false },
+    "modesUsed": "{ [app]: { [mode]: true } } — actividades distintas usadas DENTRO de una app (Question Lab: build/identify/respond). Se marca aunque la respuesta sea incorrecta: premia haber probado la actividad, no acertar. Añadido en 1.3.0; un progreso guardado antes simplemente arranca vacío (loadProgress rellena con emptyProgress), sin bump de esquema.",
     "badges": "{ [badgeId]: unlockedDateISO }  (for perTense badges the key is `${badgeId}:${tenseId}`)"
   },
 
@@ -77,7 +78,13 @@
 
     { "id": "explorer", "category": "suite", "icon": "🧩", "scope": "suite",
       "name": { "es": "Explorador del Hub", "en": "Hub explorer" }, "desc": { "es": "Usaste las 3 apps", "en": "Used all 3 apps" },
-      "criteria": { "type": "appsUsed", "gte": 3 } }
+      "criteria": { "type": "appsUsed", "gte": 3 } },
+
+    { "id": "ql-trio", "category": "suite", "icon": "🧪", "scope": "suite", "app": "questionlab",
+      "name": { "es": "Laboratorio completo", "en": "Full lab" },
+      "desc": { "es": "Usaste los 3 modos de Question Lab", "en": "Used all 3 Question Lab modes" },
+      "where": { "es": "Se consigue en Question Lab: Construye, Identifica y Responde", "en": "Earned in Question Lab: Build, Identify and Respond" },
+      "criteria": { "type": "modesUsed", "app": "questionlab", "gte": 3 } }
   ],
 
   "deferred": [],

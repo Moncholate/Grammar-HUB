@@ -24,17 +24,22 @@
      detección de texto de IA no es confiable. El riesgo no es solo con el
      alumno: refuerza en el docente la idea de que se detecta a ojo.
 
-   SIN CIFRAS, a propósito: A1 y A7 llegaron con datos precisos pero SIN AUTORES,
-   así que no se pueden comprobar. Se enuncia la dirección del hallazgo, que sí
-   es consistente con Bjork y con el efecto de generación, y la advertencia va
-   visible. Si aparecen las referencias, se reponen los números.
+   CIFRAS REPUESTAS (2026-08). A1 y A7 llegaron con datos precisos pero sin
+   autores; se integraron primero sin números y con advertencia. Buscadas las
+   fuentes, las dos existen y las cifras cuadran:
+   · A1 (id 800) = Barcaui (2025). OJO: el documento original lo atribuía a
+     "Computers in Human Behavior: Artificial Humans" y **está mal** — salió en
+     Social Sciences & Humanities Open. La cita corregida es la que va aquí.
+   · A7 (id 805) = Education Sciences 16(3), 481 (2026), doi 10.3390/educsci16030481.
+     No se pudo recuperar la lista de autores (MDPI bloquea la descarga), pero el
+     DOI identifica el artículo sin ambigüedad. La muestra es de Corea del Sur y
+     eso queda dicho en la fuente: importa para generalizar a Chile.
    ========================================================================== */
 export default [
   /* ── A · Por qué copiar te perjudica ───────────────────────────────── */
-  { id: 800, tramo: 2, tag: 'ia_evidencia', status: 'debate',
-    note: 'La referencia de este estudio llegó sin autores, así que no se pudo verificar. Por eso se enuncia la dirección del hallazgo y no las cifras exactas.',
-    es: 'En un ensayo controlado, quienes estudiaron con IA sin restricciones recordaban MENOS 45 días después que quienes estudiaron sin ella.',
-    source: 'Ensayo controlado aleatorizado sobre retención de conocimiento y uso de ChatGPT (2025), Computers in Human Behavior: Artificial Humans' },
+  { id: 800, tramo: 2, tag: 'ia_evidencia',
+    es: 'En un experimento con 120 universitarios, quienes estudiaron con IA sin restricciones respondieron 57,5% en una prueba sorpresa 45 días después. Quienes estudiaron sin IA: 68,5%.',
+    source: 'Barcaui, A. (2025), “ChatGPT as a cognitive crutch: Evidence from a randomized controlled trial on knowledge retention”, Social Sciences & Humanities Open — n = 120, d = 0,68' },
 
   { id: 801, tramo: 3, tag: 'ia_evidencia',
     es: 'La IA baja el esfuerzo mental. El problema es que ese esfuerzo era justamente lo que fijaba el aprendizaje.',
@@ -52,10 +57,9 @@ export default [
     es: 'Cuando la IA arma la oración por ti, te salta el paso donde “notas” la estructura. Y sin notar, no hay adquisición.',
     source: 'Schmidt (1990), Noticing Hypothesis, Applied Linguistics 11(2)' },
 
-  { id: 805, tramo: 2, tag: 'ia_evidencia', status: 'debate',
-    note: 'La referencia llegó sin autores y no se pudo verificar. El fenómeno que describe (sentirse seguro ≠ saber) sí está bien documentado en otras líneas de investigación.',
-    es: 'Estudiar con IA da más confianza pero no siempre más aprendizaje. Sentirse seguro y saber no son lo mismo.',
-    source: 'Meta-análisis de instrucción de inglés con ChatGPT (2026), Education Sciences — “brecha afectivo-cognitiva”' },
+  { id: 805, tramo: 2, tag: 'ia_evidencia',
+    es: 'Estudiar con IA sube mucho la confianza y poco lo que aprendes. Un meta-análisis de 22 estudios midió un efecto casi cuatro veces mayor en lo emocional que en lo cognitivo.',
+    source: '“Beyond Language Gains: A Meta-Analysis of Non-Linguistic Outcomes of ChatGPT-Integrated English Instruction in South Korea” (2026), Education Sciences 16(3), 481 — 22 estudios, N = 1.303: afectivo g = 0,67 · cognitivo/metacognitivo g = 0,17. La muestra es de Corea del Sur.' },
 
   /* ── B · Cómo usar la IA para ENTENDER gramática ───────────────────── */
   { id: 810, tramo: 1, tag: 'ia_prompt',

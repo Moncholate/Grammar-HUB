@@ -165,7 +165,7 @@ export default [
     es: 'En inglés los adjetivos no cambian: “red car”, “red cars”. Es una de las pocas veces que el inglés te hace la vida más fácil.',
     source: 'Swan & Smith (2001)' },
 
-  { id: 1046, tramo: 3, tag: 'curiosidad_contraste', estructura: 'conditionals',
+  { id: 1046, tramo: 3, tag: 'curiosidad_contraste', estructura: 'conditionals', nivel: 'intermedio2',
     es: 'El inglés no tiene subjuntivo vivo como el español. Lo que queda son restos: “If I were you”.',
     source: 'Crystal; gramática histórica del subjuntivo inglés' },
 

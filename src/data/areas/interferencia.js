@@ -155,7 +155,7 @@ export default [
     es: 'Los modales (can, must, should) no llevan “to” después ni -s en tercera persona.',
     mal: 'She cans to swim.', bien: 'She can swim.', source: SWAN },
 
-  { id: 249, tramo: 3, tag: 'transfer_verbo', estructura: 'conditionals', nivel: 'avanzado',
+  { id: 249, tramo: 3, tag: 'transfer_verbo', estructura: 'conditionals', nivel: 'intermedio2',
     es: 'Después de “if” en condicionales de tipo 1, usa presente, no futuro.',
     mal: 'If it will rain, I’ll stay.', bien: 'If it rains, I’ll stay.', source: SWAN },
 

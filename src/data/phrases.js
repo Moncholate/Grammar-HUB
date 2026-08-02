@@ -26,7 +26,10 @@
              y el ítem no se muestra a alguien por debajo de ese nivel
    ========================================================================== */
 import AREA_INTERFERENCIA from './areas/interferencia.js';
+import AREA_VARIEDADES from './areas/variedades.js';
+import AREA_SUENO from './areas/sueno.js';
 import AREA_MICRO from './areas/micro.js';
+import AREA_EVALUACION7 from './areas/evaluacion7.js';
 import AREA_EVALUACION from './areas/evaluacion.js';
 import AREA_IA from './areas/ia.js';
 import AREA_HISTORIA from './areas/historia.js';
@@ -56,6 +59,8 @@ export const CATEGORIES = {
      alumno vive como fracaso— sin animarlo desde arriba. */
   refuerzo:     { es: 'Perspectiva',                en: 'Perspective' },
   interferencia:{ es: 'Español vs inglés',          en: 'Spanish vs English' },
+  variedades:   { es: 'Variedades del inglés',      en: 'Varieties of English' },
+  sueno:        { es: 'Sueño y memoria',            en: 'Sleep and memory' },
   micro:        { es: 'Rutinas cortas',             en: 'Short routines' },
   ia:           { es: 'Inglés con IA',              en: 'English with AI' },
   historia:     { es: 'Historia del inglés',        en: 'History of English' },
@@ -580,7 +585,10 @@ export const PHRASES = [
     ...p,
   })),
   ...conArea(AREA_INTERFERENCIA, 2, 'interferencia'),
+  ...conArea(AREA_VARIEDADES, 4, 'variedades'),
+  ...conArea(AREA_SUENO, 5, 'sueno'),
   ...conArea(AREA_MICRO, 6, 'micro'),
+  ...conArea(AREA_EVALUACION7, 7, 'evaluacion'),
   ...conArea(AREA_IA, 8, 'ia'),
   ...conArea(AREA_HISTORIA, 10, 'historia'),
   ...conArea(AREA_EVALUACION, 11, 'evaluacion'),

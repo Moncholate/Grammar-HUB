@@ -106,17 +106,39 @@ const chocan = (a, b) => {
 };
 
 /* Separa los pares que chocan: cuando una carta choca con la anterior, se
-   adelanta la primera de más adelante que no choque. Si no hay ninguna, se
-   deja como está — mejor un par repetido que una baraja incompleta. */
+   adelanta la primera de más adelante que no choque. Si no hay ninguna, se deja
+   como está — mejor un par repetido que una baraja incompleta.
+
+   El candidato TIENE que ser del mismo tramo. Sin esa restricción la reparación
+   rompía las fases: se traía una carta de método a los primeros 20 días, que
+   deben ser solo de entrada. Cada posición conserva su tramo y solo cambia qué
+   carta de ese tramo la ocupa. */
 function separar(deck, byId) {
-  for (let i = 1; i < deck.length; i++) {
-    if (!chocan(byId(deck[i - 1]), byId(deck[i]))) continue;
-    for (let j = i + 1; j < deck.length; j++) {
-      const cand = byId(deck[j]);
-      if (chocan(byId(deck[i - 1]), cand)) continue;
-      if (i + 1 < deck.length && chocan(cand, byId(deck[i + 1]))) continue;
-      [deck[i], deck[j]] = [deck[j], deck[i]];
-      break;
+  /* Dos pasadas: la primera hacia adelante y la segunda hacia atrás. Una sola
+     pasada dejaba unos pocos choques cerca del final de cada tramo, donde ya no
+     quedaban candidatos por delante; buscando también hacia atrás se resuelven. */
+  for (const haciaAdelante of [true, false]) {
+    for (let i = 1; i < deck.length; i++) {
+      const prev = byId(deck[i - 1]);
+      if (!chocan(prev, byId(deck[i]))) continue;
+      const tramoAqui = tier(byId(deck[i]));
+      const orden = haciaAdelante
+        ? Array.from({ length: deck.length - i - 1 }, (_, k) => i + 1 + k)
+        : Array.from({ length: i - 1 }, (_, k) => i - 2 - k);
+      for (const j of orden) {
+        const cand = byId(deck[j]);
+        if (tier(cand) !== tramoAqui) continue;      // no romper las fases
+        if (chocan(prev, cand)) continue;
+        if (i + 1 < deck.length && chocan(cand, byId(deck[i + 1]))) continue;
+        // Al traerla de atrás hay que revisar el hueco que deja.
+        const movida = byId(deck[i]);
+        if (!haciaAdelante) {
+          if (j > 0 && chocan(byId(deck[j - 1]), movida)) continue;
+          if (j + 1 < deck.length && j + 1 !== i && chocan(movida, byId(deck[j + 1]))) continue;
+        }
+        [deck[i], deck[j]] = [deck[j], deck[i]];
+        break;
+      }
     }
   }
   return deck;
@@ -141,8 +163,10 @@ export function buildDeck(rnd = Math.random) {
     if (!t) break;
     deck.push(pilas[t].shift());
   }
-  const byId = (id) => pool.find(p => p.id === id);
-  return separar(deck, byId);
+  // Mapa y no `find`: la reparación mira muchos pares y con 400+ ítems una
+  // búsqueda lineal dentro de dos bucles anidados se nota.
+  const mapa = new Map(pool.map(p => [p.id, p]));
+  return separar(deck, (id) => mapa.get(id));
 }
 
 function read(storage) {

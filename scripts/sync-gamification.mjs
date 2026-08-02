@@ -24,7 +24,7 @@ const enginePlain = engine.replace(/^export\s+/gm, '');   // quita los `export` 
 const qlBody = `${BANNER}window.GH_GAME = (function(){
 ${enginePlain}
   return {
-    SHARED_KEY, SCHEMA_V, emptyProgress, loadProgress, saveProgress, recordAttempt, evaluateBadges,
+    SHARED_KEY, SCHEMA_V, emptyProgress, loadProgress, saveProgress, recordAttempt, recordRound, evaluateBadges,
     BADGES: ${JSON.stringify(model.badges)}
   };
 })();

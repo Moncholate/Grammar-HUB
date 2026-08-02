@@ -33,6 +33,8 @@ export function emptyProgress() {
     tenses: {},                 // { [tenseId]: { attempts, correct, days: [ISO] } }
     appsUsed: {},               // { grammaster:true, ... }
     modesUsed: {},              // { [app]: { [mode]:true } } — actividades distintas dentro de una app
+    roundsDone: 0,              // rondas de práctica completadas
+    perfectRounds: 0,           // …de esas, cuántas sin un solo fallo
     badges: {}                  // { [badgeId]: unlockedISO }  (perTense → `${id}:${tenseId}`)
   };
 }
@@ -99,6 +101,21 @@ export function recordAnalysis(p, { app } = {}) {
   return p;
 }
 
+/* Registra el cierre de UNA ronda de práctica.
+   Solo cuenta como perfecta si tenía al menos MIN_RONDA_PERFECTA ejercicios: en
+   Question Lab la ronda de Construye se acota a los desafíos disponibles del
+   nivel, y una ronda de 3 sin fallos no es el mismo logro que una de 10. Sin
+   este piso, la insignia se ganaría en el nivel con menos desafíos. */
+export const MIN_RONDA_PERFECTA = 5;
+export function recordRound(p, { app, ok = 0, total = 0 } = {}) {
+  if (app) p.appsUsed[app] = true;
+  p.roundsDone = (p.roundsDone || 0) + 1;
+  if (total >= MIN_RONDA_PERFECTA && ok === total) {
+    p.perfectRounds = (p.perfectRounds || 0) + 1;
+  }
+  return p;
+}
+
 function meets(p, criteria, tenseId) {
   const c = criteria;
   switch (c.type) {
@@ -107,6 +124,7 @@ function meets(p, criteria, tenseId) {
     case 'bestAnswerStreak': return p.bestAnswerStreak >= c.gte;
     case 'appsUsed':         return Object.values(p.appsUsed).filter(Boolean).length >= c.gte;
     case 'modesUsed':        return Object.values((p.modesUsed || {})[c.app] || {}).filter(Boolean).length >= c.gte;
+    case 'perfectRounds':    return (p.perfectRounds || 0) >= c.gte;
     case 'sentencesAnalyzed':return (p.sentencesAnalyzed || 0) >= c.gte;
     case 'tenseFamiliar': {
       const t = p.tenses[tenseId];

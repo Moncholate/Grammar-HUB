@@ -61,6 +61,31 @@ const PromptBox = ({ text, t }) => {
   );
 };
 
+/* Par ❌/✅ de los ítems de interferencia.
+   El ✅ va primero y con más peso; el ❌ debajo, chico y tachado. Nunca al revés
+   y nunca el ❌ solo: el alumno se lleva la forma que vio más grande, así que
+   mostrar el error con el mismo peso que la corrección lo refuerza.
+   El color no carga solo el significado (DUA): van el símbolo, la etiqueta para
+   lector de pantalla y el tachado, además del verde y el rojo. */
+const ParEjemplo = ({ p }) => (
+  <div className="mt-3 space-y-1.5" lang="en">
+    {p.bien && (
+      <p className="flex items-start gap-2 text-[15px] font-semibold leading-snug text-emerald-700"
+         style={{ fontFamily: "'Atkinson Hyperlegible', system-ui, sans-serif" }}>
+        <span aria-hidden="true" className="mt-px">✓</span>
+        <span><span className="sr-only">Correcto: </span>{p.bien}</span>
+      </p>
+    )}
+    {p.mal && (
+      <p className="flex items-start gap-2 text-[13px] leading-snug text-slate-500"
+         style={{ fontFamily: "'Atkinson Hyperlegible', system-ui, sans-serif" }}>
+        <span aria-hidden="true" className="mt-px text-rose-600">✗</span>
+        <span className="line-through decoration-rose-400"><span className="sr-only">Incorrecto: </span>{p.mal}</span>
+      </p>
+    )}
+  </div>
+);
+
 /* Cuerpo compartido por la línea desplegada y el aviso. */
 const PhraseBody = ({ p, t, lang, big }) => (
   <>
@@ -69,6 +94,7 @@ const PhraseBody = ({ p, t, lang, big }) => (
     </blockquote>
 
     {p.prompt && <PromptBox text={p.prompt} t={t} />}
+    {(p.bien || p.mal) && <ParEjemplo p={p} />}
 
     {p.en && (
       <p

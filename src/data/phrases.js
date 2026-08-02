@@ -25,6 +25,7 @@
              `nivel` es el curso MÍNIMO en que se enseña (según syllabus-aef.md)
              y el ítem no se muestra a alguien por debajo de ese nivel
    ========================================================================== */
+import AREA_INTERFERENCIA from './areas/interferencia.js';
 import AREA_MICRO from './areas/micro.js';
 import AREA_EVALUACION from './areas/evaluacion.js';
 import AREA_IA from './areas/ia.js';
@@ -54,6 +55,7 @@ export const CATEGORIES = {
      "Perspectiva" nombra lo que estas frases hacen —dar vuelta algo que el
      alumno vive como fracaso— sin animarlo desde arriba. */
   refuerzo:     { es: 'Perspectiva',                en: 'Perspective' },
+  interferencia:{ es: 'Español vs inglés',          en: 'Spanish vs English' },
   micro:        { es: 'Rutinas cortas',             en: 'Short routines' },
   ia:           { es: 'Inglés con IA',              en: 'English with AI' },
   historia:     { es: 'Historia del inglés',        en: 'History of English' },
@@ -577,6 +579,7 @@ export const PHRASES = [
     tramo: TRAMO_POR_ID[p.id] || TRAMO_POR_CAT[p.cat] || 2,
     ...p,
   })),
+  ...conArea(AREA_INTERFERENCIA, 2, 'interferencia'),
   ...conArea(AREA_MICRO, 6, 'micro'),
   ...conArea(AREA_IA, 8, 'ia'),
   ...conArea(AREA_HISTORIA, 10, 'historia'),

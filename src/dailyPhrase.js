@@ -68,11 +68,81 @@ export function eligible() {
   return PHRASES.filter(p => INCLUIR_APOCRIFAS || p.status !== 'apocrifa');
 }
 
-/* Baraja completa de ids: mezclada dentro de cada tramo, tramos en orden. */
+/* ── Fases ────────────────────────────────────────────────────────────────
+   Los tramos NO se agotan uno antes de empezar el siguiente. Con el banco
+   completo el tramo de entrada solo pasa los 90 ítems, o sea que un alumno de
+   un semestre no alcanzaría a ver JAMÁS un ítem de interferencia. La baraja se
+   arma por fases, y la mezcla de cada fase dice de qué tramo sale cada carta:
+
+     días 1-20    solo entrada — bajar la guardia antes de pedir nada
+     días 21-60   2 de cada 3 de entrada, 1 de método
+     día 61+      parejo entre los tres
+
+   El patrón de la fase 2 es además el cupo que pidió el docente para los ítems
+   de corrección de errores: como máximo uno de cada tres, nunca de los primeros. */
+const FASES = [
+  { hasta: 20,       mezcla: [1] },
+  { hasta: 60,       mezcla: [1, 1, 2] },
+  { hasta: Infinity, mezcla: [1, 2, 3, 2] },
+];
+
+/* ── Adyacencia ───────────────────────────────────────────────────────────
+   Hay pares que por separado están bien y juntos se contradicen o suenan a
+   reproche. La clase de un ítem sale de su área (o de su tag, para la ética). */
+const CLASE_POR_AREA = { 2: 'interferencia', 4: 'variedades', 7: 'evaluacion', 11: 'evaluacion' };
+const clase = (p) => (p.tag === 'ia_etica' ? 'etica' : CLASE_POR_AREA[p.area] || null);
+
+const CHOCAN = new Set([
+  'interferencia|interferencia',   // dos correcciones seguidas = la app te reta
+  'interferencia|etica', 'etica|interferencia', // "este error cometes" + "no copies" = sospecha
+  'variedades|evaluacion', 'evaluacion|variedades', // "ambas son correctas" y "se evalúa precisión"
+  'evaluacion|evaluacion',         // dos de exigencia seguidos
+  'etica|etica',
+]);
+
+const chocan = (a, b) => {
+  const ca = clase(a), cb = clase(b);
+  return !!ca && !!cb && CHOCAN.has(`${ca}|${cb}`);
+};
+
+/* Separa los pares que chocan: cuando una carta choca con la anterior, se
+   adelanta la primera de más adelante que no choque. Si no hay ninguna, se
+   deja como está — mejor un par repetido que una baraja incompleta. */
+function separar(deck, byId) {
+  for (let i = 1; i < deck.length; i++) {
+    if (!chocan(byId(deck[i - 1]), byId(deck[i]))) continue;
+    for (let j = i + 1; j < deck.length; j++) {
+      const cand = byId(deck[j]);
+      if (chocan(byId(deck[i - 1]), cand)) continue;
+      if (i + 1 < deck.length && chocan(cand, byId(deck[i + 1]))) continue;
+      [deck[i], deck[j]] = [deck[j], deck[i]];
+      break;
+    }
+  }
+  return deck;
+}
+
+/* Baraja completa de ids: mezclada dentro de cada tramo, repartida por fases y
+   con los pares que chocan separados. */
 export function buildDeck(rnd = Math.random) {
-  const byTier = { 1: [], 2: [], 3: [] };
-  for (const p of eligible()) (byTier[tier(p)] || byTier[2]).push(p.id);
-  return [1, 2, 3].flatMap(t => shuffle(byTier[t], rnd));
+  const pilas = { 1: [], 2: [], 3: [] };
+  const pool = eligible();
+  for (const p of pool) (pilas[tier(p)] || pilas[2]).push(p.id);
+  for (const t of [1, 2, 3]) pilas[t] = shuffle(pilas[t], rnd);
+
+  const total = pool.length;
+  const deck = [];
+  while (deck.length < total) {
+    const i = deck.length;
+    const fase = FASES.find(f => i < f.hasta);
+    const quiere = fase.mezcla[i % fase.mezcla.length];
+    // Si el tramo que toca ya se acabó, se toma del primero que quede.
+    const t = pilas[quiere].length ? quiere : [1, 2, 3].find(x => pilas[x].length);
+    if (!t) break;
+    deck.push(pilas[t].shift());
+  }
+  const byId = (id) => pool.find(p => p.id === id);
+  return separar(deck, byId);
 }
 
 function read(storage) {

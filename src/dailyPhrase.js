@@ -144,8 +144,66 @@ function separar(deck, byId) {
   return deck;
 }
 
-/* Baraja completa de ids: mezclada dentro de cada tramo, repartida por fases y
-   con los pares que chocan separados. */
+/* ── Encadenado ───────────────────────────────────────────────────────────
+   Lo contrario de la adyacencia: hay pares que deben caer JUNTOS, no separados.
+   Un ítem de historia puede declarar `explica: <id>` y entonces se coloca unos
+   días DESPUÉS del error que explica. Primero el alumno ve que en inglés hay que
+   poner el sujeto siempre; tres o cuatro días después, que es porque el idioma
+   perdió las terminaciones que lo indicaban. El orden importa: la explicación
+   histórica sin el error antes es un dato suelto.
+
+   Igual que `separar`, solo mueve dentro del mismo tramo — busca el primer hueco
+   de ese tramo a partir del segundo día siguiente, para no romper las fases. */
+const HUECO_MAX = 10;   // si no hay sitio en 10 posiciones, se deja donde estaba
+
+function encadenar(deck, byId, pool) {
+  const pos = new Map(deck.map((id, i) => [id, i]));
+  for (const p of pool) {
+    if (!p.explica) continue;
+    const i = pos.get(p.explica), j = pos.get(p.id);
+    if (i === undefined || j === undefined) continue;
+    if (j > i && j - i <= HUECO_MAX) continue;         // ya cae bastante cerca
+
+    /* Cambia de sitio UNA de las dos, la que se pueda:
+       (a) llevar la explicación a los días siguientes al error, o
+       (b) si no hay hueco —o si la explicación ya venía ANTES—, traer el error
+           a los días previos a la explicación. El resultado es el mismo, el
+           alumno ve primero el error y después el porqué.
+       Solo se cambia por una carta del mismo tramo, para no romper las fases. */
+    const mover = (quien, desde, hastaK, paso) => {
+      for (let k = hastaK; k !== desde && k >= 0 && k < deck.length; k += paso) {
+        if (tier(byId(deck[k])) !== tier(quien)) continue;
+        /* La carta desplazada ocupa el hueco que deja: hay que comprobar que
+           ahí no choque, porque este paso corre al final y ya no hay una
+           separación después que lo arregle. */
+        const desplazada = byId(deck[k]);
+        const hueco = pos.get(quien.id);
+        if (hueco > 0 && chocan(byId(deck[hueco - 1]), desplazada)) continue;
+        if (hueco + 1 < deck.length && chocan(desplazada, byId(deck[hueco + 1]))) continue;
+        /* Y al revés: cuando el que se mueve es el ERROR (clase conflictiva, a
+           diferencia de la explicación) hay que comprobar que no choque en su
+           destino. Sin esto la cadena arreglaba una cosa y rompía otra. */
+        if (k > 0 && k - 1 !== hueco && chocan(byId(deck[k - 1]), quien)) continue;
+        if (k + 1 < deck.length && k + 1 !== hueco && chocan(quien, byId(deck[k + 1]))) continue;
+        deck[k] = quien.id;
+        deck[hueco] = desplazada.id;
+        pos.set(quien.id, k);
+        pos.set(desplazada.id, hueco);
+        return true;
+      }
+      return false;
+    };
+
+    // (a) la explicación baja hasta los 2-10 días después del error
+    if (j > i || !mover(byId(p.explica), i, Math.max(0, j - 2), -1)) {
+      mover(p, j, Math.min(deck.length - 1, i + 2), +1);
+    }
+  }
+  return deck;
+}
+
+/* Baraja completa de ids: mezclada dentro de cada tramo, repartida por fases,
+   con los pares que chocan separados y los que se explican, encadenados. */
 export function buildDeck(rnd = Math.random) {
   const pilas = { 1: [], 2: [], 3: [] };
   const pool = eligible();
@@ -166,7 +224,15 @@ export function buildDeck(rnd = Math.random) {
   // Mapa y no `find`: la reparación mira muchos pares y con 400+ ítems una
   // búsqueda lineal dentro de dos bucles anidados se nota.
   const mapa = new Map(pool.map(p => [p.id, p]));
-  return separar(deck, (id) => mapa.get(id));
+  const byId = (id) => mapa.get(id);
+  /* `encadenar` va AL FINAL, y no en medio. Los ítems de historia no pertenecen
+     a ninguna clase conflictiva, o sea que son el candidato perfecto para
+     reparar un choque — y por eso una separación posterior se los robaba a su
+     cadena y los mandaba a 190 días de distancia. Corriendo último, nada los
+     mueve; a cambio, encadenar tiene que verificar él mismo que la carta que
+     desplaza no choque en su nuevo hueco. */
+  separar(deck, byId);
+  return encadenar(deck, byId, pool);
 }
 
 function read(storage) {

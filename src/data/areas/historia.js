@@ -74,11 +74,11 @@ export default [
     es: 'Cuando un idioma pierde las terminaciones, necesita otra forma de marcar quién hace qué. El inglés eligió el orden fijo de palabras.',
     source: 'Baugh & Cable; literatura sobre tipología y pérdida de flexión' },
 
-  { id: 1014, tramo: 2, tag: 'curiosidad_contraste', estructura: 'word_order',
+  { id: 1014, tramo: 2, explica: 212, tag: 'curiosidad_contraste', estructura: 'word_order',
     es: 'Por eso el orden Sujeto-Verbo-Objeto es tan rígido en inglés y tan flexible en español: el español todavía conserva las marcas que el inglés perdió.',
     source: 'Análisis contrastivo; Swan & Smith (2001)' },
 
-  { id: 1015, tramo: 2, tag: 'curiosidad_historia', estructura: 'present_simple', nivel: 'basico1',
+  { id: 1015, tramo: 2, explica: 241, tag: 'curiosidad_historia', estructura: 'present_simple', nivel: 'basico1',
     es: 'La -s de tercera persona es el último resto de un sistema de terminaciones que tenía una para cada persona. Sobrevivió solo ella.',
     source: 'Baugh & Cable; Crystal' },
 
@@ -95,7 +95,10 @@ export default [
     es: 'Algunas “reglas” del inglés no describen cómo se habla: describen cómo unos señores del siglo XVIII creyeron que debía hablarse. Saber de dónde vienen ayuda a no idealizarlas — pero la norma existe y se evalúa igual.',
     source: 'Crystal, sobre la tradición prescriptivista; distinción descriptivo/prescriptivo en lingüística' },
 
-  { id: 1021, tramo: 3, tag: 'curiosidad_regla', estructura: 'negation', nivel: 'basico1',
+  /* Sube del tramo 3 al 2 para poder encadenarse al 230. Acompañado de su
+     corrección es MÁS seguro que suelto: "la doble negación era correcta"
+     aterriza mucho mejor tres días después de "en inglés estándar va una sola". */
+  { id: 1021, tramo: 2, explica: 230, tag: 'curiosidad_regla', estructura: 'negation', nivel: 'basico1',
     es: 'La doble negación era correcta en inglés antiguo y medieval. Chaucer la usaba. Se volvió “error” recién en el siglo XVIII.',
     source: 'Baugh & Cable; historia del prescriptivismo inglés' },
 
@@ -108,7 +111,7 @@ export default [
     source: 'Crystal; historia del prescriptivismo' },
 
   /* ── D · El misterio del “do” ──────────────────────────────────────── */
-  { id: 1030, tramo: 2, tag: 'curiosidad_auxiliar', estructura: 'questions_do', nivel: 'basico1',
+  { id: 1030, tramo: 2, explica: 220, tag: 'curiosidad_auxiliar', estructura: 'questions_do', nivel: 'basico1',
     es: 'El “do” de las preguntas no existía en inglés antiguo. Se decía “Know you not?” — como en español, solo invirtiendo.',
     source: 'Historia del do-support (Baugh & Cable; Denison, English Historical Syntax)' },
 
@@ -128,7 +131,7 @@ export default [
     es: '“Shall” y “will” eran verbos con significado propio: deber y querer. Con los siglos se vaciaron y quedaron como marcas de futuro.',
     source: 'Historia de la gramaticalización de los modales ingleses' },
 
-  { id: 1035, tramo: 2, tag: 'curiosidad_auxiliar', estructura: 'present_perfect', nivel: 'elemental2',
+  { id: 1035, tramo: 2, explica: 243, tag: 'curiosidad_auxiliar', estructura: 'present_perfect', nivel: 'elemental2',
     es: '“Have” pasó de significar “poseer” a ser el auxiliar del present perfect. “I have eaten” era literalmente “tengo comido”.',
     source: 'Historia del perfecto en lenguas germánicas y románicas' },
 
@@ -149,7 +152,7 @@ export default [
     es: '“They” se usa en singular para una persona de género no especificado desde hace siglos, mucho antes del debate actual.',
     source: 'Documentación histórica del singular “they” (Oxford English Dictionary; Crystal)' },
 
-  { id: 1043, tramo: 2, tag: 'curiosidad_contraste', estructura: 'subject_pronouns', nivel: 'basico1',
+  { id: 1043, tramo: 2, explica: 200, tag: 'curiosidad_contraste', estructura: 'subject_pronouns', nivel: 'basico1',
     es: 'El inglés obliga a poner el sujeto porque perdió las terminaciones que lo indicaban. El español no lo necesita porque las conserva.',
     source: 'Tipología pro-drop; Swan & Smith (2001)' },
 
@@ -158,7 +161,7 @@ export default [
     es: 'El adjetivo va antes en inglés y después en español. No es capricho: son dos soluciones distintas al mismo problema.',
     source: 'Tipología del orden de constituyentes' },
 
-  { id: 1045, tramo: 2, tag: 'curiosidad_contraste', estructura: 'adjectives', nivel: 'basico1',
+  { id: 1045, tramo: 2, explica: 211, tag: 'curiosidad_contraste', estructura: 'adjectives', nivel: 'basico1',
     es: 'En inglés los adjetivos no cambian: “red car”, “red cars”. Es una de las pocas veces que el inglés te hace la vida más fácil.',
     source: 'Swan & Smith (2001)' },
 
@@ -166,7 +169,7 @@ export default [
     es: 'El inglés no tiene subjuntivo vivo como el español. Lo que queda son restos: “If I were you”.',
     source: 'Crystal; gramática histórica del subjuntivo inglés' },
 
-  { id: 1047, tramo: 2, tag: 'curiosidad_contraste', estructura: 'prepositions',
+  { id: 1047, tramo: 2, explica: 264, tag: 'curiosidad_contraste', estructura: 'prepositions',
     es: 'El inglés distingue “in”, “on” y “at” donde el español usa “en” para todo. No hay traducción posible: hay que aprenderlas de a una.',
     source: 'Swan & Smith (2001)' },
 

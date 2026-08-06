@@ -3,7 +3,11 @@ import { useState, useEffect } from 'react';
 const THEME_ICON = { light: '☀️', dark: '🌙' };
 const THEME_NAME = { es: { light: 'Claro', dark: 'Oscuro' }, en: { light: 'Light', dark: 'Dark' } };
 
-const HeaderNav = ({ lang, setLang }) => {
+/* El toggle de tema, exportado aparte: además de la cabecera del Hub lo usa la
+   barra del iframe. Dentro de una app embebida el tema se maneja desde ahí, no
+   desde la cabecera de la app — en celular esa cabecera queda cargada de
+   información y el botón compite con el título. */
+export function ThemeToggle({ lang = 'es', compacto = false }) {
   // Arranca en auto (sigue al SO). El toggle es binario y ofrece el modo destino.
   const [eff, setEff] = useState(() => (typeof window !== 'undefined' && window.ghTheme ? window.ghTheme.effective() : 'light'));
   useEffect(() => {
@@ -19,8 +23,22 @@ const HeaderNav = ({ lang, setLang }) => {
     };
   }, []);
   const target = eff === 'dark' ? 'light' : 'dark';   // el modo al que puedes cambiar
-  const toggleTheme = () => { if (window.ghTheme) setEff(window.ghTheme.toggle()); };
+  const etiqueta = `${lang === 'es' ? 'Cambiar a modo' : 'Switch to'} ${THEME_NAME[lang][target].toLowerCase()}`;
+  return (
+    <button
+      onClick={() => { if (window.ghTheme) setEff(window.ghTheme.toggle()); }}
+      className={`flex items-center gap-1.5 rounded-lg font-bold bg-slate-100 border border-slate-300 text-slate-600 hover:bg-slate-50 transition-all ${
+        compacto ? 'px-2.5 py-1.5 text-sm' : 'px-2.5 py-1 text-sm'}`}
+      title={etiqueta}
+      aria-label={etiqueta}
+    >
+      <span className="text-base leading-none">{THEME_ICON[target]}</span>
+      <span>{THEME_NAME[lang][target]}</span>
+    </button>
+  );
+}
 
+const HeaderNav = ({ lang, setLang }) => {
   return (
     <header className="bg-white/80 backdrop-blur-sm border-b border-slate-100 sticky top-0 z-40">
       <div className="relative max-w-2xl mx-auto px-5 py-4 flex flex-col items-center gap-2">
@@ -30,15 +48,7 @@ const HeaderNav = ({ lang, setLang }) => {
           <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide px-1 mb-0.5">
             {lang === 'es' ? 'Tema' : 'Theme'}
           </span>
-          <button
-            onClick={toggleTheme}
-            className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-sm font-bold bg-slate-100 border border-slate-300 text-slate-600 hover:bg-slate-50 transition-all"
-            title={`${lang === 'es' ? 'Cambiar a modo' : 'Switch to'} ${THEME_NAME[lang][target].toLowerCase()}`}
-            aria-label={`${lang === 'es' ? 'Cambiar a modo' : 'Switch to'} ${THEME_NAME[lang][target].toLowerCase()}`}
-          >
-            <span className="text-base leading-none">{THEME_ICON[target]}</span>
-            <span>{THEME_NAME[lang][target]}</span>
-          </button>
+          <ThemeToggle lang={lang} />
         </div>
 
         {/* Selector de idioma — esquina superior derecha */}

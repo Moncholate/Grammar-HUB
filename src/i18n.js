@@ -5,6 +5,9 @@ export const translations = {
     heroSub: 'Elige tu nivel y luego una app para empezar',
     open: 'Abrir',
     back: 'Volver',
+    /* Nombra el destino a proposito: dentro de la app hay sus propios «atras»
+       y un «Volver» generico se llevaba los clics dirigidos a ellos. */
+    backToHub: 'Hub',
     levelLabel: 'Nivel',
     step1: 'Elige tu nivel',
     step2: 'Elige tu app',
@@ -25,6 +28,7 @@ export const translations = {
     heroSub: 'Choose your level and then an app to get started',
     open: 'Open',
     back: 'Back',
+    backToHub: 'Hub',
     levelLabel: 'Level',
     step1: 'Choose your level',
     step2: 'Choose your app',

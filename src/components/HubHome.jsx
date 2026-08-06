@@ -3,6 +3,7 @@ import { ArrowLeft } from 'lucide-react';
 import { translations, STAGES } from '../i18n';
 import { loadProgress, BADGES } from '../gamification.generated.js';
 import DailyPhrase from './DailyPhrase';
+import { ThemeToggle } from './HeaderNav';
 
 // Colores alineados a la identidad de los logos de bloques:
 // Grammaster índigo (#6366F1) · Desgramatizador coral (#FB7185 = rose-400) ·
@@ -113,15 +114,20 @@ const HubHome = ({ lang, level, setLevel, onPhraseOpenChange }) => {
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
-        <div className="px-4 py-3 border-b border-slate-100 flex-shrink-0">
+        {/* Barra del iframe. El botón dice a DÓNDE va, no «Volver»: dentro de
+            la app hay sus propios «atrás» y el genérico se llevaba los clics
+            que iban dirigidos a ellos. Y el tema vive acá mientras la app está
+            embebida, para descargar su cabecera en celular. */}
+        <div className="px-4 py-3 border-b border-slate-100 flex-shrink-0 flex items-center justify-between gap-2">
           <button
             onClick={() => setSelectedApp(null)}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium text-slate-600 bg-slate-100 active:bg-slate-200 transition-colors touch-manipulation"
             style={{ WebkitTapHighlightColor: 'transparent' }}
           >
             <ArrowLeft size={16} />
-            {t.back}
+            {t.backToHub}
           </button>
+          <ThemeToggle lang={lang} compacto />
         </div>
 
         <div

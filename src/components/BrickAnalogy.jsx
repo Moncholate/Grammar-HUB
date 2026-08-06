@@ -38,18 +38,21 @@ const BrickAnalogy = ({ lang }) => {
 
       {/* Las dos figuras. En móvil se apilan; el orden importa: primero la que
           el alumno YA sabe armar. */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
+      {/* La columna del grande es más ancha porque la figura lo es: con dos
+          columnas iguales sobraba aire a los lados y el contraste se diluía. */}
+      <div className="grid grid-cols-1 sm:grid-cols-[3fr_2fr] gap-4 mb-5">
         {[
-          { src: 'dino-grande.svg', alto: '100%',   titulo: t.whyBricksL1Title, texto: t.whyBricksL1, alt: t.whyBricksL1Alt },
-          { src: 'dino-chico.svg',  alto: '62.2%',  titulo: t.whyBricksL2Title, texto: t.whyBricksL2, alt: t.whyBricksL2Alt },
+          { src: 'dino-grande.svg', alto: '100%',  titulo: t.whyBricksL1Title, texto: t.whyBricksL1, alt: t.whyBricksL1Alt },
+          { src: 'dino-chico.svg',  alto: '42.2%', titulo: t.whyBricksL2Title, texto: t.whyBricksL2, alt: t.whyBricksL2Alt },
         ].map(({ src, alto, titulo, texto, alt }) => (
           <figure key={src} className="rounded-xl bg-slate-50 border border-slate-200 p-3 flex flex-col">
-            {/* Los dos van a la MISMA ESCALA, no ajustados cada uno a su caja.
-                Con `object-contain` el T-rex —que es ancho— se encogía y
-                terminaba VIÉNDOSE más chico que el pequeño, o sea al revés del
-                mensaje. El alto relativo (289/465) los deja a la misma escala y
-                apoyados en el mismo suelo. */}
-            <div className="h-32 sm:h-40 flex items-end justify-center mb-2">
+            {/* Los dos van a la MISMA ESCALA — mismo tamaño de ladrillo, que es
+                lo que vende que salen del mismo juego de piezas. Si cada uno se
+                ajusta a su caja, el T-rex —que es ancho— se encoge y termina
+                VIÉNDOSE más chico que el pequeño: el mensaje al revés.
+                El 42,2% es el cociente real de los dos lienzos; si se
+                regeneran las figuras hay que recalcularlo. */}
+            <div className="h-32 sm:h-36 flex items-end justify-center mb-2">
               <img src={src} alt={alt} style={{ height: alto }} className="w-auto" />
             </div>
             <figcaption>

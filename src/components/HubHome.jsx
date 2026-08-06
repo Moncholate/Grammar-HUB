@@ -4,6 +4,7 @@ import { translations, STAGES } from '../i18n';
 import { loadProgress, BADGES } from '../gamification.generated.js';
 import DailyPhrase from './DailyPhrase';
 import { ThemeToggle } from './HeaderNav';
+import BrickAnalogy from './BrickAnalogy';
 
 // Colores alineados a la identidad de los logos de bloques:
 // Grammaster índigo (#6366F1) · Desgramatizador coral (#FB7185 = rose-400) ·
@@ -176,6 +177,10 @@ const HubHome = ({ lang, level, setLevel, onPhraseOpenChange }) => {
         </h1>
         <p className="text-slate-500 text-sm">{t.heroSub}</p>
       </div>
+
+      {/* Por que la suite entera esta hecha de bloques. Abierta la primera vez;
+          despues queda como una linea que el profesor puede reabrir al presentar. */}
+      <BrickAnalogy lang={lang} />
 
 
       {/* Progreso compartido de la suite */}

@@ -150,3 +150,10 @@ button:disabled { cursor: not-allowed; }
 :root[data-theme="dark"] .hover\:text-gray-700:hover,
 :root[data-theme="dark"] .hover\:text-slate-600:hover,
 :root[data-theme="dark"] .hover\:text-slate-800:hover { color: #eceff8 !important; }
+
+/* Tinta de color sobre un tinte que la capa oscurece: el fondo se invierte y el
+   texto de marca no, así que queda tinta oscura sobre fondo oscuro (2.61:1).
+   Selector compuesto/descendiente a propósito: no toca los chips -100, que
+   conservan su fondo claro. Lo detecta `check-dark.mjs`. */
+:root[data-theme="dark"] .bg-slate-50.text-indigo-600,
+:root[data-theme="dark"] .bg-slate-50 .text-indigo-600 { color: #c7d2fe !important; }  /* 11.00:1 */

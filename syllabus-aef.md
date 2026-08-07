@@ -257,9 +257,19 @@ junto a *must*. Es el contraste clásico obligación externa vs. interna.
 
 **Contenido del temario que las apps NO cubren todavía:**
 - Condicionales: primera (Int. II 8B), segunda (Int. II 9A), tercera (AEF 3 9A).
+  Es el único hueco real y está pendiente a propósito: son dos cláusulas
+  ligadas, un capítulo aparte y no un ítem más de la lista de tiempos.
+
+**Está en el LIBRO pero el currículo no lo considera** (decisión del docente,
+2026-08-07). No son huecos: están fuera de alcance. Quizá más adelante, para
+tener las apps más completas.
 - Voz pasiva (Int. II 10C, AEF 3 6A).
 - Reported speech (Int. II 12B, AEF 3 8B).
-- Question tags (AEF 3 10B) — relevante para Question Lab.
+- Question tags (AEF 3 10B) — sería lo más natural para Question Lab.
+
+> **Ojo con esta tabla:** es el índice del LIBRO mapeado a los cursos. Que una
+> unidad aparezca acá **no** significa que el currículo la evalúe. Para eso, la
+> fuente es el docente, no este archivo.
 
 **Los niveles de los tiempos que sí existen están todos correctos**, verificados
 uno a uno contra este temario.

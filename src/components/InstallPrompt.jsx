@@ -60,7 +60,10 @@ const InstallPrompt = ({ paused = false }) => {
     return (
       <button
         onClick={() => setAbiertoAMano(true)}
-        className="fixed bottom-4 right-4 z-40 flex items-center gap-1.5 rounded-full bg-white/95 backdrop-blur-sm border border-slate-200 shadow-lg px-3 py-2 text-xs font-semibold text-slate-600 hover:text-slate-900 hover:border-slate-300 transition-colors touch-manipulation"
+        title="Instalar Grammar HUB"
+        /* Relleno azul, no una píldora blanca con texto gris: así se veía
+           deshabilitada y un botón que parece apagado se lee como roto. */
+        className="fixed bottom-4 right-4 z-40 flex items-center gap-1.5 rounded-full bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white shadow-lg px-3.5 py-2.5 text-xs font-semibold transition-colors touch-manipulation"
         style={{ WebkitTapHighlightColor: 'transparent' }}
       >
         <Download size={14} />

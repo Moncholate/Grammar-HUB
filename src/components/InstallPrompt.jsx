@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { X, Download, Share } from 'lucide-react';
-import { usePwaInstall } from '../usePwaInstall';
+import { usePwaInstall, isIOS } from '../usePwaInstall';
 
 /**
  * Panel de diagnóstico en pantalla, visible solo con `?debugInstall` en la URL.
@@ -12,7 +12,7 @@ const InstallDebug = ({ data, visible }) => (
     <div className="font-bold mb-1">Diagnóstico de instalación</div>
     <div>¿se muestra el aviso?: <b>{visible ? 'SÍ' : 'no'}</b></div>
     <div>corriendo como app: {String(data.standalone)}</div>
-    <div>la damos por instalada: {String(data.instalada)}</div>
+    <div>la damos por instalada: {String(data.instalada)} (desde {data.desde})</div>
     <div>aviso pospuesto: {String(data.pospuesta)}</div>
     <div>el navegador ofrece instalar: {String(data.eventoDelNavegador)}</div>
     <div>API de consulta disponible: {String(data.apiDisponible)}</div>
@@ -23,28 +23,53 @@ const InstallDebug = ({ data, visible }) => (
 /* `paused`: hay otro panel encima (la frase del día). No se cancela el aviso,
    solo espera a que se cierre, para no apilar dos interrupciones. */
 const InstallPrompt = ({ paused = false }) => {
-  const { canPrompt, needsManualSteps, snooze, markInstalled, install, debug } = usePwaInstall();
+  const { canPrompt, needsManualSteps, canInstallManually,
+          snooze, markInstalled, install, debug } = usePwaInstall();
   const showDebug = typeof location !== 'undefined' && location.search.includes('debugInstall');
-  const ios = needsManualSteps;
+  const iosSteps = needsManualSteps || (isIOS() && !canPrompt);
   // En iOS no hay evento del navegador, así que el aviso se muestra tras un
   // momento; en el resto solo cuando el navegador confirma que es instalable.
-  const [delayPassed, setDelayPassed] = useState(!ios);
+  const [delayPassed, setDelayPassed] = useState(!needsManualSteps);
+  /* Abierto a mano desde el botón chico. Va aparte de `canPrompt` justamente
+     para que funcione cuando el aviso automático está bloqueado. */
+  const [abiertoAMano, setAbiertoAMano] = useState(false);
 
   useEffect(() => {
-    if (!ios) return;
+    if (!needsManualSteps) return;
     const t = setTimeout(() => setDelayPassed(true), 2000);
     return () => clearTimeout(t);
-  }, [ios]);
+  }, [needsManualSteps]);
 
-  const visible = !paused && delayPassed && (canPrompt || ios);
+  const auto = !paused && delayPassed && (canPrompt || needsManualSteps);
+  const visible = auto || abiertoAMano;
 
   const handleInstall = async () => {
     const ok = await install();
     if (!ok) snooze();   // si lo rechaza, no insistir por un buen tiempo
+    setAbiertoAMano(false);
   };
+  const cerrar = () => { setAbiertoAMano(false); if (auto) snooze(); };
 
   if (showDebug) return <InstallDebug data={debug} visible={visible} />;
-  if (!visible) return null;
+
+  /* Botón chico y permanente. Sin él, «pospuesto» o una marca de instalada mal
+     puesta dejaban la instalación sin ninguna vía de acceso: solo se recuperaba
+     con ?resetInstall en la URL. */
+  if (!visible) {
+    if (!canInstallManually || paused) return null;
+    return (
+      <button
+        onClick={() => setAbiertoAMano(true)}
+        className="fixed bottom-4 right-4 z-40 flex items-center gap-1.5 rounded-full bg-white/95 backdrop-blur-sm border border-slate-200 shadow-lg px-3 py-2 text-xs font-semibold text-slate-600 hover:text-slate-900 hover:border-slate-300 transition-colors touch-manipulation"
+        style={{ WebkitTapHighlightColor: 'transparent' }}
+      >
+        <Download size={14} />
+        Instalar app
+      </button>
+    );
+  }
+
+  const ios = iosSteps;
 
   return (
     <div className="fixed bottom-4 left-4 right-4 z-50 sm:left-auto sm:right-4 sm:w-80">
@@ -60,7 +85,7 @@ const InstallPrompt = ({ paused = false }) => {
             <span className="font-bold text-slate-900 text-sm">Grammar HUB</span>
           </div>
           <button
-            onClick={snooze}
+            onClick={cerrar}
             aria-label="Ahora no"
             className="text-slate-400 hover:text-slate-600 transition-colors touch-manipulation p-1"
             style={{ WebkitTapHighlightColor: 'transparent' }}
@@ -116,7 +141,7 @@ const InstallPrompt = ({ paused = false }) => {
           {/* Salida definitiva: algunos navegadores ofrecen instalar aunque la
               app ya esté instalada, y no hay forma de detectarlo desde la web. */}
           <button
-            onClick={markInstalled}
+            onClick={() => { markInstalled(); setAbiertoAMano(false); }}
             className="w-full mt-2 text-xs text-slate-400 hover:text-slate-600 py-1.5 touch-manipulation"
             style={{ WebkitTapHighlightColor: 'transparent' }}
           >

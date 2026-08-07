@@ -34,7 +34,7 @@ export const translations = {
     phraseCopied: 'Copiado',
     grammaster: { tagline: 'Arma oraciones, pieza por pieza.' },
     desgramatizador: { tagline: 'Desarma oraciones y descubre cómo funcionan.' },
-    questionlab: { tagline: 'Arma preguntas y respóndelas como ping pong.' },
+    questionlab: { tagline: 'Arma preguntas y respóndelas con las mismas piezas.' },
   },
   en: {
     subtitle: 'Your English laboratory',
@@ -66,7 +66,7 @@ export const translations = {
     phraseCopied: 'Copied',
     grammaster: { tagline: 'Build sentences, piece by piece.' },
     desgramatizador: { tagline: 'Break down sentences and discover how they work.' },
-    questionlab: { tagline: 'Build questions and answer them like ping-pong.' },
+    questionlab: { tagline: 'Build questions and answer them with the same pieces.' },
   },
 };
 

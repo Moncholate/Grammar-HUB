@@ -1,3 +1,6 @@
+/* Anillo de foco accesible, generado desde design-tokens (no editar allí). */
+@import './dua.generated.css';
+
 @font-face{font-family:'Lexend';font-style:normal;font-weight:400 700;font-display:swap;src:url('./fonts/Lexend.woff2') format('woff2');}
 @font-face{font-family:'Atkinson Hyperlegible';font-style:normal;font-weight:400;font-display:swap;src:url('./fonts/AtkinsonHyperlegible-Regular.woff2') format('woff2');}
 @font-face{font-family:'Atkinson Hyperlegible';font-style:normal;font-weight:700;font-display:swap;src:url('./fonts/AtkinsonHyperlegible-Bold.woff2') format('woff2');}
@@ -102,11 +105,9 @@ body {
   background: #6b7280;
 }
 
-button:focus-visible,
-a:focus-visible {
-  outline: 2px solid #1e40af;
-  outline-offset: 2px;
-}
+/* El anillo de foco lo pone ahora dua.generated.css, con el color de los tokens.
+   El que había aquí era un #1e40af fijo: azul oscuro, casi invisible sobre el
+   fondo #0c0e15 del tema oscuro. */
 
 /* ── Afordancia de clic en escritorio ──────────────────────────────────────
    Tailwind no le pone `cursor:pointer` a los <button>, así que el navegador les

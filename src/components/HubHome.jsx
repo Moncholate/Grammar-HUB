@@ -47,7 +47,7 @@ const STAGE_TINTS = [
   { box: 'bg-indigo-100/70 border-indigo-300', label: 'text-indigo-600' },
 ];
 
-const HubHome = ({ lang, level, setLevel, onPhraseOpenChange }) => {
+const HubHome = ({ lang, level, setLevel, onPhraseOpenChange, onAppOpenChange }) => {
   const [selectedApp, setSelectedApp] = useState(null);
   const iframeRef = useRef(null);
   const touchStartX = useRef(null);
@@ -70,6 +70,10 @@ const HubHome = ({ lang, level, setLevel, onPhraseOpenChange }) => {
   useEffect(() => {
     try { setProgress(loadProgress(window.localStorage)); } catch (e) {}
   }, [selectedApp]);
+  /* Con una app abierta el iframe ocupa la pantalla y el aviso de instalar
+     quedaría flotando encima de ella — justo sobre la barra inferior de
+     Question Lab. Espera a que se vuelva al Hub. */
+  useEffect(() => { onAppOpenChange?.(!!selectedApp); }, [selectedApp, onAppOpenChange]);
 
   const sendToIframe = (payload) => {
     setTimeout(() => {

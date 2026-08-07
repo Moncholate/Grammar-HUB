@@ -159,3 +159,13 @@ button:disabled { cursor: not-allowed; }
    conservan su fondo claro. Lo detecta `check-dark.mjs`. */
 :root[data-theme="dark"] .bg-slate-50.text-indigo-600,
 :root[data-theme="dark"] .bg-slate-50 .text-indigo-600 { color: #c7d2fe !important; }  /* 11.00:1 */
+
+/* Tinta de marca que la capa no invertía y quedaba oscura sobre fondo oscuro.
+   Compuestos a propósito: los chips sobre tinte claro conservan su texto. */
+:root[data-theme="dark"] .bg-white.text-indigo-600 { color: #c7d2fe !important; }   /* 2.81 → 11.85 */
+:root[data-theme="dark"] .hover\:text-red-700:hover { color: #fca5a5 !important; }  /* 2.44 → 8.89 */
+
+/* El hover oscurece el fondo ámbar a un neutro, pero la tinta seguía siendo
+   amber-800: 1,85:1 solo mientras el ratón está encima. Compuesto para tocar
+   únicamente ese elemento en ese estado. */
+:root[data-theme="dark"] .hover\:bg-amber-200:hover.text-amber-800 { color: #fde68a !important; }

@@ -197,7 +197,7 @@ const HubHome = ({ lang, level, setLevel, onPhraseOpenChange, onAppOpenChange })
         <button
           onClick={() => setShowBadges(v => !v)}
           aria-expanded={showBadges}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-semibold text-amber-700 bg-amber-100 hover:bg-amber-200 transition-colors touch-manipulation"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-semibold text-amber-800 bg-amber-100 hover:bg-amber-200 transition-colors touch-manipulation"
           style={{ WebkitTapHighlightColor: 'transparent' }}
         >
           🏅 {unlockedCount}/{BADGES.length} {lang === 'es' ? 'logros' : 'badges'} <span className="text-[10px]">{showBadges ? '▲' : '▼'}</span>
@@ -253,7 +253,7 @@ const HubHome = ({ lang, level, setLevel, onPhraseOpenChange, onAppOpenChange })
       {/* Paso 2 · Cards — 3 columnas en PC: las tres apps son pares */}
       <div className="w-full max-w-2xl">
         <div className="flex items-center gap-2 mb-2 px-1">
-          <span className={`w-5 h-5 rounded-full text-[11px] font-bold flex items-center justify-center flex-shrink-0 ${level ? 'bg-indigo-600 text-white' : 'bg-slate-300 text-white'}`}>2</span>
+          <span className={`w-5 h-5 rounded-full text-[11px] font-bold flex items-center justify-center flex-shrink-0 ${level ? 'bg-indigo-600 text-white' : 'bg-slate-500 text-white'}`}>2</span>
           <span className={`text-sm font-bold ${level ? 'text-slate-700' : 'text-slate-400'}`}>{t.step2}</span>
         </div>
       <div className="grid sm:grid-cols-3 gap-3 w-full">

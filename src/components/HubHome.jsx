@@ -190,7 +190,7 @@ const HubHome = ({ lang, level, setLevel, onPhraseOpenChange, onAppOpenChange })
       {/* Progreso compartido de la suite */}
       <div className="flex items-center justify-center flex-wrap gap-2 mb-5" aria-label={lang === 'es' ? 'Tu progreso' : 'Your progress'}>
         {dayStreak > 0 && (
-          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-bold text-white bg-gradient-to-br from-rose-500 to-amber-400 shadow-sm">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-bold text-red-950 bg-gradient-to-br from-rose-400 to-amber-400 shadow-sm">
             🔥 {dayStreak} {lang === 'es' ? (dayStreak === 1 ? 'día' : 'días') : (dayStreak === 1 ? 'day' : 'days')}
           </span>
         )}

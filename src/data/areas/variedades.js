@@ -3,7 +3,7 @@
    ----------------------------------------------------------------------------
    Muchos alumnos creen que existe una sola forma correcta de decir cada cosa y
    que cualquier desviación es error. Ese supuesto los paraliza. Aquí se muestra
-   que el inglés tiene variantes legítimas en competencia —incluso en gramática—
+   que el inglés tiene variantes legítimas en competencia (incluso en gramática)
    y que la meta realista no es sonar nativo sino ser claro y consistente.
 
    ES EL ÁREA CON MÁS RIESGO DE EFECTO CONTRAPRODUCENTE: si el alumno concluye

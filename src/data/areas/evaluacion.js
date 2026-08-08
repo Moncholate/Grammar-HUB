@@ -27,11 +27,11 @@ export default [
 
   { id: 1102, tramo: 2, tag: 'rubrica_extension',
     es: 'La extensión es el único criterio que puedes asegurar antes de entrar a la prueba: ya sabes cuántas palabras te piden. Practica llegar a esa cifra.',
-    source: 'Rúbrica de writing — umbrales del 100%: básico 40 · elemental 60 · intermedio 80 · intermedio alto 100' },
+    source: 'Rúbrica de writing, umbrales del 100%: básico 40 · elemental 60 · intermedio 80 · intermedio alto 100' },
 
   { id: 1103, tramo: 2, tag: 'rubrica_extension',
     es: 'Llegar al número de palabras no es rellenar. Repetir la misma idea con otras palabras no suma extensión: suma incoherencia, que se evalúa en el mismo criterio.',
-    source: 'Rúbrica de writing — el criterio es “coherencia y extensión”, las dos cosas juntas' },
+    source: 'Rúbrica de writing, el criterio es “coherencia y extensión”, las dos cosas juntas' },
 
   /* ── B · El conteo de errores ──────────────────────────────────────── */
   { id: 1105, tramo: 2, tag: 'rubrica_conteo',
@@ -61,7 +61,7 @@ export default [
 
   { id: 1111, tramo: 2, tag: 'rubrica_ortografia',
     es: 'La ortografía es un criterio propio de 2 puntos, no un detalle. Con 3 faltas ya bajaste del 100%. Revísala aparte de la gramática, en otra pasada.',
-    source: 'Rúbrica de writing — máximo 2 errores ortográficos para el 100%' },
+    source: 'Rúbrica de writing, máximo 2 errores ortográficos para el 100%' },
 
   { id: 1112, tramo: 2, tag: 'rubrica_revision',
     es: 'Revisa buscando un solo tipo de error por pasada. Tu rúbrica separa gramática de ortografía; revísalas separadas tú también.',
@@ -87,11 +87,11 @@ export default [
   /* ── E · Oral ───────────────────────────────────────────────────────── */
   { id: 1120, tramo: 1, tag: 'rubrica_oral',
     es: 'Si te equivocas hablando, corrígete y sigue. Darte cuenta del error mientras hablas es control del idioma, no debilidad: es la señal de que te estás escuchando.',
-    source: 'MCER — monitorear y reparar es parte de la competencia estratégica' },
+    source: 'MCER, monitorear y reparar es parte de la competencia estratégica' },
 
   { id: 1121, tramo: 2, tag: 'rubrica_oral',
     es: 'Si en la prueba no te sale la estructura compleja, dila simple y sigue adelante. Trabarte cuesta más que simplificar. Guárdate el riesgo para practicar, no para el examen.',
-    source: 'MCER — estrategias de compensación; rúbrica de speaking (coherencia y fluidez, 4 puntos)' },
+    source: 'MCER, estrategias de compensación; rúbrica de speaking (coherencia y fluidez, 4 puntos)' },
 
   { id: 1122, tramo: 2, tag: 'rubrica_oral',
     es: 'Coherencia y fluidez valen 4 puntos en el oral; la gramática, 3. Trabarte buscando la forma perfecta te cuesta más que decirlo con un error.',
@@ -99,7 +99,7 @@ export default [
 
   { id: 1123, tramo: 1, tag: 'rubrica_oral',
     es: 'En el oral no se espera que hables perfecto. Ni los hablantes nativos hablan sin repetirse, corregirse ni empezar de nuevo. Se espera que se entienda lo que dices.',
-    source: 'MCER — descriptores de precisión gramatical; literatura sobre disfluencias y auto-reparación en habla espontánea nativa' },
+    source: 'MCER, descriptores de precisión gramatical; literatura sobre disfluencias y auto-reparación en habla espontánea nativa' },
 
   /* ── F · Responder lo que se pregunta ──────────────────────────────── */
   { id: 1130, tramo: 1, tag: 'rubrica_coherencia', estructura: 'wh_questions', nivel: 'basico1',
@@ -109,11 +109,11 @@ export default [
 
   { id: 1131, tramo: 1, tag: 'rubrica_coherencia',
     es: 'Cuenta cuántas cosas te pide el enunciado antes de escribir. Si son tres, tu texto necesita tres respuestas. Es el error más caro de la prueba y el más fácil de evitar.',
-    source: 'Rúbrica de writing — “presentando todas las ideas requeridas” es parte del criterio de 4 puntos' },
+    source: 'Rúbrica de writing, “presentando todas las ideas requeridas” es parte del criterio de 4 puntos' },
 
   { id: 1132, tramo: 1, tag: 'rubrica_coherencia', estructura: 'questions_do', nivel: 'basico1',
     es: 'Fíjate si la pregunta es abierta o cerrada. Si dice “and explain why” o “give details”, un “Yes, I do” no alcanza: pierdes en coherencia, no en gramática.',
-    source: 'Rúbrica de writing y speaking — cobertura de los temas requeridos' },
+    source: 'Rúbrica de writing y speaking, cobertura de los temas requeridos' },
 
   { id: 1133, tramo: 1, tag: 'rubrica_coherencia',
     es: 'Responder muy bien una pregunta que no te hicieron vale cero. La coherencia con el enunciado pesa 4 de 12 puntos, más que la gramática.',

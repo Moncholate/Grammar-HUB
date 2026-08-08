@@ -53,7 +53,7 @@ export default [
     source: 'Mensaje pedagógico basado en la evidencia de retención' },
 
   { id: 803, tramo: 3, tag: 'ia_evidencia',
-    es: 'Producir tú la frase —aunque salga imperfecta— fija más que leer la versión correcta. Es el efecto de generación.',
+    es: 'Producir tú la frase (aunque salga imperfecta) fija más que leer la versión correcta. Es el efecto de generación.',
     source: 'Slamecka & Graf (1978), efecto de generación' },
 
   { id: 804, tramo: 1, tag: 'ia_evidencia',
@@ -130,11 +130,11 @@ export default [
 
   { id: 823, tramo: 2, tag: 'ia_metodo',
     es: 'Saber corregir lo que la IA te entrega es una habilidad real y evaluable. Saber pegarlo no lo es.',
-    source: 'Chon et al. (2021) — la post-edición como nueva competencia escrita' },
+    source: 'Chon et al. (2021), la post-edición como nueva competencia escrita' },
 
   { id: 824, tramo: 2, tag: 'ia_advertencia',
     es: 'Tu capacidad de post-editar depende de tu nivel real de inglés. Sin base, no puedes ni detectar los errores de la IA.',
-    source: 'Chon et al. (2021) — el nivel de L2 determina la calidad de la post-edición' },
+    source: 'Chon et al. (2021), el nivel de L2 determina la calidad de la post-edición' },
 
   { id: 825, tramo: 2, tag: 'ia_traductor',
     es: 'Usa el traductor para palabras y frases sueltas mientras escribes. Para el texto completo, escribe tú.',

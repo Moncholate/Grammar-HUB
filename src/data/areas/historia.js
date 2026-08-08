@@ -39,7 +39,7 @@ export default [
 
   { id: 1002, tramo: 2, tag: 'curiosidad_verbos', estructura: 'irregular_verbs',
     es: 'Hace 1.200 años el inglés tenía 177 verbos irregulares. Hoy quedan 98. Se están extinguiendo de a poco.',
-    source: 'Lieberman et al. (2007), Nature — seguimiento de 177 verbos del inglés antiguo' },
+    source: 'Lieberman et al. (2007), Nature: seguimiento de 177 verbos del inglés antiguo' },
 
   { id: 1003, tramo: 2, tag: 'curiosidad_verbos', estructura: 'irregular_verbs',
     es: 'Help, walk, work y reach eran irregulares. Se volvieron regulares con el tiempo. Los que te cuestan hoy son los sobrevivientes.',
@@ -92,7 +92,7 @@ export default [
 
   /* ── C · Reglas que en realidad fueron inventadas ──────────────────── */
   { id: 1020, tramo: 3, tag: 'curiosidad_regla',
-    es: 'Algunas “reglas” del inglés no describen cómo se habla: describen cómo unos señores del siglo XVIII creyeron que debía hablarse. Saber de dónde vienen ayuda a no idealizarlas — pero la norma existe y se evalúa igual.',
+    es: 'Algunas “reglas” del inglés no describen cómo se habla: describen cómo unos señores del siglo XVIII creyeron que debía hablarse. Saber de dónde vienen ayuda a no idealizarlas, pero la norma existe y se evalúa igual.',
     source: 'Crystal, sobre la tradición prescriptivista; distinción descriptivo/prescriptivo en lingüística' },
 
   /* Sube del tramo 3 al 2 para poder encadenarse al 230. Acompañado de su
@@ -112,7 +112,7 @@ export default [
 
   /* ── D · El misterio del “do” ──────────────────────────────────────── */
   { id: 1030, tramo: 2, explica: 220, tag: 'curiosidad_auxiliar', estructura: 'questions_do', nivel: 'basico1',
-    es: 'El “do” de las preguntas no existía en inglés antiguo. Se decía “Know you not?” — como en español, solo invirtiendo.',
+    es: 'El “do” de las preguntas no existía en inglés antiguo. Se decía “Know you not?”, como en español, solo invirtiendo.',
     source: 'Historia del do-support (Baugh & Cable; Denison, English Historical Syntax)' },
 
   { id: 1031, tramo: 2, tag: 'curiosidad_auxiliar', estructura: 'questions_do', nivel: 'basico1',

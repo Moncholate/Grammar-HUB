@@ -143,7 +143,7 @@ export function usePwaInstall() {
       standalone: isStandalone(),
       guardado: load(),
       instalada: installed,
-      desde: installedAt ? new Date(installedAt).toISOString().slice(0, 10) : '—',
+      desde: installedAt ? new Date(installedAt).toISOString().slice(0, 10) : 'sin dato',
       pospuesta: snoozed,
       eventoDelNavegador: !!event,
       apiDisponible: !!navigator.getInstalledRelatedApps,

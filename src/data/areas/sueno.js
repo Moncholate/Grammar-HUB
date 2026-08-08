@@ -41,7 +41,7 @@ export default [
   /* ── El horario nocturno como ventaja ──────────────────────────────── */
   { id: 507, tramo: 1, tag: 'sueno_habito',
     es: 'Si estudias de noche y te vas a dormir después, estás usando el mejor horario posible: tu cerebro consolida justo lo que viste antes de dormir.',
-    source: 'Kim & Nam (2020), “Sleep-dependent consolidation of second language grammar knowledge”, Studies in Second Language Acquisition 42(5), 1107-1120 — diseños mañana/noche' },
+    source: 'Kim & Nam (2020), “Sleep-dependent consolidation of second language grammar knowledge”, Studies in Second Language Acquisition 42(5), 1107-1120: diseños mañana/noche' },
 
   { id: 513, tramo: 1, tag: 'sueno_habito',
     es: 'Repasar 5 minutos justo antes de dormir es de los usos más eficientes de tu tiempo.',
@@ -62,7 +62,7 @@ export default [
 
   { id: 503, tramo: 2, tag: 'sueno_consolidacion', estructura: 'vocabulary',
     es: 'Las palabras nuevas se integran a tu vocabulario mental durante la noche, no en el momento en que las lees.',
-    source: 'Dumay & Gaskell (2007), Psychological Science — consolidación léxica dependiente del sueño' },
+    source: 'Dumay & Gaskell (2007), Psychological Science: consolidación léxica dependiente del sueño' },
 
   { id: 504, tramo: 2, tag: 'sueno_consolidacion',
     es: 'Aprender una regla y dormir sobre ella funciona mejor que aprenderla y seguir de largo hasta la noche siguiente.',
@@ -72,7 +72,7 @@ export default [
 
   { id: 505, tramo: 2, tag: 'sueno_evidencia',
     es: 'En un experimento clásico, el 59% de quienes durmieron descubrieron el patrón oculto de una tarea, frente al 23% de quienes no durmieron.',
-    source: 'Wagner, Gais, Haider, Verleger & Born (2004), Nature — sueño e insight sobre estructuras abstractas' },
+    source: 'Wagner, Gais, Haider, Verleger & Born (2004), Nature: sueño e insight sobre estructuras abstractas' },
 
   { id: 506, tramo: 2, tag: 'sueno_consolidacion',
     es: 'Detectar patrones es exactamente lo que haces al aprender gramática. Y dormir te hace mejor detectando patrones.',
@@ -81,7 +81,7 @@ export default [
   /* ── B · La condición clave: notar antes de dormir ─────────────────── */
   { id: 510, tramo: 2, tag: 'sueno_condicion',
     es: 'Dormir consolidó la gramática solo en quienes se habían dado cuenta conscientemente de la regla antes de acostarse. Primero notas, después duermes.',
-    source: 'Kim & Nam (2020), SSLA 42(5) — hallazgo principal del estudio' },
+    source: 'Kim & Nam (2020), SSLA 42(5): hallazgo principal del estudio' },
 
   { id: 511, tramo: 1, tag: 'sueno_condicion',
     es: 'El sueño no aprende por ti. Amplifica lo que alcanzaste a entender despierto.',
@@ -93,7 +93,7 @@ export default [
 
   { id: 514, tramo: 2, tag: 'sueno_condicion',
     es: 'Si terminaste la clase sin entender la regla, no esperes que la noche la resuelva. Pregunta antes de irte.',
-    source: 'Kim & Nam (2020) — sin conciencia previa de la regla, no hubo consolidación' },
+    source: 'Kim & Nam (2020), sin conciencia previa de la regla, no hubo consolidación' },
 
   /* ── C · Horarios, siestas y ritmo ─────────────────────────────────── */
   { id: 520, tramo: 2, tag: 'sueno_siesta',

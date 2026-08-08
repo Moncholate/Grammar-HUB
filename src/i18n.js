@@ -13,7 +13,7 @@ export const translations = {
        porque un instructivo LEGO de verdad lleva a UNA figura y el idioma no. */
     whyBricksTitle: '¿Por qué bloques?',
     whyBricksCore: 'Imagina que las palabras de un idioma son bloques y la gramática es el instructivo.',
-    whyBricksBooklet: 'El instructivo no te dice qué figura armar —eso lo eliges tú—, sino cómo encajan las piezas. Puedes hablar sin conocer la gramática: así aprendiste tu primer idioma. Pero con él a mano sabes qué va antes y qué se conecta con qué, y dejas de armar a tientas.',
+    whyBricksBooklet: 'El instructivo no te dice qué figura armar (eso lo eliges tú), sino cómo encajan las piezas. Puedes hablar sin conocer la gramática: así aprendiste tu primer idioma. Pero con él a mano sabes qué va antes y qué se conecta con qué, y dejas de armar a tientas.',
     whyBricksL1Title: 'En tu idioma',
     whyBricksL1: 'Manejas una cantidad enorme de bloques y armas algo como este T-Rex sin pensarlo. Tienes todas las piezas y el instructivo te lo sabes de memoria.',
     whyBricksL1Alt: 'Un tiranosaurio armado con cientos de bloques pequeños: rayado en rojo y negro, panza gris, mandíbula abierta con colmillos serrados, dos patas y los bracitos con garras',
@@ -45,7 +45,7 @@ export const translations = {
     backToHub: 'Hub',
     whyBricksTitle: 'Why bricks?',
     whyBricksCore: 'Imagine the words of a language are bricks and grammar is the instruction booklet.',
-    whyBricksBooklet: 'The booklet does not tell you which model to build — that one is yours to choose — it tells you how the pieces fit. You can speak without knowing the grammar: that is how you learned your first language. But with the booklet at hand you know what comes first and what connects to what, and you stop building blind.',
+    whyBricksBooklet: 'The booklet does not tell you which model to build (that one is yours to choose), it tells you how the pieces fit. You can speak without knowing the grammar: that is how you learned your first language. But with the booklet at hand you know what comes first and what connects to what, and you stop building blind.',
     whyBricksL1Title: 'In your language',
     whyBricksL1: 'You handle an enormous number of bricks and put together something like this T-Rex without thinking. You have every piece and you know the booklet by heart.',
     whyBricksL1Alt: 'A T-rex built from hundreds of small bricks: red and black striping, grey belly, open jaw with serrated fangs, two legs and the classic tiny arms',

@@ -32,11 +32,11 @@ export default [
   /* ── B · El dato que cambia la conversación · tramo de entrada ─────── */
   { id: 710, tramo: 1, tag: 'eval_dato',
     es: 'Dato contraintuitivo: la precisión NO sube de forma lineal. Los errores aumentan alrededor de B1, cuando empiezas a usar el idioma con más libertad.',
-    source: 'Consejo de Europa, MCER, cap. 5 — análisis de las escalas ilustrativas' },
+    source: 'Consejo de Europa, MCER, cap. 5: análisis de las escalas ilustrativas' },
 
   { id: 711, tramo: 1, tag: 'eval_dato',
     es: 'Si cometes más errores que el semestre pasado, puede que estés arriesgando más. Eso es progreso, no retroceso.',
-    source: 'MCER, cap. 5 — la imprecisión aumenta cuando el aprendiz empieza a producir de forma más independiente y creativa' },
+    source: 'MCER, cap. 5: la imprecisión aumenta cuando el aprendiz empieza a producir de forma más independiente y creativa' },
 
   { id: 712, tramo: 1, tag: 'eval_riesgo',
     es: 'El estudiante que solo dice frases que ya domina no comete errores. Tampoco avanza.',
@@ -44,16 +44,16 @@ export default [
 
   { id: 713, tramo: 2, tag: 'eval_riesgo',
     es: 'Hay dos formas de sacar pocos errores: dominar mucho o arriesgar poco.',
-    source: 'MCER — evaluación de la competencia gramatical' },
+    source: 'MCER, evaluación de la competencia gramatical' },
 
   /* ── A · Lo que sí se sostiene del MCER ────────────────────────────── */
   { id: 700, tramo: 2, tag: 'eval_rubrica',
     es: 'En B1 se espera precisión razonable en contextos familiares, con control generalmente bueno, aunque se note la influencia del español.',
-    source: 'Consejo de Europa, MCER — descriptor de precisión gramatical B1' },
+    source: 'Consejo de Europa, MCER: descriptor de precisión gramatical B1' },
 
   { id: 701, tramo: 1, tag: 'eval_rubrica',
     es: 'Nadie te pide hablar como nativo. Te piden control razonable de lo que ya viste en el curso.',
-    source: 'MCER — escalas de precisión gramatical A2-B2' },
+    source: 'MCER, escalas de precisión gramatical A2-B2' },
 
   { id: 702, tramo: 2, tag: 'eval_preparacion',
     es: 'Si tienes 5 minutos para estudiar antes de la prueba, repasa la estructura que más vas a usar, no la más difícil.',
@@ -61,7 +61,7 @@ export default [
 
   { id: 703, tramo: 2, tag: 'eval_prioridad', estructura: 'verb_tenses',
     es: 'Confundir el tiempo verbal cambia CUÁNDO pasó todo. Ese error sí altera el mensaje, aunque en la rúbrica cuente igual que cualquier otro.',
-    source: 'MCER — criterio de errores que afectan la comprensión' },
+    source: 'MCER, criterio de errores que afectan la comprensión' },
 
   /* ── C · Escritura: revisar antes de entregar ──────────────────────── */
   { id: 720, tramo: 2, tag: 'eval_escritura',
@@ -82,7 +82,7 @@ export default [
 
   { id: 724, tramo: 2, tag: 'eval_escritura', estructura: 'prepositions',
     es: 'Chequeo 4: las preposiciones. Si dudas de una, cámbiala por una estructura que sí domines.',
-    source: 'Gonzalez-Torres et al. (2025) — preposiciones entre los errores más persistentes' },
+    source: 'Gonzalez-Torres et al. (2025), preposiciones entre los errores más persistentes' },
 
   { id: 725, tramo: 2, tag: 'eval_escritura', estructura: 'verb_tenses',
     es: 'Chequeo 5: ¿mezclaste tiempos verbales sin razón? Elige uno de base y sé consistente.',
@@ -111,15 +111,15 @@ export default [
   /* ── D · Oral: gramática bajo presión ──────────────────────────────── */
   { id: 731, tramo: 2, tag: 'eval_oral',
     es: 'En la prueba oral no se espera perfección gramatical. Se espera que se entienda lo que quieres decir.',
-    source: 'MCER — descriptores de precisión gramatical B1-B2' },
+    source: 'MCER, descriptores de precisión gramatical B1-B2' },
 
   { id: 732, tramo: 2, tag: 'eval_oral',
     es: 'Prepara de antemano tres estructuras que domines bien y úsalas. Un repertorio pequeño y seguro sostiene toda la prueba.',
-    source: 'MCER — descriptor B1 sobre repertorio de rutinas y patrones frecuentes' },
+    source: 'MCER, descriptor B1 sobre repertorio de rutinas y patrones frecuentes' },
 
   { id: 733, tramo: 2, tag: 'eval_oral',
     es: 'Si no te sale la estructura compleja, dilo simple. Comunicar con frases básicas correctas es mejor que trabarse.',
-    source: 'MCER — el criterio es que el error no impida la comprensión' },
+    source: 'MCER, el criterio es que el error no impida la comprensión' },
 
   { id: 734, tramo: 2, tag: 'eval_oral',
     es: 'Practica tu presentación en voz alta, no mentalmente. Hablar y pensar no usan los mismos recursos.',
@@ -130,8 +130,8 @@ export default [
     source: 'Práctica deliberada (Ericsson, Krampe & Tesch-Römer, 1993)' },
 
   { id: 736, tramo: 2, tag: 'eval_oral', estructura: 'connectors',
-    es: 'Usa conectores simples y correctos —and, but, because, so— antes que conectores elegantes mal usados.',
-    source: 'MCER — criterio de control sobre el repertorio del propio nivel' },
+    es: 'Usa conectores simples y correctos (and, but, because, so) antes que conectores elegantes mal usados.',
+    source: 'MCER, criterio de control sobre el repertorio del propio nivel' },
 
   { id: 737, tramo: 2, tag: 'eval_oral',
     es: 'Habla más lento de lo que crees necesario. Con más tiempo, tu gramática mejora sola.',
@@ -143,12 +143,12 @@ export default [
 
   { id: 739, tramo: 1, tag: 'eval_oral',
     es: 'Si te preguntan algo que no entendiste, pide que repitan. Pedir aclaración es competencia evaluable, no debilidad.',
-    source: 'MCER — estrategias de compensación e interacción' },
+    source: 'MCER, estrategias de compensación e interacción' },
 
   /* ── E · Priorizar ─────────────────────────────────────────────────── */
   { id: 740, tramo: 2, tag: 'eval_prioridad',
     es: 'Ataca primero el error que se repite. Los aislados son más difíciles de predecir y salen más caros de perseguir.',
-    source: 'MCER — distinción entre errores sistemáticos y deslices no sistemáticos' },
+    source: 'MCER, distinción entre errores sistemáticos y deslices no sistemáticos' },
 
   /* ── F · Preparación y ansiedad ────────────────────────────────────── */
   { id: 741, tramo: 1, tag: 'eval_preparacion',

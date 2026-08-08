@@ -87,7 +87,7 @@ const ORIGINAL = [
     source: 'Krashen, Affective Filter Hypothesis (1985)' },
 
   { id: 4, cat: 'sla', tag: 'sla_output',
-    es: 'Producir el idioma —hablar y escribir— te obliga a notar lo que aún no sabes decir.',
+    es: 'Producir el idioma (hablar y escribir) te obliga a notar lo que aún no sabes decir.',
     source: 'Swain, “Communicative Competence: Some Roles of Comprehensible Input and Comprehensible Output” (1985), en Gass & Madden, pp. 235-253' },
 
   { id: 5, cat: 'sla', tag: 'sla_output',
@@ -155,7 +155,7 @@ const ORIGINAL = [
     source: 'Dweck (2006), Mindset: The New Psychology of Success' },
 
   { id: 20, cat: 'estrategias', tag: 'meta_mindset',
-    es: 'Cambia “no sé inglés” por “todavía no sé inglés”. Esa palabra —“todavía”— lo cambia todo.',
+    es: 'Cambia “no sé inglés” por “todavía no sé inglés”. Esa palabra (“todavía”) lo cambia todo.',
     source: 'Basado en Dweck (2006)' },
 
   { id: 21, cat: 'estrategias', tag: 'meta_autoeficacia',
@@ -201,7 +201,7 @@ const ORIGINAL = [
     source: 'Ebbinghaus (1885), Über das Gedächtnis' },
 
   { id: 31, cat: 'ciencia', tag: 'ca_deliberada',
-    es: 'La práctica deliberada —enfocada en tus puntos débiles y con retroalimentación— es la que produce mejoras reales.',
+    es: 'La práctica deliberada (enfocada en tus puntos débiles y con retroalimentación) es la que produce mejoras reales.',
     source: 'Ericsson, Krampe & Tesch-Römer (1993), Psychological Review' },
 
   { id: 32, cat: 'ciencia', tag: 'ca_generacion',
@@ -274,7 +274,7 @@ const ORIGINAL = [
     source: 'Basado en Swain (noticing) y en psicología positiva del aprendizaje' },
 
   { id: 48, cat: 'ansiedad', tag: 'ans_ambiguedad',
-    es: 'Tolerar la ambigüedad —seguir aunque no entiendas cada palabra— es una habilidad clave para avanzar.',
+    es: 'Tolerar la ambigüedad (seguir aunque no entiendas cada palabra) es una habilidad clave para avanzar.',
     source: 'Literatura sobre tolerancia a la ambigüedad en SLA' },
 
   { id: 49, cat: 'ansiedad', tag: 'ans_wtc',
@@ -335,7 +335,7 @@ const ORIGINAL = [
     source: 'Analogía basada en literatura de economía laboral (p. ej., estudios RAND / British Council)' },
 
   { id: 62, cat: 'empleabilidad', tag: 'emp_global',
-    es: 'En economías emergentes —incluida Latinoamérica— mejorar el inglés suele dar el mayor salto de ingresos en tecnología, servicios y trabajo remoto.',
+    es: 'En economías emergentes (incluida Latinoamérica) mejorar el inglés suele dar el mayor salto de ingresos en tecnología, servicios y trabajo remoto.',
     source: 'Síntesis de estudios sobre retornos del inglés en economías emergentes' },
 
   /* ── Técnica práctica ────────────────────────────────────────────────── */
@@ -427,7 +427,7 @@ const ORIGINAL = [
   { id: 83, cat: 'cita', tag: 'cita_wittgenstein',
     es: 'Los límites de mi lenguaje son los límites de mi mundo.',
     en: 'The limits of my language mean the limits of my world.',
-    source: 'Ludwig Wittgenstein, Tractatus Logico-Philosophicus (1922), proposición 5.6 — fuente primaria verificada' },
+    source: 'Ludwig Wittgenstein, Tractatus Logico-Philosophicus (1922), proposición 5.6: fuente primaria verificada' },
 
   { id: 84, cat: 'cita', tag: 'cita_lewis',
     es: 'Aprender otro idioma no es solo aprender palabras distintas para las mismas cosas, sino otra forma de pensar.',

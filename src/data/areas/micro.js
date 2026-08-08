@@ -113,7 +113,7 @@ export default [
 
   { id: 625, tramo: 2, tag: 'micro_entorno',
     es: 'Si trabajas con clientes o sistemas en inglés, eso cuenta como práctica. Ponle atención consciente.',
-    source: 'Schmidt (1990) — el input solo enseña si se nota' },
+    source: 'Schmidt (1990), el input solo enseña si se nota' },
 
   { id: 626, tramo: 2, tag: 'micro_entorno',
     es: 'Escucha inglés mientras caminas. Hay evidencia de que el movimiento durante el aprendizaje ayuda.',
@@ -130,7 +130,7 @@ export default [
 
   { id: 632, tramo: 2, tag: 'micro_habito',
     es: 'Un hábito toma en promedio unos dos meses en automatizarse. Si aún te cuesta a la semana tres, vas normal.',
-    source: 'Lally et al. (2010), European Journal of Social Psychology — mediana de 66 días',
+    source: 'Lally et al. (2010), European Journal of Social Psychology: mediana de 66 días',
     status: 'debate',
     note: 'Es una mediana con un rango enorme entre participantes: de 18 a más de 250 días. No es “en 66 días tendrás el hábito”.' },
 
@@ -140,7 +140,7 @@ export default [
 
   { id: 634, tramo: 2, tag: 'micro_habito',
     es: 'Si fallaste un día, no rompiste nada. Lo que rompe el hábito es fallar dos veces seguidas.',
-    source: 'Lally et al. (2010) — un lapso aislado no afectó la formación del hábito' },
+    source: 'Lally et al. (2010), un lapso aislado no afectó la formación del hábito' },
 
   { id: 635, tramo: 2, tag: 'micro_habito',
     es: 'Marca los días que practicaste. Ver la racha hace más por tu constancia que cualquier promesa.',

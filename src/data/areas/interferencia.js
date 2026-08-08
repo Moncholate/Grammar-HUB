@@ -57,7 +57,7 @@ export default [
 
   { id: 204, tramo: 3, tag: 'transfer_dato', estructura: 'pronouns',
     es: 'Los pronombres están entre los errores más frecuentes de los hispanohablantes. Vale la pena revisarlos siempre.',
-    source: 'Gonzalez-Torres et al. (2025), International Journal of Learning, Teaching and Educational Research — estudio con 180 estudiantes ecuatorianos' },
+    source: 'Gonzalez-Torres et al. (2025), International Journal of Learning, Teaching and Educational Research: estudio con 180 estudiantes ecuatorianos' },
 
   /* ── B · Orden de palabras ─────────────────────────────────────────── */
   { id: 210, tramo: 2, tag: 'transfer_orden', estructura: 'adjective_order',
@@ -286,11 +286,11 @@ export default [
 
   { id: 292, tramo: 2, tag: 'transfer_meta',
     es: 'Los errores de transferencia disminuyen a medida que sube tu nivel. Si aún los cometes, vas en camino, no atrasado.',
-    source: 'Gonzalez-Torres et al. (2025), IJLTER — hallazgo con 180 aprendices hispanohablantes' },
+    source: 'Gonzalez-Torres et al. (2025), IJLTER: hallazgo con 180 aprendices hispanohablantes' },
 
   { id: 293, tramo: 2, tag: 'transfer_meta',
     es: 'Un error que no notas se fosiliza: se queda contigo para siempre. Por eso conviene atacarlos temprano.',
-    source: 'Selinker (1972), “Interlanguage”, IRAL 10(3) — concepto de fosilización' },
+    source: 'Selinker (1972), “Interlanguage”, IRAL 10(3): concepto de fosilización' },
 
   { id: 294, tramo: 2, tag: 'transfer_meta',
     es: 'Si traduces palabra por palabra desde el español, la gramática se rompe. Piensa en bloques, no en palabras.',

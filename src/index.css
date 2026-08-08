@@ -164,6 +164,10 @@ button:disabled { cursor: not-allowed; }
    Compuestos a propósito: los chips sobre tinte claro conservan su texto. */
 :root[data-theme="dark"] .bg-white.text-indigo-600 { color: #c7d2fe !important; }   /* 2.81 → 11.85 */
 :root[data-theme="dark"] .hover\:text-red-700:hover { color: #fca5a5 !important; }  /* 2.44 → 8.89 */
+/* El selector de nivel: en reposo ya estaba cubierto arriba, pero al pasar el
+   ratón vuelve a indigo-600 por la variante `hover:`, que es OTRA clase y el
+   override de arriba no alcanza. Quedaba en 2,81:1 justo al apuntarlo. */
+:root[data-theme="dark"] .hover\:text-indigo-600:hover { color: #a5b4fc !important; }  /* 8.86:1 sobre #141826 */
 
 /* El hover oscurece el fondo ámbar a un neutro, pero la tinta seguía siendo
    amber-800: 1,85:1 solo mientras el ratón está encima. Compuesto para tocar

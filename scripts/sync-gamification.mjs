@@ -15,6 +15,17 @@ const apps = join(hub, '..');        // Apps
 const engine = readFileSync(join(hub, 'gamification-engine.js'), 'utf8');
 const model = JSON.parse(readFileSync(join(hub, 'gamification.json'), 'utf8'));
 
+/* Las claves que empiezan con `_` son notas para quien lea el modelo, no datos:
+   explican POR QUÉ una insignia es como es, que es justo lo que se pierde con el
+   tiempo. Se quedan en gamification.json y NO viajan al bundle — sin esto, la
+   justificación de un icono la descargaba el alumno en cada visita. Mismo
+   criterio que `tokens.json`, donde las notas tampoco salen por `sync.mjs`. */
+const sinNotas = (v) => Array.isArray(v) ? v.map(sinNotas)
+  : (v && typeof v === 'object'
+      ? Object.fromEntries(Object.entries(v).filter(([k]) => !k.startsWith('_')).map(([k, x]) => [k, sinNotas(x)]))
+      : v);
+model.badges = sinNotas(model.badges);
+
 const BANNER =
   '/* AUTO-GENERATED from Grammar HUB/gamification-engine.js + gamification.json — do not edit.\n' +
   '   Regenerate: node scripts/sync-gamification.mjs (from Grammar HUB). */\n';

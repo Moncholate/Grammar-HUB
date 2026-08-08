@@ -82,7 +82,8 @@
       "desc": { "es": "≥90% en ≥12 intentos, en ≥2 días distintos", "en": "≥90% over ≥12 attempts, on ≥2 different days" },
       "criteria": { "type": "tenseMastery", "accuracyGte": 0.9, "attemptsGte": 12, "daysGte": 2 } },
 
-    { "id": "explorer", "category": "suite", "icon": "🧩", "scope": "suite",
+    { "_iconNota": "Era 🧩, un rompecabezas, y justo en la insignia que representa a la suite entera. La analogía de la suite son las piezas de LEGO, no el puzzle: las piezas encajan por sus studs y se pueden intercambiar, que es lo que se enseña. 🧭 va con «Explorador» y no arrastra la analogía vieja.",
+      "id": "explorer", "category": "suite", "icon": "🧭", "scope": "suite",
       "name": { "es": "Explorador del Hub", "en": "Hub explorer" }, "desc": { "es": "Usaste las 3 apps", "en": "Used all 3 apps" },
       "criteria": { "type": "appsUsed", "gte": 3 } },
 

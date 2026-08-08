@@ -197,12 +197,49 @@ const HubHome = ({ lang, level, setLevel, onPhraseOpenChange, onAppOpenChange })
         <button
           onClick={() => setShowBadges(v => !v)}
           aria-expanded={showBadges}
+          aria-controls="gh-insignias"
           className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-semibold text-amber-800 bg-amber-100 hover:bg-amber-200 transition-colors touch-manipulation"
           style={{ WebkitTapHighlightColor: 'transparent' }}
         >
           🏅 {unlockedCount}/{BADGES.length} {lang === 'es' ? 'logros' : 'badges'} <span className="text-[10px]">{showBadges ? '▲' : '▼'}</span>
         </button>
       </div>
+
+      {/* Galería de insignias, JUSTO DEBAJO de su botón.
+          Estaba al final del componente, después de la frase del día, del
+          selector de nivel y de las tres tarjetas de apps: al abrirla la página
+          crecía por abajo, fuera de la pantalla, y desde el botón no pasaba
+          NADA visible. Un desplegable tiene que aparecer pegado a lo que se
+          pulsa; si no, no hay forma de saber que funcionó. */}
+      {showBadges && (
+        <div id="gh-insignias" className="w-full max-w-2xl mb-5">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+            {BADGES.map((b) => {
+              const unlocked = isUnlocked(b);
+              const name = (lang === 'es' ? b.name.es : b.name.en).replace('{tense}', lang === 'es' ? 'un tiempo' : 'a tense');
+              // Bloqueada y con pista → se muestra DÓNDE se consigue en vez de qué
+              // pide. Un candado sin camino frustra; con la pista invita a probar
+              // la app que falta (hoy: 🔍 Analista vive en Desgramatizador).
+              const desc = (!unlocked && b.where)
+                ? (lang === 'es' ? b.where.es : b.where.en)
+                : (lang === 'es' ? b.desc.es : b.desc.en);
+              return (
+                <div
+                  key={b.id}
+                  title={unlocked ? name : (lang === 'es' ? 'Bloqueado' : 'Locked')}
+                  className={`rounded-xl border p-2.5 flex items-start gap-2 ${unlocked ? 'bg-white border-amber-200 shadow-sm' : 'bg-slate-50 border-slate-200'}`}
+                >
+                  <span className={`text-2xl leading-none ${unlocked ? '' : 'opacity-30 grayscale'}`}>{b.icon}</span>
+                  <div className="min-w-0">
+                    <p className={`text-xs font-bold leading-tight ${unlocked ? 'text-slate-800' : 'text-slate-400'}`}>{name}</p>
+                    <p className="text-[10px] text-slate-400 leading-tight mt-0.5">{desc}</p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
       {/* Frase del día · aviso la 1ª visita del día + línea plegada todo el día */}
       <DailyPhrase lang={lang} level={level} onOpenChange={onPhraseOpenChange} />
@@ -289,37 +326,6 @@ const HubHome = ({ lang, level, setLevel, onPhraseOpenChange, onAppOpenChange })
         ))}
       </div>
       </div>
-
-      {/* Galería de insignias */}
-      {showBadges && (
-        <div className="w-full max-w-2xl mt-5">
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-            {BADGES.map((b) => {
-              const unlocked = isUnlocked(b);
-              const name = (lang === 'es' ? b.name.es : b.name.en).replace('{tense}', lang === 'es' ? 'un tiempo' : 'a tense');
-              // Bloqueada y con pista → se muestra DÓNDE se consigue en vez de qué
-              // pide. Un candado sin camino frustra; con la pista invita a probar
-              // la app que falta (hoy: 🔍 Analista vive en Desgramatizador).
-              const desc = (!unlocked && b.where)
-                ? (lang === 'es' ? b.where.es : b.where.en)
-                : (lang === 'es' ? b.desc.es : b.desc.en);
-              return (
-                <div
-                  key={b.id}
-                  title={unlocked ? name : (lang === 'es' ? 'Bloqueado' : 'Locked')}
-                  className={`rounded-xl border p-2.5 flex items-start gap-2 ${unlocked ? 'bg-white border-amber-200 shadow-sm' : 'bg-slate-50 border-slate-200'}`}
-                >
-                  <span className={`text-2xl leading-none ${unlocked ? '' : 'opacity-30 grayscale'}`}>{b.icon}</span>
-                  <div className="min-w-0">
-                    <p className={`text-xs font-bold leading-tight ${unlocked ? 'text-slate-800' : 'text-slate-400'}`}>{name}</p>
-                    <p className="text-[10px] text-slate-400 leading-tight mt-0.5">{desc}</p>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      )}
 
       {/* Footer */}
       <p className="mt-8 text-xs text-slate-400 text-center">

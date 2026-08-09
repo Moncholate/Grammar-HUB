@@ -207,10 +207,16 @@ app por no encontrarlo en estas tablas, hay que preguntarle al profesor.
 Casos ya confirmados que viven en Practical English (aportados por el profesor,
 2026-07-28):
 
-| Estructura | Nivel | Cómo se enseña |
-|---|---|---|
-| `could` | Elemental | Pedir algo — *Could I have…?* Fórmula, no gramática |
-| `would` | Elemental | Invitar / ofrecer — *Would you like…?* Fórmula, no gramática |
+| Estructura | Nivel | Dónde cae | Cómo se enseña |
+|---|---|---|---|
+| `would` | **Básico II** | después de 9B | Invitar / ofrecer, *Would you like…?* Fórmula, no gramática |
+| `could` | Elemental II | después de 7C | Pedir algo, *Could I have…?* Fórmula, no gramática |
+
+La columna «dónde cae» la aportó el profesor el 2026-08-08 y **corrige la
+versión anterior de esta tabla**, que ponía los dos en «Elemental» sin más
+detalle. `would` aparece un curso y medio antes de lo que decía. Que Practical
+English no tenga unidad en el índice no significa que no tenga lugar en el
+calendario: la primera clase en que puede salir es la siguiente a la indicada.
 
 Y dos modales que el temario no lista como unidad propia pero **sí se nombran en
 clase**, como alternativas de otro:
@@ -219,6 +225,25 @@ clase**, como alternativas de otro:
 |---|---|---|
 | `may` | `might` | Intermedio II (11B) |
 | `shall` | `should` | Intermedio II (8A) |
+
+## Un tiempo verbal NO se enseña de golpe
+
+Mirar solo la unidad donde aparece el nombre del tiempo lleva a preguntar de
+más. El libro los reparte, y cada tramo es una clase distinta:
+
+| Tiempo | Tramos |
+|---|---|
+| Presente simple (Básico I) | `be` **1A-2B** · demás verbos (+)(−) **5A** · preguntas **5B** · he/she/it **6A** |
+| Pasado simple (Básico II) | was/were **10B** · regulares **11A** · irregulares **11B** |
+
+Dentro del `be` hay a su vez un orden: **1A** yo/tú, **1B** he/she/it, **2A** el
+plural y **2B** las preguntas Wh-. O sea que **las preguntas cerradas llegan
+antes que las abiertas**, y eso pesa sobre todo en Question Lab.
+
+Decisión del profesor (2026-08-08): las apps abren el `be` en la **2B**, cuando
+está completo, en vez de modelar cada persona. Son cuatro clases seguidas, el
+desfase dura poco y las apps no se usan todas las clases. En cambio los tramos
+del presente simple y del pasado simple **sí** se modelan uno a uno.
 
 ## Notas para el contenido de las apps
 
@@ -232,9 +257,9 @@ de arriba):
   "simple, continuous, perfect", sin el perfecto continuo.
 
 **Sobre `would`:** como ítem gramatical aparece **solo en la segunda condicional**
-(Intermedio II 9A y AEF 3 7B). En Practical English de Elemental se enseña antes,
-como fórmula para invitar/ofrecer — por eso el modal está disponible desde
-Elemental I y esa es la ubicación correcta. El hábito pasado tiene unidad propia
+(Intermedio II 9A y AEF 3 7B). En Practical English se enseña bastante antes,
+como fórmula para invitar/ofrecer, y eso ocurre en **Básico II tras la 9B**: esa
+es la ubicación correcta del modal. El hábito pasado tiene unidad propia
 (AEF 3 5B "Past and present habits and states") pero **sin nombrar `would`**: el
 ítem explícito de hábito pasado es **`used to`**, en Intermedio II 11A.
 
@@ -243,8 +268,8 @@ Elemental I y esa es la ubicación correcta. El hábito pasado tiene unidad prop
 | Modal | Respaldo en el temario |
 |---|---|
 | `can` Básico II | Básico II 8A *Can / can't* |
-| `would` Elemental I | Practical English (invitar/ofrecer) |
-| `could` Elemental II | Practical English (pedir); como gramática, AEF 3 4B |
+| `would` Básico II | Practical English tras la 9B (invitar/ofrecer) |
+| `could` Elemental II | Practical English tras la 7C (pedir); como gramática, AEF 3 4B |
 | `will` Intermedio I | Intermedio I 6A *Will / won't* |
 | `must` Intermedio II | Intermedio II 7C *have to, must, must not* |
 | `should` Intermedio II | Intermedio II 8A *Should* |

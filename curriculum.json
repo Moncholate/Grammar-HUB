@@ -1,5 +1,10 @@
 {
-  "$description": "Grammar Hub curriculum — canonical CEFR level scale + tense→level map, consumed by the hub apps via generated files (see scripts/sync-curriculum.mjs). OJO: este archivo fue sembrado desde Grammaster/src/data/grammar.js, así que NO es una fuente independiente: describe lo que la app ofrece, no lo que enseñan los cursos. La fuente real del temario es syllabus-aef.md (American English File 3rd ed., unidad por unidad); ante cualquier desacuerdo, manda ese archivo.",
+  "$description": "Grammar Hub · currículo canónico. Escala de niveles, UNIDADES de cada curso y la unidad en que cada contenido se enseña. Lo consumen las apps a través de archivos generados (scripts/sync-curriculum.mjs); nadie lo lee en runtime.",
+  "$fuente": "Las unidades salen de syllabus-aef.md (American English File 3rd ed., unidad por unidad, aportado por el profesor). ESE archivo manda: este es una copia operativa para las apps. Los niveles se sembraron en su día desde Grammaster, así que para el nivel de un contenido la referencia también es el temario, no esta copia.",
+  "$porQueUnidades": "La práctica corrige y PUNTÚA. Sin unidad, un alumno de Intermedio II en la semana 3 recibía Pasado Perfecto (12A): fallaba, perdía la racha y no sumaba insignia. La gamificación lo castigaba por no saber algo que nadie le había enseñado. Un curso avanza ~una unidad por clase, 2 clases por semana (3-4 los intensivos): entre la semana 3 y la 6 hay media asignatura.",
+  "$quienLoUsa": "Grammaster y Question Lab, cada uno con su archivo generado. Desgramatizador NO, y no es un olvido: lo que enseña son CATEGORÍAS gramaticales (sustantivo, verbo, adjetivo…), y esas no se dan en secuencia como los tiempos — el alumno usa sustantivos y verbos desde la primera clase, aunque «singular and plural nouns» sea una unidad concreta. Ya acota lo que muestra por banda de nivel, que es la granularidad que su contenido tiene; una unidad ahí sería precisión sin significado. Si el profesor quiere mapear categorías a unidades, esto se revisa.",
+  "$soloLaPractica": "El filtro se aplica donde se CORRIGE y PUNTÚA. Los constructores y analizadores no se acotan: ahí el alumno explora a propósito y nadie le pone nota.",
+
   "levels": [
     "basico1",
     "basico2",
@@ -18,17 +23,51 @@
     "intermedio2":{ "es": "Intermedio II", "en": "Intermediate II" },
     "avanzado":   { "es": "Intermedio Alto","en": "Upper-Interm." }
   },
-  "tenses": {
-    "simple-present": "basico1",
-    "present-continuous": "basico2",
-    "simple-past": "basico2",
-    "future-going-to": "elemental2",
-    "present-perfect": "elemental2",
-    "past-continuous": "intermedio1",
-    "simple-future": "intermedio1",
-    "past-perfect": "intermedio2",
-    "used-to": "intermedio2",
-    "present-perfect-continuous": "avanzado"
+
+  "units": {
+    "basico1":     ["1A", "1B", "2A", "2B", "3A", "3B", "4A", "4B", "5A", "5B", "6A", "6B"],
+    "basico2":     ["7A", "7B", "8A", "8B", "9A", "9B", "10A", "10B", "11A", "11B", "12A", "12B"],
+    "elemental1":  ["1A", "1B", "1C", "2A", "2B", "2C", "3A", "3B", "3C", "4A", "4B", "4C", "5A", "5B", "5C", "6A", "6B", "6C"],
+    "elemental2":  ["7A", "7B", "7C", "8A", "8B", "8C", "9A", "9B", "9C", "10A", "10B", "10C", "11A", "11B", "11C", "12A", "12B", "12C"],
+    "intermedio1": ["1A", "1B", "1C", "2A", "2B", "2C", "3A", "3B", "3C", "4A", "4B", "4C", "5A", "5B", "5C", "6A", "6B", "6C"],
+    "intermedio2": ["7A", "7B", "7C", "8A", "8B", "8C", "9A", "9B", "9C", "10A", "10B", "10C", "11A", "11B", "11C", "12A", "12B", "12C"],
+    "avanzado":    ["1A", "1B", "2A", "2B", "3A", "3B", "4A", "4B", "5A", "5B", "6A", "6B", "7A", "7B", "8A", "8B", "9A", "9B", "10A", "10B"]
   },
+
+  "$etapas": "Un tiempo NO se enseña de golpe y mirar solo la unidad del nombre lleva a preguntar de más. `unitBe` es la etapa temprana (solo el verbo `be`); entre ella y `unit` el tiempo se practica SOLO con `be`. `unitQuestions` y `unitThirdPerson` son lo mismo aplicado a la forma interrogativa y a he/she/it. `unitIrregulars` marca desde cuándo entran los verbos irregulares. Ojo con `be`: empieza en la 1A pero viene repartido por personas (1B he/she/it, 2A plural) y las preguntas Wh- son la 2B. Decisión del profesor (2026-08-08): las apps lo abren en la 2B, cuando está COMPLETO, en vez de modelar cada persona.",
+
+  "content": {
+    "to-be-pres":       { "level": "basico1",     "unit": "2B",  "$": "Question Lab lo trata como tiempo aparte. 2B: es cuando el `be` está completo y ya hay preguntas Wh-." },
+    "simple-present":   { "level": "basico1",     "unit": "5A",  "unitBe": "2B", "unitQuestions": "5B", "unitThirdPerson": "6A" },
+    "present-continuous": { "level": "basico2",   "unit": "9A" },
+    "to-be-past":       { "level": "basico2",     "unit": "10B" },
+    "simple-past":      { "level": "basico2",     "unit": "11A", "unitBe": "10B", "unitIrregulars": "11B" },
+    "future-going-to":  { "level": "elemental2",  "unit": "10B" },
+    "present-perfect":  { "level": "elemental2",  "unit": "12A" },
+    "past-continuous":  { "level": "intermedio1", "unit": "2B" },
+    "simple-future":    { "level": "intermedio1", "unit": "6A" },
+    "past-perfect":     { "level": "intermedio2", "unit": "12A" },
+    "used-to":          { "level": "intermedio2", "unit": "11A" },
+    "present-perfect-continuous": { "level": "avanzado", "unit": "2B" },
+
+    "subject-question": { "level": "intermedio2", "unit": "12C", "$": "«Who painted the Mona Lisa?» — Int. II 12C, Questions without auxiliaries." },
+
+    "modal":    { "level": "basico2",     "unit": "8A",  "$": "El modal genérico de Question Lab; su primera aparición es `can`." },
+    "can":      { "level": "basico2",     "unit": "8A" },
+    "would":    { "level": "basico2",     "unit": "10A", "$": "Practical English tras la 9B. Estuvo en Elemental I por una nota vieja del temario, curso y medio tarde." },
+    "could":    { "level": "elemental2",  "unit": "8A",  "$": "Practical English tras la 7C. Como gramática de habilidad pasada llega en AEF 3 4B, pero el alumno ya lo usa antes." },
+    "will":     { "level": "intermedio1", "unit": "6A" },
+    "must":     { "level": "intermedio2", "unit": "7C" },
+    "have-to":  { "level": "intermedio2", "unit": "7C" },
+    "should":   { "level": "intermedio2", "unit": "8A" },
+    "shall":    { "level": "intermedio2", "unit": "8A",  "$": "Sin unidad propia: se nombra junto a `should`." },
+    "might":    { "level": "intermedio2", "unit": "11B" },
+    "may":      { "level": "intermedio2", "unit": "11B", "$": "Sin unidad propia: se nombra junto a `might`." },
+
+    "conditional-1": { "level": "intermedio2", "unit": "8B" },
+    "conditional-2": { "level": "intermedio2", "unit": "9A" },
+    "conditional-3": { "level": "avanzado",    "unit": "9A" }
+  },
+
   "$removed": "2026-07-28, contrastado contra syllabus-aef.md: would-past (no es un tiempo — would + base; el temario solo nombra `would` para la 2ª condicional y el hábito pasado lo cubre `used to`), future-perfect y past-perfect-continuous (no se enseñan en ningún curso)."
 }

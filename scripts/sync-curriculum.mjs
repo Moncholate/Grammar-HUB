@@ -33,6 +33,10 @@ for (const nivel of cur.levels) {
   if (!cur.labels[nivel]) problemas.push(`falta la etiqueta de «${nivel}»`);
 }
 for (const [id, item] of Object.entries(cur.content)) {
+  /* Las claves `$…` son notas para quien lee el JSON, también DENTRO de
+     `content`: sin esto la nota se validaba como si fuera un contenido más y el
+     sync se caía diciendo «nivel undefined desconocido». */
+  if (id.startsWith('$')) continue;
   if (!cur.levels.includes(item.level)) { problemas.push(`${id}: nivel «${item.level}» desconocido`); continue; }
   for (const campo of CAMPOS_UNIDAD) {
     const u = item[campo];
@@ -63,7 +67,9 @@ const BANNER =
 
 /* Las claves `$…` son notas para quien lee el JSON, no datos: fuera del bundle. */
 const limpio = (o) => Object.fromEntries(Object.entries(o).filter(([k]) => !k.startsWith('$')));
-const content = Object.fromEntries(Object.entries(cur.content).map(([k, v]) => [k, limpio(v)]));
+const content = Object.fromEntries(Object.entries(cur.content)
+  .filter(([k]) => !k.startsWith('$'))
+  .map(([k, v]) => [k, limpio(v)]));
 
 /* Mapa id→nivel, que es lo que consumían las apps antes de que existieran las
    unidades. Se sigue emitiendo derivado para no tener el nivel escrito dos

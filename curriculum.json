@@ -64,6 +64,28 @@
     "might":    { "level": "intermedio2", "unit": "11B" },
     "may":      { "level": "intermedio2", "unit": "11B", "$": "Sin unidad propia: se nombra junto a `might`." },
 
+    "$wh": "Las wh-words también tienen su orden en el libro, y hace falta desde que Question Lab estrenó el modo «Falta la wh»: ahí la wh ES la respuesta del ejercicio, no un detalle de la pregunta. Antes de esto, un alumno de Básico I en la 2B podía tener que escribir «how much», que es la 9B de Elemental II. En Identifica y Responde la wh es incidental y por eso nunca se notó. El grueso sale de Básico I 2B, «Wh- and How questions with be»; las que el temario sitúa aparte llevan su unidad propia y su motivo.",
+
+    "wh-what":       { "level": "basico1", "unit": "2B" },
+    "wh-where":      { "level": "basico1", "unit": "2B" },
+    "wh-who":        { "level": "basico1", "unit": "2B" },
+    "wh-whom":       { "level": "basico1", "unit": "2B", "$": "Variante de `who`; la app la acepta donde `who` vale." },
+    "wh-when":       { "level": "basico1", "unit": "2B" },
+    "wh-why":        { "level": "basico1", "unit": "2B" },
+    "wh-how":        { "level": "basico1", "unit": "2B" },
+    "wh-how-old":    { "level": "basico1", "unit": "2B", "$": "Fórmula de la misma unidad: «How old are you?» es de Starter." },
+    "wh-what-time":  { "level": "basico1", "unit": "2B", "$": "Ídem: «What time is it?»." },
+    "wh-what-color": { "level": "basico1", "unit": "2B", "$": "Los colores son vocabulario de Starter." },
+    "wh-which":      { "level": "basico1", "unit": "2B", "$": "Sin unidad propia en el temario. Se queda con el grupo base: «Which bag is yours?» es una pregunta con `be` y nada indica retrasarla." },
+    "wh-what-kind":  { "level": "basico1", "unit": "2B", "$": "Sin unidad propia. Misma decisión que `which`." },
+    "wh-how-far":    { "level": "basico1", "unit": "2B", "$": "Sin unidad propia. Misma decisión que `which`." },
+    "wh-how-fast":   { "level": "basico1", "unit": "2B", "$": "Sin unidad propia. Misma decisión que `which`." },
+    "wh-how-often":  { "level": "basico1", "unit": "6B", "$": "Básico I 6B, adverbios de frecuencia: preguntar la frecuencia necesita saber expresarla." },
+    "wh-whose":      { "level": "elemental1", "unit": "4A", "$": "Elemental I 4A, «Possessive 's; Whose…?», que es donde el libro la nombra." },
+    "wh-how-much":   { "level": "elemental2", "unit": "9B", "$": "Elemental II 9B, «Quantifiers: how much / how many»." },
+    "wh-how-many":   { "level": "elemental2", "unit": "9B", "$": "Ídem." },
+    "wh-how-long":   { "level": "intermedio2", "unit": "9B", "$": "Intermedio II 9B, «Present perfect + for and since»: la duración se pregunta cuando se sabe expresarla." },
+
     "conditional-1": { "level": "intermedio2", "unit": "8B" },
     "conditional-2": { "level": "intermedio2", "unit": "9A" },
     "conditional-3": { "level": "avanzado",    "unit": "9A" }

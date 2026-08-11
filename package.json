@@ -8,7 +8,9 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "sync-curriculum": "node scripts/sync-curriculum.mjs"
+    "sync-curriculum": "node scripts/sync-curriculum.mjs",
+    "sync-gamification": "node scripts/sync-gamification.mjs",
+    "sync": "npm run sync-curriculum && npm run sync-gamification"
   },
   "dependencies": {
     "react": "^18.2.0",

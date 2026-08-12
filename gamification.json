@@ -87,12 +87,12 @@
       "name": { "es": "Explorador del Hub", "en": "Hub explorer" }, "desc": { "es": "Usaste las 3 apps", "en": "Used all 3 apps" },
       "criteria": { "type": "appsUsed", "gte": 3 } },
 
-    { "$nota": "Question Lab pasó de 3 modos a 5 (2026-08-11: «Falta la wh» y «Falta el auxiliar»). El id se queda en `ql-trio` A PROPÓSITO: es la clave con la que la insignia está guardada en el `gh_progress` de los alumnos, y renombrarla se la quitaría a quien ya la tenía. Lo que sube es el listón y el texto.",
+    { "$nota": "Question Lab pasó de 3 modos a 4 (2026-08-12: «Falta una pieza», que empezó siendo dos y se unió). El id se queda en `ql-trio` A PROPÓSITO: es la clave con la que la insignia está guardada en el `gh_progress` de los alumnos, y renombrarla se la quitaría a quien ya la tenía. Lo que cambia es el listón y el texto.",
       "id": "ql-trio", "category": "suite", "icon": "🧪", "scope": "suite", "app": "questionlab",
       "name": { "es": "Laboratorio completo", "en": "Full lab" },
-      "desc": { "es": "Usaste los 5 modos de Question Lab", "en": "Used all 5 Question Lab modes" },
-      "where": { "es": "Se consigue en Question Lab: Construye, Identifica, Responde, Falta la wh y Falta el auxiliar", "en": "Earned in Question Lab: Build, Identify, Respond, Missing wh-word and Missing auxiliary" },
-      "criteria": { "type": "modesUsed", "app": "questionlab", "gte": 5 } }
+      "desc": { "es": "Usaste los 4 modos de Question Lab", "en": "Used all 4 Question Lab modes" },
+      "where": { "es": "Se consigue en Question Lab: Construye, Identifica, Responde y Falta una pieza", "en": "Earned in Question Lab: Build, Identify, Respond and Missing piece" },
+      "criteria": { "type": "modesUsed", "app": "questionlab", "gte": 4 } }
   ],
 
   "deferred": [],

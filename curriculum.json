@@ -5,6 +5,9 @@
   "$quienLoUsa": "Grammaster y Question Lab, cada uno con su archivo generado. Desgramatizador NO, y no es un olvido: lo que enseña son CATEGORÍAS gramaticales (sustantivo, verbo, adjetivo…), y esas no se dan en secuencia como los tiempos — el alumno usa sustantivos y verbos desde la primera clase, aunque «singular and plural nouns» sea una unidad concreta. Ya acota lo que muestra por banda de nivel, que es la granularidad que su contenido tiene; una unidad ahí sería precisión sin significado. Si el profesor quiere mapear categorías a unidades, esto se revisa.",
   "$soloLaPractica": "El filtro se aplica donde se CORRIGE y PUNTÚA. Los constructores y analizadores no se acotan: ahí el alumno explora a propósito y nadie le pone nota.",
 
+  "$revision": "Cada cuántos días se le vuelve a preguntar al alumno si su curso sigue en esa unidad. El dato CADUCA SOLO y el fallo es silencioso y siempre hacia el mismo lado: una unidad vieja solo puede hacer la app más chica, escondiendo justo lo que se vio en la última clase. 7 días porque es el ritmo semanal del curso: el que practica a diario la ve una vez por semana, no todos los días. Vive AQUÍ y no en cada app porque el plazo es una decisión del temario, y dos números que dicen lo mismo terminan diciendo cosas distintas (pasó con el nivel de `would`).",
+  "revision": { "dias": 7 },
+
   "levels": [
     "basico1",
     "basico2",

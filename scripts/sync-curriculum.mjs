@@ -55,6 +55,10 @@ for (const [id, item] of Object.entries(cur.content)) {
       problemas.push(`${id}.${campo} va ANTES de unit: esa etapa nunca se aplicaría`);
   }
 }
+/* El plazo de la revisión: si faltara o fuera 0, la app pediría revisar la
+   unidad en cada carga, que es peor que no pedirla nunca. */
+if (!cur.revision || !(cur.revision.dias > 0))
+  problemas.push('revision.dias debe ser un número de días mayor que 0');
 if (problemas.length) {
   console.error('✗ curriculum.json no cuadra con el temario:');
   for (const p of problemas) console.error('   · ' + p);
@@ -80,7 +84,7 @@ const tenses = Object.fromEntries(Object.entries(content).map(([k, v]) => [k, v.
    Question Lab es vanilla (no ESM), así que en vez de `export` asignamos a
    window para que su script inline lo lea. */
 const qlBody = `${BANNER}window.GRAMMAR_CEFR = ${JSON.stringify(
-  { levels: cur.levels, labels: cur.labels, units: cur.units, content, tenses }, null, 2)};\n`;
+  { levels: cur.levels, labels: cur.labels, units: cur.units, revision: cur.revision, content, tenses }, null, 2)};\n`;
 writeFileSync(join(apps, 'Question Lab', 'cefr.generated.js'), qlBody);
 console.log('  ✓ Question Lab/cefr.generated.js');
 
@@ -99,6 +103,11 @@ const gmBody = `${BANNER}
 export const NIVELES = ${JSON.stringify(cur.levels)};
 
 export const UNIDADES_POR_CURSO = ${JSON.stringify(cur.units, null, 2)};
+
+/* Cada cuántos días se le vuelve a preguntar al alumno si su curso sigue en esa
+   unidad. Ver \`$revision\` en curriculum.json: el plazo es decisión del temario,
+   no de cada app. */
+export const DIAS_REVISION = ${cur.revision.dias};
 
 /* id → { cefr, unidad, unidadBe, unidadInterrogativa, unidadTerceraPersona,
    unidadIrregulares }. Solo están los campos que ese contenido usa. */

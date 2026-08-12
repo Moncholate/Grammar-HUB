@@ -36,6 +36,7 @@ const qlBody = `${BANNER}window.GH_GAME = (function(){
 ${enginePlain}
   return {
     SHARED_KEY, SCHEMA_V, emptyProgress, loadProgress, saveProgress, recordAttempt, recordRound, evaluateBadges,
+    todayISO, dayGap,
     BADGES: ${JSON.stringify(model.badges)}
   };
 })();

@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "sync-curriculum": "node scripts/sync-curriculum.mjs",
     "sync-gamification": "node scripts/sync-gamification.mjs",
-    "sync": "npm run sync-curriculum && npm run sync-gamification"
+    "sync-phrasal": "node scripts/sync-phrasal.mjs",
+    "sync": "npm run sync-curriculum && npm run sync-gamification && npm run sync-phrasal"
   },
   "dependencies": {
     "react": "^18.2.0",

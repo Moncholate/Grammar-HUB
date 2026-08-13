@@ -1,0 +1,44 @@
+{
+  "$description": "Grammar Hub · verbos frasales del libro. Fuente ÚNICA para las apps que ANALIZAN (Desgramatizador y Question Lab), a través de archivos generados por scripts/sync-phrasal.mjs.",
+
+  "$porQueAqui": "Esta lista vivía SOLO dentro de Desgramatizador. Question Lab no tenía ninguna noción de verbo frasal, así que «What time do you get up during the week?» le dejaba «up» pegado al complemento y el verbo en «get». El profesor lo encontró en clase y su reacción fue la correcta: «pensé que habíamos solucionado el problema». Y estaba resuelto — en la otra app. Es el mismo patrón que ya costó el nivel de `would` y el filtro del modo repaso: dos implementaciones de la misma regla siempre divergen, y aquí ni siquiera había dos, había una y un hueco.",
+
+  "$quienNoLaUsa": "Grammaster NO, y no es un olvido: esa app GENERA oraciones en vez de analizarlas, y deja los frasales fuera de su lista de verbos a propósito porque la partícula rompe el armado (ver la nota de `check in` en su grammar.js). Una lista de frasales ahí no tendría a quién servir.",
+
+  "$fuente": "American English File 3rd ed. Se agrupan por el libro donde aparecen para que se vea qué maneja el alumno y cuándo.",
+
+  "$limite": "Solo se reconoce la partícula PEGADA al verbo. «pick the kids up», con el objeto en medio, no se detecta en ninguna de las dos apps. Es un límite conocido y compartido, no un descuido: separarlo bien exige saber dónde acaba el objeto, y eso es otro problema.",
+
+  "verbs": [
+    ["get", "up"], ["wake", "up"], ["sit", "down"], ["stand", "up"],
+    ["go", "out"], ["come", "in"], ["put", "on"], ["take", "off"],
+    ["turn", "on"], ["turn", "off"], ["pick", "up"], ["put", "down"],
+    ["come", "back"], ["go", "back"], ["look", "at"], ["listen", "to"],
+
+    ["find", "out"], ["give", "up"], ["look", "for"], ["look", "after"],
+    ["carry", "on"], ["set", "up"], ["turn", "up"], ["turn", "down"],
+    ["go", "on"], ["come", "on"], ["take", "up"], ["take", "out"],
+    ["take", "back"], ["bring", "up"], ["bring", "back"],
+    ["run", "out"], ["run", "into"],
+    ["come", "up", "with"], ["look", "forward", "to"],
+    ["get", "on"], ["get", "off"], ["get", "along"], ["get", "back"],
+    ["give", "back"]
+  ],
+
+  "$prepParticles": "Partículas que TAMBIÉN son preposiciones. Cuando una de estas encabeza un adverbial de tiempo o lugar («came in the morning», «went on holiday», «in 2020») la palabra es preposición, no partícula. Las partículas puramente adverbiales (up, down, off, out, back, away…) no tienen esa ambigüedad y por eso no están aquí.",
+  "prepParticles": ["in", "on", "at", "into", "after", "to", "for"],
+
+  "$adverbialHeads": "Sustantivos que, justo detrás de una `prepParticle`, marcan la frase como adverbial y no como objeto del frasal. Deliberadamente CORTA y casi toda temporal: si crece, empieza a comerse objetos legítimos como «look at the board», «get on the bus» o «look after the kids». Un año de cuatro cifras cuenta igual, y eso va en el código.",
+  "adverbialHeads": [
+    "morning", "afternoon", "evening", "night", "midnight", "noon",
+    "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday",
+    "january", "february", "march", "april", "may", "june", "july",
+    "august", "september", "october", "november", "december",
+    "weekend", "week", "weekday", "holiday", "holidays", "vacation", "vacations",
+    "day", "summer", "winter", "spring", "autumn", "fall", "easter", "christmas",
+    "home", "time", "foot"
+  ],
+
+  "$determiners": "Se saltan para llegar al sustantivo: «on a holiday», «in the morning».",
+  "determiners": ["the", "a", "an", "my", "your", "his", "her", "our", "their"]
+}

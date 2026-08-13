@@ -327,9 +327,14 @@ const HubHome = ({ lang, level, setLevel, onPhraseOpenChange, onAppOpenChange })
       </div>
       </div>
 
-      {/* Footer */}
+      {/* Footer. La firma se queda como estaba; debajo va el copyright, más
+          apagado, porque no es lo que el alumno viene a leer. El aviso que pesa
+          a efectos legales es el del código y el LICENSE del repositorio. */}
       <p className="mt-8 text-xs text-slate-400 text-center">
         <span className="font-medium text-slate-500">Grammar HUB</span> – By Besto Teacher Víctor Morales
+      </p>
+      <p className="mt-1 text-[11px] text-slate-400 text-center">
+        © 2026 Víctor Manuel Morales Muñoz · {t.derechos}
       </p>
     </div>
   );

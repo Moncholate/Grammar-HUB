@@ -4,6 +4,7 @@ export const translations = {
     hero: '¿Qué quieres practicar?',
     heroSub: 'Elige tu nivel y luego una app para empezar',
     open: 'Abrir',
+    derechos: 'Todos los derechos reservados',
     back: 'Volver',
     /* Nombra el destino a proposito: dentro de la app hay sus propios «atras»
        y un «Volver» generico se llevaba los clics dirigidos a ellos. */
@@ -41,6 +42,7 @@ export const translations = {
     hero: 'What do you want to practice?',
     heroSub: 'Choose your level and then an app to get started',
     open: 'Open',
+    derechos: 'All rights reserved',
     back: 'Back',
     backToHub: 'Hub',
     whyBricksTitle: 'Why bricks?',

@@ -21,6 +21,11 @@ export const translations = {
     whyBricksL2Title: 'En inglés, por ahora',
     whyBricksL2: 'Las piezas son nuevas y el instructivo recién lo estás aprendiendo, así que una figura tan compleja todavía no te va a salir. Una más simple, sí. Y está bien: se entiende perfectamente que es un dinosaurio.',
     whyBricksL2Alt: 'Un dinosaurio pequeño armado con pocos bloques, sencillo pero reconocible',
+    /* La segunda figura empieza tapada: el contraste es el mensaje, y un
+       contraste que aparece de golpe pega más que uno que ya estaba ahí. */
+    whyBricksAsk: '¿Qué crees que te sale?',
+    whyBricksReveal: 'Descúbrelo',
+    whyBricksRevealAria: 'Descubrir qué figura sale en inglés',
     whyBricksPunch: 'La trampa es traducir el T-Rex pieza por pieza. No sale: no tienes la misma cantidad de bloques ni te sabes el instructivo de memoria, así que con suerte armas un diente. Lo que funciona es dejar de traducir y construir directo con las piezas del otro idioma. Tu dinosaurio será más simple, pero será tuyo y se va a entender.',
     whyBricksClose: 'Entendido',
     levelLabel: 'Nivel',
@@ -54,6 +59,9 @@ export const translations = {
     whyBricksL2Title: 'In English, for now',
     whyBricksL2: 'The pieces are new and you are still learning the booklet, so a model this complex will not come out yet. A simpler one will. And that is fine: it clearly reads as a dinosaur.',
     whyBricksL2Alt: 'A small dinosaur built from a few bricks, simple but recognisable',
+    whyBricksAsk: 'What do you think you get?',
+    whyBricksReveal: 'Find out',
+    whyBricksRevealAria: 'Reveal which model comes out in English',
     whyBricksPunch: 'The trap is translating the T-Rex piece by piece. It does not work: you do not have the same number of bricks and you do not know the booklet by heart, so with luck you get one tooth. What works is to stop translating and build straight from the other set of pieces. Your dinosaur will be simpler, but it will be yours and it will be understood.',
     whyBricksClose: 'Got it',
     levelLabel: 'Level',

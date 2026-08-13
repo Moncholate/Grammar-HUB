@@ -28,16 +28,39 @@
   "$prepParticles": "Partículas que TAMBIÉN son preposiciones. Cuando una de estas encabeza un adverbial de tiempo o lugar («came in the morning», «went on holiday», «in 2020») la palabra es preposición, no partícula. Las partículas puramente adverbiales (up, down, off, out, back, away…) no tienen esa ambigüedad y por eso no están aquí.",
   "prepParticles": ["in", "on", "at", "into", "after", "to", "for"],
 
-  "$adverbialHeads": "Sustantivos que, justo detrás de una `prepParticle`, marcan la frase como adverbial y no como objeto del frasal. Deliberadamente CORTA y casi toda temporal: si crece, empieza a comerse objetos legítimos como «look at the board», «get on the bus» o «look after the kids». Un año de cuatro cifras cuenta igual, y eso va en el código.",
-  "adverbialHeads": [
+  "$adverbialHeads": "Sustantivos que, justo detrás de una `prepParticle`, marcan la frase como adverbial y no como objeto del frasal. Deliberadamente CORTA: si crece, empieza a comerse objetos legítimos como «look at the board», «get on the bus» o «look after the kids». Un año de cuatro cifras cuenta igual, y eso va en el código.",
+
+  "$porQueSeparados": "Van en dos listas porque hay DOS preguntas distintas que responder con ellas. Para los frasales da igual de qué tipo sea el adverbial: cualquiera basta para que la partícula sea preposición, y ahí se usa la unión de las dos. Pero el orden de la respuesta modelo en Question Lab necesita saber si es de TIEMPO en concreto: el inglés ordena objeto, después lugar, después tiempo, y por eso «I ate at home today» va así y no «I ate today at home». Una sola lista no puede contestar las dos cosas, y dos listas sueltas se desincronizan.",
+
+  "adverbialHeadsTime": [
     "morning", "afternoon", "evening", "night", "midnight", "noon",
     "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday",
     "january", "february", "march", "april", "may", "june", "july",
     "august", "september", "october", "november", "december",
     "weekend", "week", "weekday", "holiday", "holidays", "vacation", "vacations",
-    "day", "summer", "winter", "spring", "autumn", "fall", "easter", "christmas",
-    "home", "time", "foot"
+    "day", "summer", "winter", "spring", "autumn", "fall", "easter", "christmas"
   ],
+
+  "$adverbialHeadsOtros": "Ni de tiempo ni de lugar del todo: «at home» es lugar, «on time» y «on foot» son modo. Sirven para los frasales y NO para el orden lugar-tiempo, que es justo por lo que están aparte.",
+  "adverbialHeadsOtros": ["home", "time", "foot"],
+
+  "$advTiempoSueltos": "Adverbios de tiempo que van solos, sin preposición ni determinante: «I ate today». No son núcleos de sintagma, así que no caben en la lista de arriba, pero responden la misma pregunta.",
+  "advTiempoSueltos": [
+    "today", "yesterday", "tomorrow", "tonight", "now", "then",
+    "soon", "later", "early", "late", "already", "recently", "lately"
+  ],
+
+  "$cuantificadoresTiempo": "Determinantes que, delante de un núcleo temporal, arman un adverbial de tiempo sin preposición: «last week», «every day», «this morning», «next year».",
+  "cuantificadoresTiempo": ["last", "next", "this", "every", "each"],
+
+  "$preposicionesTiempo": "Preposiciones que pueden encabezar un adverbial de tiempo. `in`, `on` y `at` también encabezan lugares, así que no bastan solas: el núcleo tiene que estar en `adverbialHeadsTime`.",
+  "preposicionesTiempo": ["in", "on", "at", "after", "before", "during", "since", "until", "by"],
+
+  "$preposicionesSecuencia": "El subconjunto que ordena en el tiempo y NO puede señalar un lugar. Detrás de estas, un nombre de evento también arma un tiempo.",
+  "preposicionesSecuencia": ["after", "before", "during", "since", "until"],
+
+  "$nucleosDeEvento": "Sustantivos que son TIEMPO solo detrás de una preposición de secuencia. La distinción no es un capricho: «after school» es cuándo y «at school» es dónde, con el mismo sustantivo. Por eso no pueden entrar en `adverbialHeadsTime`, que se consulta también con `in`, `on` y `at`.",
+  "nucleosDeEvento": ["class", "classes", "school", "work", "lunch", "dinner", "breakfast"],
 
   "$determiners": "Se saltan para llegar al sustantivo: «on a holiday», «in the morning».",
   "determiners": ["the", "a", "an", "my", "your", "his", "her", "our", "their"]

@@ -41,19 +41,47 @@ for (const e of src.verbs) {
 const particulasUsadas = new Set(src.verbs.flatMap(e => e.slice(1)));
 for (const p of src.prepParticles)
   if (!particulasUsadas.has(p)) problemas.push(`prepParticles: «${p}» no aparece en ningún frasal`);
-for (const lista of ['adverbialHeads', 'determiners'])
+const LISTAS = ['adverbialHeadsTime', 'adverbialHeadsOtros', 'determiners',
+                'advTiempoSueltos', 'cuantificadoresTiempo', 'preposicionesTiempo',
+                'preposicionesSecuencia', 'nucleosDeEvento'];
+/* Las de secuencia son un SUBCONJUNTO de las de tiempo: si una se sale, deja de
+   aplicarse la regla general y el caso pasa desapercibido. */
+for (const p of src.preposicionesSecuencia)
+  if (!src.preposicionesTiempo.includes(p))
+    problemas.push(`preposicionesSecuencia: «${p}» no está en preposicionesTiempo`);
+/* Un evento en la lista general rompería la distinción que justifica separarlos:
+   «after school» es cuándo, «at school» es dónde. */
+for (const w of src.nucleosDeEvento)
+  if (src.adverbialHeadsTime.includes(w))
+    problemas.push(`nucleosDeEvento: «${w}» también está en adverbialHeadsTime, y ahí «at ${w}» pasaría por tiempo`);
+for (const lista of LISTAS)
   for (const w of src[lista])
     if (w !== w.toLowerCase()) problemas.push(`${lista}: «${w}» tiene que ir en minúscula`);
+/* Las dos mitades de los núcleos adverbiales no pueden solaparse: si una palabra
+   estuviera en las dos, «de tiempo o no» dejaría de tener respuesta única y el
+   orden lugar-tiempo saldría distinto según qué lista se consultara antes. */
+for (const w of src.adverbialHeadsOtros)
+  if (src.adverbialHeadsTime.includes(w))
+    problemas.push(`«${w}» está en adverbialHeadsTime y en adverbialHeadsOtros a la vez`);
 if (problemas.length) {
   console.error('✗ phrasal-verbs.json no cuadra:');
   for (const p of problemas) console.error('   · ' + p);
   process.exit(1);
 }
 
+/* `adverbialHeads` se emite DERIVADO, como la unión de las dos mitades: los
+   frasales solo preguntan «¿es adverbial?» y les da igual de qué tipo. Así el
+   consumidor viejo no cambia y el nuevo tiene el corte que necesita. */
 const datos = {
   verbs: src.verbs,
   prepParticles: src.prepParticles,
-  adverbialHeads: src.adverbialHeads,
+  adverbialHeads: [...src.adverbialHeadsTime, ...src.adverbialHeadsOtros],
+  adverbialHeadsTime: src.adverbialHeadsTime,
+  advTiempoSueltos: src.advTiempoSueltos,
+  cuantificadoresTiempo: src.cuantificadoresTiempo,
+  preposicionesTiempo: src.preposicionesTiempo,
+  preposicionesSecuencia: src.preposicionesSecuencia,
+  nucleosDeEvento: src.nucleosDeEvento,
   determiners: src.determiners,
 };
 const BANNER =

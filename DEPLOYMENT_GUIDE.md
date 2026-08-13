@@ -132,7 +132,7 @@ Una vez configurado, tus URLs serán:
 ```
 Grammar HUB:      https://tu_usuario.github.io/Grammar-HUB/
 Grammaster:       https://tu_usuario.github.io/GramMaster/
-DesGramatizador:  https://tu_usuario.github.io/Desgramatizador/
+DesGramatizador:  https://tu_usuario.github.io/DesGramatizador/
 ```
 
 ## 💡 Consejos

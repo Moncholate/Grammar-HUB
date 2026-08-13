@@ -10,8 +10,13 @@ No es una sección de frases motivacionales. Cada ítem es un dato o un hallazgo
 con **fuente citable**, y la fuente se muestra siempre junto al texto. Ese es el
 punto: que el estudiante vea que lo que se le dice tiene respaldo.
 
-Origen: compilación bilingüe encargada por el docente (Víctor Morales, Duoc UC),
-en 8 categorías + un bloque de refuerzo diario, con verificación de atribución.
+Origen: compilación bilingüe encargada por el docente (Víctor Morales), en 8
+categorías + un bloque de refuerzo diario, con verificación de atribución.
+
+**Solo entran fuentes públicas y citables.** Hubo un área con los criterios de
+evaluación de una institución concreta y se retiró: eran instrumentos de esa
+institución, no material de este proyecto. Un banco que le habla al alumno de
+cómo lo evalúan tiene que apoyarse en algo que él pueda ir a leer.
 
 ## Dónde se muestra
 

@@ -1,27 +1,28 @@
 /* ============================================================================
    Área 7 · Evaluaciones (MCER)                        ids 700-749 · 38 ítems
    ----------------------------------------------------------------------------
-   Comparte categoría con el área 11 (Tu evaluación): las dos hablan de cómo se
-   mide al alumno. La diferencia es la fuente — el área 11 sale de las rúbricas
-   REALES del curso; esta sale del MCER, o sea del estándar internacional.
+   Sale del MCER, el estándar internacional, que es una fuente PÚBLICA. Esa es
+   la única fuente que se admite en esta área.
 
-   ONCE ÍTEMS CORTADOS O SUSTITUIDOS. El motivo es el mismo en todos: las
-   rúbricas de este curso CUENTAN errores y el MCER PONDERA comprensión, así que
-   varios ítems describían un estándar que no es el que se le aplica al alumno.
-   Ver banco-rubricas-duoc.md para el detalle y los números.
+   HUBO UN ÁREA 11 CON LOS CRITERIOS DE EVALUACIÓN DE UNA INSTITUCIÓN CONCRETA, y
+   se retiró: eran instrumentos de esa institución, no material de este proyecto.
+   Con ella se fueron las notas que comparaban este área contra esos criterios.
+   La regla que queda es simple y conviene no perderla: **aquí solo entra lo que
+   se pueda citar de una fuente pública**. Un banco que le habla al alumno de
+   cómo lo evalúan tiene que apoyarse en algo que él pueda ir a leer.
 
-   · A1, A3, A4 — describen que en A2/B1/B2 se esperan errores. En la rúbrica del
-     curso, un error básico sistemático repetido 8 veces = 0 puntos, y el 100%
-     de gramática del oral de intermedio alto exige CERO errores.
-   · A6 — cita "repertorio" como la palabra clave de las rúbricas. Esa palabra
-     no aparece en ninguna rúbrica del curso.
-   · A7 — "la rúbrica mide rango Y precisión". No hay criterio de rango
-     gramatical: se mide extensión, vocabulario aprendido y conteo de errores.
-   · E1 — "no todos los errores pesan igual". La rúbrica no pondera: 8 deslices
-     menores valen lo mismo que 8 errores graves. Este ítem le enseñaba al
-     alumno a ignorar errores que sí le cuestan puntos.
-   · A8, D2, E2, E4 — sustituidos por sus versiones corregidas en el área 11
-     (ids 1140, 1120, 1108 y 1109).
+   ONCE ÍTEMS CORTADOS O SUSTITUIDOS, y el motivo se sostiene solo: describían
+   una tolerancia al error que no es universal. El MCER PONDERA comprensión, pero
+   hay cursos que CUENTAN errores, y un ítem que le dice al alumno «a este nivel
+   se esperan errores» le enseña a puntuar peor donde eso no es cierto.
+
+   · A1, A3, A4 — describen que en A2/B1/B2 se esperan errores.
+   · A6 — presenta "repertorio" como palabra clave universal, y no lo es.
+   · A7 — da por hecho que se mide rango gramatical además de precisión.
+   · E1 — "no todos los errores pesan igual". Hay escalas que no ponderan, y ahí
+     el ítem le enseña al alumno a ignorar errores que sí le cuestan puntos.
+   · A8, D2, E2, E4 — se sustituían por versiones del área 11; al retirarse esa
+     área quedan simplemente fuera.
    · F5 — "trasnochar antes de la prueba": duplica el C3 del área de sueño, que
      ya se cortó por hablarle a un alumno que no elige su horario.
 

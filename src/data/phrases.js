@@ -20,7 +20,11 @@
                           (ver INCLUIR_APOCRIFAS en dailyPhrase.js)
      note    advertencia que se imprime bajo la fuente cuando status ≠ 'ok'
      tramo   1 entrada · 2 método · 3 fondo — define cuándo entra en la baraja
-     area    de qué banco viene (1 = original, 6 = rutinas cortas, 11 = rúbricas)
+     area    de qué banco viene (1 = original, 6 = rutinas cortas)
+             El área 11 EXISTIÓ y se retiró: salía de las rúbricas de evaluación
+             de una institución concreta, o sea material que no es de este
+             proyecto. Su número no se reutiliza, para que un progreso guardado
+             con ítems del 11 no acabe apuntando a otra cosa.
      estructura / nivel   opcionales: si el ítem nombra una estructura concreta,
              `nivel` es el curso MÍNIMO en que se enseña (según syllabus-aef.md)
              y el ítem no se muestra a alguien por debajo de ese nivel
@@ -30,7 +34,6 @@ import AREA_VARIEDADES from './areas/variedades.js';
 import AREA_SUENO from './areas/sueno.js';
 import AREA_MICRO from './areas/micro.js';
 import AREA_EVALUACION7 from './areas/evaluacion7.js';
-import AREA_EVALUACION from './areas/evaluacion.js';
 import AREA_IA from './areas/ia.js';
 import AREA_HISTORIA from './areas/historia.js';
 
@@ -534,8 +537,11 @@ const ORIGINAL = [
    ----------------------------------------------------------------------------
    Cada área vive en su archivo y declara su `tramo` por ítem. Aquí se les
    estampa `area` y `cat`, para que los archivos de área queden limpios.
-   Rangos de id: 1-105 original · 6xx área 6 · 11xx área 11. Los ids son
-   ESTABLES: la baraja guardada en localStorage recuerda ids, no posiciones.
+   Rangos de id: 1-105 original · 6xx área 6. Los ids son ESTABLES: la baraja
+   guardada en localStorage recuerda ids, no posiciones.
+   El rango 11xx queda QUEMADO: era del área 11, que se retiró. No se reutiliza
+   para que la baraja de un alumno que ya vio esos ítems no acabe apuntando a
+   frases distintas de las que recuerda haber visto.
    ========================================================================== */
 
 /* El banco original no trae `tramo` por ítem (son 105), así que se deriva de la
@@ -591,5 +597,4 @@ export const PHRASES = [
   ...conArea(AREA_EVALUACION7, 7, 'evaluacion'),
   ...conArea(AREA_IA, 8, 'ia'),
   ...conArea(AREA_HISTORIA, 10, 'historia'),
-  ...conArea(AREA_EVALUACION, 11, 'evaluacion'),
 ];

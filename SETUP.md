@@ -49,7 +49,7 @@ const apps = [
   },
   {
     title: 'DesGramatizador',
-    url: 'https://moncholate.github.io/Desgramatizador/',
+    url: 'https://moncholate.github.io/DesGramatizador/',
     // ...
   }
 ];

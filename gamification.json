@@ -29,12 +29,16 @@
     "dayStreak": {
       "scope": "suite",
       "desc": { "es": "Días seguidos practicando (en cualquier app)", "en": "Consecutive days practicing (any app)" },
-      "rule": "On any correct-graded practice, mark today in practiceDays; count = consecutive days ending today; reset to 1 if a day was skipped; best = max ever."
+      "rule": "En CUALQUIER intento de práctica —acierte o falle— y también al analizar una oración, se marca hoy en practiceDays; count = días seguidos terminando hoy; vuelve a 1 si se saltó un día; best = el máximo histórico.",
+      "$aciertoNo": "Decía «on any correct-graded practice» y el motor nunca hizo eso: `markDay` se llama en todos los intentos. Manda el CÓDIGO, no este texto. Perder la racha por equivocarse castigaría justo lo que se quiere fomentar, que es volver a practicar; la racha mide constancia, no puntería. Para la puntería está `answerStreak`.",
+      "$fechaLocal": "El día es LOCAL, no UTC. Con `toISOString()` cambiaba a las 20:00 en Chile y la racha dejaba de contar el día del alumno que estudia de noche. Está resuelto en `todayISO` del motor, que se EXPORTA justamente para que nadie vuelva a calcular una fecha por su cuenta: a Grammaster le pasó, y su racha local y la de la suite mostraban números distintos para lo mismo en la misma tarjeta."
     },
     "answerStreak": {
       "scope": "activity-local",
       "desc": { "es": "Aciertos seguidos dentro de una actividad", "en": "Correct answers in a row within an activity" },
-      "rule": "Local to each practice activity; resets on a wrong answer. Its running max is pushed to shared bestAnswerStreak for the precision badge."
+      "rule": "Local a cada actividad de práctica; se corta con una respuesta incorrecta. Su máximo se envía a `bestAnswerStreak`, que es contra lo que se evalúa la insignia de puntería.",
+      "$laUnidadEsLaRESPUESTA": "«Racha» solo puede significar ACIERTOS SEGUIDOS. Llegó a significar tres cosas distintas con el mismo nombre y el mismo 🔥: aciertos en Question Lab, aciertos en Grammaster, y RONDAS 100% correctas en Desgramatizador. Lo de Desgramatizador es legítimo y más difícil, pero no es lo mismo, así que lleva nombre propio («rondas perfectas seguidas») y NO se envía a `bestAnswerStreak`: mezclar rondas con respuestas en un `Math.max` regalaría la insignia.",
+      "$quienLaEnvia": "Question Lab y Grammaster. A Grammaster se le olvidaba, y con eso la insignia de puntería era inalcanzable ahí pese a no llevar marca de app. Al añadir una actividad calificada hay que pasar `answerStreak`, o su racha no cuenta para nada fuera de la pantalla."
     },
     "tenseMastery": {
       "scope": "suite",

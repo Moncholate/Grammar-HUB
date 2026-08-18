@@ -9,7 +9,9 @@
 
   "$dosTrabajosDistintos": "PALABRAS decide si una palabra existe: es la unión de todo y nunca se recorta. Recortarla por lo que el alumno «ya vio» marcaría como error una palabra correcta aprendida por su cuenta, que es decirle que su trabajo bien hecho está mal — el fallo que esta suite lleva persiguiendo desde la auditoría. CATEGORIA_DE solo ordena sugerencias, dentro de una misma distancia y nunca por encima de ella.",
 
-  "$categorias": "sustantivo · adjetivo · verbo · gerundio · numero · nacionalidad · adverbio. `gerundio` va aparte de `verbo` a propósito: son las dos cosas que pueden seguir a `be`, y la que NO puede es el verbo en forma base («He is swimming» sí, «He is swim» no). Mezclarlas dejaría al hueco de detrás de `be` sin poder distinguir justo lo que ahí hay que distinguir.",
+  "$categorias": "sustantivo · adjetivo · verbo · gerundio · numero · nacionalidad · adverbio · preposicion. `gerundio` va aparte de `verbo` a propósito: son las dos cosas que pueden seguir a `be`, y la que NO puede es el verbo en forma base («He is swimming» sí, «He is swim» no). Mezclarlas dejaría al hueco de detrás de `be` sin poder distinguir justo lo que ahí hay que distinguir. `preposicion` está por exactitud y no porque algún hueco la pida todavía: la alternativa era meter «between» y «across from» en adverbio, y una etiqueta FALSA sí hace daño porque ordena sugerencias y empuja fuera del primer puesto a la palabra correcta. Una etiqueta verdadera que nadie consulta es inocua.",
+
+  "$deDondeSale": "Del vocabulario que se trabaja en clase, y no todo vive en las páginas de vocabulario: parte aparece dentro de las unidades. Las preposiciones de lugar y las direcciones («next to», «turn left») llegaron así, de la sección de inglés práctico del último tramo del segundo curso básico. Que una palabra no esté no significa que no se enseñe, solo que todavía no se ha recopilado.",
 
   "$comoAgregar": "Se añade al grupo de su categoría y ya. No hace falta orden ni completitud. Las entradas de varias palabras («orange juice», «going for a walk») se guardan como vienen: sync-vocabulary.mjs las separa en palabras sueltas para el corrector, que trabaja palabra a palabra, y asigna la categoría SOLO a la primera —el núcleo—, porque en «buying clothes» la categoría describe a «buying» y decir que «clothes» es un gerundio sacaría del top-1 a la palabra correcta. Los artículos no van: «a chair» se guarda como «chair».",
 
@@ -65,7 +67,9 @@
     "pillow", "lamp", "light", "remote control", "floor", "bathroom",
     "bathtub", "towel", "toilet", "closet", "swimming pool", "spa",
     "restrooms", "kitchen", "elevator", "gift shop", "reception", "yard",
-    "parking lot"
+    "parking lot",
+
+    "corner", "left", "right"
   ],
 
   "adjetivo": [
@@ -84,7 +88,13 @@
     "go out", "play", "exercise", "stay", "hike", "swim", "meet", "relax",
     "travel",
     "book", "pack", "leave", "carry", "wear", "wait", "rent", "arrive",
-    "call", "buy"
+    "call", "buy",
+    "turn right", "turn left", "go straight ahead"
+  ],
+
+  "preposicion": [
+    "next to", "across from", "between",
+    "on the corner", "on the left", "on the right"
   ],
 
   "gerundio": [
@@ -115,5 +125,5 @@
     "Turkish", "British", "American", "Vietnamese"
   ],
 
-  "adverbio": ["very"]
+  "adverbio": ["very", "straight", "ahead", "left", "right"]
 }

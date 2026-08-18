@@ -42,7 +42,12 @@ const src = JSON.parse(readFileSync(join(here, '..', 'vocabulary.json'), 'utf8')
 /* `gerundio` va aparte de `verbo` a propósito: son las dos cosas que pueden
    seguir a `be` y la que NO puede es el verbo en forma base. «He is swimming»
    sí, «He is swim» no. */
-const CATEGORIAS = new Set(['sustantivo', 'adjetivo', 'verbo', 'gerundio', 'numero', 'nacionalidad', 'adverbio']);
+/* `preposicion` está por exactitud, no porque algún hueco la pida todavía. La
+   alternativa era meter «between» y «across from» en adverbio, y una etiqueta
+   falsa sí hace daño: se usa para ordenar sugerencias y empuja fuera del primer
+   puesto a la palabra correcta. Una etiqueta verdadera que nadie consulta, en
+   cambio, es inocua. */
+const CATEGORIAS = new Set(['sustantivo', 'adjetivo', 'verbo', 'gerundio', 'numero', 'nacionalidad', 'adverbio', 'preposicion']);
 
 /* ---------- Validación ----------------------------------------------------
    Una entrada mal escrita no rompe nada: deja de reconocerse esa palabra y el

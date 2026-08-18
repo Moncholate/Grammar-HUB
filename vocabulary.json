@@ -1,0 +1,115 @@
+{
+  "$description": "Grammar Hub · vocabulario del libro por unidad. Fuente ÚNICA del diccionario de las apps, a través de los archivos generados por scripts/sync-vocabulary.mjs.",
+
+  "$porQueAqui": "El diccionario vivía SOLO dentro de Grammaster, con 285 palabras escritas a mano, y de 32 adjetivos básicos le faltaban 24. Question Lab no tenía ninguno: ante una errata respondía «pregunta incompleta», o sea le decía al alumno que le faltaba una pieza cuando lo que había era una letra cambiada. Mismo patrón que ya costó los frasales (ver phrasal-verbs.json): una implementación y un hueco.",
+
+  "$fuente": "American English File 3rd ed., páginas del Vocabulary Bank fotografiadas por el profesor. La unidad sale del NÚMERO DE PISTA de audio, que es fiable: 1.38 → unidad 1, 4.17 → unidad 4. Lo que esas páginas NO dicen es si es la lección A o la B, así que aquí se guarda solo el número. Para lo que se usa —ordenar sugerencias por «esto ya lo vio»— la letra no aporta nada, y no se inventa un dato que no está en la fuente.",
+
+  "$dosTrabajosDistintos": "LA UNIDAD NUNCA DECIDE SI UNA PALABRA EXISTE. El diccionario que se consulta para saber si hay errata es la UNIÓN de todas las unidades y todos los niveles. Si se filtrara por la unidad del alumno, una palabra correcta aprendida por su cuenta saldría marcada como error — que es decirle que su trabajo bien hecho está mal, el fallo que esta suite lleva persiguiendo desde la auditoría. La unidad sirve SOLO para desempatar entre candidatos a la misma distancia. Medido sobre 469 erratas simuladas: el 8% son empates que la unidad resuelve, y el 0% necesitaría pasar por encima de la distancia. O sea que como criterio de desempate no puede empeorar nada.",
+
+  "$categorias": "La categoría gramatical viene gratis: el libro ya agrupa el vocabulario así. Vale más que la unidad para el caso que originó esto («He is talk» por «He is tall»), porque sabiendo que el hueco detrás de `be` pide adjetivo, los adjetivos suben solos en las sugerencias. Categorías: sustantivo, adjetivo, verbo, numero, nacionalidad, adverbio.",
+
+  "$comoAgregar": "Se añade por unidad, y no hace falta que esté completo: una palabra sin unidad sigue contando para la existencia, solo se queda sin el desempate. Entradas de varias palabras («orange juice», «get up») se guardan como vienen; sync-vocabulary.mjs las separa en palabras sueltas para el corrector y conserva la frase. Los artículos NO van: el libro escribe «a chair» y aquí va «chair».",
+
+  "$pendiente": "«tall» NO está en el banco de Básico I — se comprobó al cargarlo, y es justo la palabra del caso de clase. Vendrá de un nivel posterior o habrá que añadirla a mano. Es el mejor recordatorio de por qué la existencia no puede filtrarse por unidad.",
+
+  "niveles": {
+    "basico1": {
+      "1": {
+        "$paginas": "Things in the classroom (1.38) · Numbers 0–10 (1.8)",
+        "sustantivo": [
+          "board", "door", "window", "chair", "coat", "table",
+          "laptop", "dictionary", "paper", "pen", "bag"
+        ],
+        "numero": [
+          "zero", "one", "two", "three", "four", "five",
+          "six", "seven", "eight", "nine", "ten"
+        ]
+      },
+
+      "2": {
+        "$paginas": "Numbers 11–100 (2.21, 2.22) · Nationalities (2.1)",
+        "numero": [
+          "eleven", "twelve", "thirteen", "fourteen", "fifteen",
+          "sixteen", "seventeen", "eighteen", "nineteen", "twenty",
+          "thirty", "forty", "fifty", "sixty", "seventy", "eighty",
+          "ninety", "hundred"
+        ],
+        "sustantivo": [
+          "Argentina", "Brazil", "Canada", "Chile", "China", "England",
+          "Japan", "Korea", "Mexico", "Peru", "Saudi Arabia", "Spain",
+          "Turkey", "United Kingdom", "United States", "Vietnam"
+        ],
+        "nacionalidad": [
+          "Argentinian", "Brazilian", "Canadian", "Chilean", "Chinese",
+          "English", "Japanese", "Korean", "Mexican", "Peruvian",
+          "Saudi", "Spanish", "Turkish", "British", "American", "Vietnamese"
+        ]
+      },
+
+      "3": {
+        "$paginas": "Personal items (3.1)",
+        "sustantivo": [
+          "cell phone", "watch", "tablet", "wallet", "change purse",
+          "pencil", "notebook", "glasses", "photo", "charger",
+          "ID card", "passport", "umbrella", "camera",
+          "credit card", "debit card", "key", "newspaper"
+        ]
+      },
+
+      "4": {
+        "$paginas": "People and family (4.3) · Colors (4.16) · Common adjectives (4.17) · Positive and negative (4.18)",
+        "sustantivo": [
+          "boy", "girl", "man", "woman", "child", "children",
+          "men", "women", "person", "people", "friend", "friends",
+          "husband", "wife", "mother", "father", "son", "daughter",
+          "brother", "sister", "grandmother", "grandfather",
+          "boyfriend", "girlfriend", "parents", "grandparents"
+        ],
+        "adjetivo": [
+          "black", "blue", "brown", "green", "gray", "orange",
+          "pink", "red", "white", "yellow",
+          "big", "small", "old", "new", "fast", "slow",
+          "beautiful", "ugly", "cheap", "expensive", "long", "short",
+          "clean", "dirty", "easy", "difficult",
+          "good", "great", "fantastic", "bad", "awful", "terrible"
+        ],
+        "adverbio": ["very"]
+      },
+
+      "5": {
+        "$paginas": "Food and drink (5.2, 5.3) · Common verb phrases 1 (5.13, 5.14)",
+        "sustantivo": [
+          "fish", "meat", "pasta", "rice", "eggs", "yogurt",
+          "vegetables", "potatoes", "salad", "fruit", "bread",
+          "butter", "cheese", "sugar", "sandwich", "cereal", "chocolate",
+          "coffee", "tea", "milk", "water", "orange juice",
+          "breakfast", "lunch", "dinner",
+          "morning", "afternoon", "evening",
+          "apartment", "radio", "fast food", "dog", "cat", "cats",
+          "bank", "class", "classes"
+        ],
+        "verbo": [
+          "have", "eat", "drink", "live", "watch", "listen", "read",
+          "speak", "want", "like", "work", "study", "go", "need"
+        ]
+      },
+
+      "6": {
+        "$paginas": "Jobs and places of work (6.1, 6.2, 6.3) · A typical day (6.14, 6.15)",
+        "sustantivo": [
+          "teacher", "doctor", "nurse", "journalist", "waiter", "waitress",
+          "salesperson", "receptionist", "policeman", "policewoman",
+          "factory worker", "taxi driver",
+          "hospital", "store", "restaurant", "office", "school",
+          "factory", "home", "street",
+          "company", "college", "student", "economics",
+          "shower", "gym", "housework", "homework", "bath", "bed",
+          "movies", "bus", "train", "car"
+        ],
+        "adjetivo": ["unemployed", "retired"],
+        "verbo": ["get", "take", "finish", "make", "do", "get up"]
+      }
+    }
+  }
+}

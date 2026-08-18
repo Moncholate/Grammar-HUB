@@ -11,7 +11,9 @@
 
   "$comoAgregar": "Se añade por unidad, y no hace falta que esté completo: una palabra sin unidad sigue contando para la existencia, solo se queda sin el desempate. Entradas de varias palabras («orange juice», «get up») se guardan como vienen; sync-vocabulary.mjs las separa en palabras sueltas para el corrector y conserva la frase. Los artículos NO van: el libro escribe «a chair» y aquí va «chair».",
 
-  "$pendiente": "«tall» NO está en el banco de Básico I — se comprobó al cargarlo, y es justo la palabra del caso de clase. Vendrá de un nivel posterior o habrá que añadirla a mano. Es el mejor recordatorio de por qué la existencia no puede filtrarse por unidad.",
+  "$pendienteTall": "«tall» NO está ni en Básico I ni en Básico II — comprobado al cargar los dos, y es justo la palabra del caso de clase («He is tall», la alumna tecleó «talk»). El banco trae «short» pero como opuesto de «long», no de «tall». O aparece en un nivel posterior o hay que añadirla a mano. Es el mejor recordatorio de por qué la existencia de una palabra no puede filtrarse por unidad: la alumna escribió una palabra correcta que el temario todavía no le había dado.",
+
+  "$pendienteMayusculas": "Los meses en minúscula NO se marcan como error, y el libro enseña justo lo contrario («Months begin with a CAPITAL letter. January NOT january», 7.21). No es un fallo del diccionario: el corrector compara en minúsculas a propósito, porque su trabajo es la ortografía y no la capitalización. Cazar «january» pide otra comprobación, del mismo tipo que la de `be` + verbo en forma base: una regla que mira el papel de la palabra. Cuando se haga, la lista de meses ya está aquí.",
 
   "niveles": {
     "basico1": {
@@ -109,6 +111,67 @@
         ],
         "adjetivo": ["unemployed", "retired"],
         "verbo": ["get", "take", "finish", "make", "do", "get up"]
+      }
+    },
+
+    "basico2": {
+      "7": {
+        "$paginas": "Common verb phrases 2 · Free time (7.4) · Months (7.21) · Ordinal numbers (7.23, 7.24)",
+        "verbo": [
+          "go out", "play", "exercise", "stay", "hike", "swim",
+          "meet", "relax", "travel"
+        ],
+        "sustantivo": [
+          "computer", "games", "beach", "movies", "theater", "tennis",
+          "mountains", "piano", "friends", "night",
+          "January", "February", "March", "April", "May", "June",
+          "July", "August", "September", "October", "November", "December"
+        ],
+        "numero": [
+          "first", "second", "third", "fourth", "fifth", "sixth",
+          "seventh", "eighth", "ninth", "tenth", "eleventh", "twelfth",
+          "thirteenth", "fourteenth", "fifteenth", "sixteenth",
+          "seventeenth", "eighteenth", "nineteenth", "twentieth",
+          "twenty-first", "twenty-second", "twenty-third", "twenty-fourth",
+          "twenty-fifth", "twenty-sixth", "twenty-seventh", "twenty-eighth",
+          "twenty-ninth", "thirtieth", "thirty-first"
+        ]
+      },
+
+      "8": {
+        "$paginas": "Activities (8.13)",
+        "gerundio": [
+          "buying clothes", "camping", "cooking", "bike riding", "doing yoga",
+          "eating out", "flying", "going for a walk", "going to the movies",
+          "painting", "reading", "running", "shopping", "singing",
+          "sleeping", "swimming", "traveling", "watching TV shows"
+        ],
+        "sustantivo": ["clothes", "bike", "yoga", "walk", "shows"]
+      },
+
+      "9": {
+        "$paginas": "Common verb phrases 2 · Traveling (9.5) · Clothes (9.14)",
+        "verbo": [
+          "book", "pack", "leave", "carry", "wear", "wait",
+          "rent", "arrive", "call", "buy"
+        ],
+        "sustantivo": [
+          "tickets", "suitcase", "house", "sunglasses", "taxi", "train",
+          "bus", "flight", "city", "presents",
+          "sweater", "T-shirt", "shirt", "pants", "jeans", "shorts",
+          "suit", "dress", "skirt", "jacket", "socks", "sneakers",
+          "shoes", "hat", "cap"
+        ]
+      },
+
+      "10": {
+        "$paginas": "In a hotel room (10.2) · In a hotel (10.3)",
+        "sustantivo": [
+          "bed", "pillow", "lamp", "light", "remote control", "floor",
+          "bathroom", "bathtub", "towel", "toilet", "closet",
+          "swimming pool", "spa", "restrooms", "kitchen", "elevator",
+          "gift shop", "reception", "yard", "parking lot"
+        ]
       }
     }
   }

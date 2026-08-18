@@ -38,7 +38,11 @@ const src = JSON.parse(readFileSync(join(here, '..', 'vocabulary.json'), 'utf8')
    corrector la marca como errata en silencio, que es exactamente el fallo que
    este archivo viene a evitar. Por eso se comprueba aquí. */
 const problemas = [];
-const CATEGORIAS = new Set(['sustantivo', 'adjetivo', 'verbo', 'numero', 'nacionalidad', 'adverbio']);
+/* `gerundio` va aparte de `verbo` a propósito: son las dos cosas que pueden
+   seguir a `be` y la que NO puede es el verbo en forma base. «He is swimming» sí,
+   «He is swim» no. Mezclarlas dejaría al hueco de detrás de `be` sin poder
+   distinguirlas, que es justo lo que hay que distinguir ahí. */
+const CATEGORIAS = new Set(['sustantivo', 'adjetivo', 'verbo', 'gerundio', 'numero', 'nacionalidad', 'adverbio']);
 const vistas = new Map();   // palabra suelta → primera unidad en que aparece
 
 const PALABRAS = new Set();
@@ -81,6 +85,7 @@ for (const [nivel, unidades] of Object.entries(src.niveles || {})) {
            palabra a palabra: «orange juice» tiene que dejar «orange» y «juice»
            en el diccionario o «juise» no se corrige. La frase entera se guarda
            aparte, que es otro uso. */
+        let esNucleo = true;
         for (const palabra of entrada.split(/\s+/)) {
           const limpia = palabra.toLowerCase().replace(/[.,;:!?]/g, '');
           if (!limpia) continue;
@@ -95,10 +100,24 @@ for (const [nivel, unidades] of Object.entries(src.niveles || {})) {
           if (!(limpia in UNIDAD_DE) || nUnidad < UNIDAD_DE[limpia]) {
             UNIDAD_DE[limpia] = nUnidad;
           }
-          /* La categoría, en cambio, se ACUMULA: «watch» es sustantivo y verbo,
-             y quedarse con una sola sería mentir sobre la palabra. */
-          (CATEGORIA_DE[limpia] ??= []).includes(categoria) ||
-            CATEGORIA_DE[limpia].push(categoria);
+          /* La categoría va SOLO al núcleo de la entrada, que es su primera
+             palabra. En «buying clothes» la categoría es «gerundio» y describe a
+             «buying»; pegársela también a «clothes» diría que «clothes» es un
+             gerundio, y esa etiqueta se usa para ordenar sugerencias — una
+             mentira ahí saca del top-1 a la palabra correcta. El resto de
+             palabras de la frase entran en el diccionario sin categoría, y la
+             reciben si aparecen listadas por su cuenta en algún sitio, que es
+             como está «clothes» en su unidad.
+
+             La categoría, en cambio, se ACUMULA entre entradas: «watch» es
+             sustantivo en una unidad y verbo en otra, «swimming» es gerundio y
+             sustantivo («swimming pool»). Quedarse con una sola sería mentir
+             igual, por omisión. */
+          if (esNucleo) {
+            (CATEGORIA_DE[limpia] ??= []).includes(categoria) ||
+              CATEGORIA_DE[limpia].push(categoria);
+            esNucleo = false;
+          }
           const antes = vistas.get(limpia);
           if (antes && antes !== `${nivel}/${nUnidad}`) { /* repetida entre unidades: legítimo */ }
           else vistas.set(limpia, `${nivel}/${nUnidad}`);

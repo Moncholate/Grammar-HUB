@@ -1,178 +1,119 @@
 {
-  "$description": "Grammar Hub · vocabulario del libro por unidad. Fuente ÚNICA del diccionario de las apps, a través de los archivos generados por scripts/sync-vocabulary.mjs.",
+  "$description": "Grammar Hub · vocabulario de los cursos. Fuente ÚNICA del diccionario de las apps, a través de los archivos generados por scripts/sync-vocabulary.mjs.",
 
   "$porQueAqui": "El diccionario vivía SOLO dentro de Grammaster, con 285 palabras escritas a mano, y de 32 adjetivos básicos le faltaban 24. Question Lab no tenía ninguno: ante una errata respondía «pregunta incompleta», o sea le decía al alumno que le faltaba una pieza cuando lo que había era una letra cambiada. Mismo patrón que ya costó los frasales (ver phrasal-verbs.json): una implementación y un hueco.",
 
-  "$fuente": "American English File 3rd ed., páginas del Vocabulary Bank fotografiadas por el profesor. La unidad sale del NÚMERO DE PISTA de audio, que es fiable: 1.38 → unidad 1, 4.17 → unidad 4. Lo que esas páginas NO dicen es si es la lección A o la B, así que aquí se guarda solo el número. Para lo que se usa —ordenar sugerencias por «esto ya lo vio»— la letra no aporta nada, y no se inventa un dato que no está en la fuente.",
+  "$queEsYQueNoEs": "Una lista plana de palabras del inglés con su categoría gramatical, recopilada por el profesor a partir del vocabulario que se trabaja en sus cursos. NO reproduce la selección ni la secuencia de ningún material ajeno: no hay unidades, ni orden de enseñanza, ni referencias a páginas o pistas de audio de ningún libro. Que «tall» es un adjetivo es un hecho del idioma, no la decisión editorial de nadie.",
 
-  "$dosTrabajosDistintos": "LA UNIDAD NUNCA DECIDE SI UNA PALABRA EXISTE. El diccionario que se consulta para saber si hay errata es la UNIÓN de todas las unidades y todos los niveles. Si se filtrara por la unidad del alumno, una palabra correcta aprendida por su cuenta saldría marcada como error — que es decirle que su trabajo bien hecho está mal, el fallo que esta suite lleva persiguiendo desde la auditoría. La unidad sirve SOLO para desempatar entre candidatos a la misma distancia. Medido sobre 469 erratas simuladas: el 8% son empates que la unidad resuelve, y el 0% necesitaría pasar por encima de la distancia. O sea que como criterio de desempate no puede empeorar nada.",
+  "$porQuePlano": "Hubo una versión anterior organizada por unidad del curso, y se aplanó a propósito. Dos razones que apuntan al mismo sitio. La primera es funcional y está medida: la unidad se probó como criterio para ordenar sugerencias y resultó NEUTRA — 98% → 98%, cero casos ganados y cero perdidos, porque la categoría gramatical ya ordena lo que hay que ordenar. La segunda es que agrupar vocabulario por unidades reproduce una SELECCIÓN Y DISPOSICIÓN, que es la parte de una compilación que sí puede tener dueño, mientras que las palabras sueltas no lo tienen. Un dato que no aporta nada y sí abre una discusión sobra por los dos lados.",
 
-  "$categorias": "La categoría gramatical viene gratis: el libro ya agrupa el vocabulario así. Vale más que la unidad para el caso que originó esto («He is talk» por «He is tall»), porque sabiendo que el hueco detrás de `be` pide adjetivo, los adjetivos suben solos en las sugerencias. Categorías: sustantivo, adjetivo, verbo, numero, nacionalidad, adverbio.",
+  "$dosTrabajosDistintos": "PALABRAS decide si una palabra existe: es la unión de todo y nunca se recorta. Recortarla por lo que el alumno «ya vio» marcaría como error una palabra correcta aprendida por su cuenta, que es decirle que su trabajo bien hecho está mal — el fallo que esta suite lleva persiguiendo desde la auditoría. CATEGORIA_DE solo ordena sugerencias, dentro de una misma distancia y nunca por encima de ella.",
 
-  "$comoAgregar": "Se añade por unidad, y no hace falta que esté completo: una palabra sin unidad sigue contando para la existencia, solo se queda sin el desempate. Entradas de varias palabras («orange juice», «get up») se guardan como vienen; sync-vocabulary.mjs las separa en palabras sueltas para el corrector y conserva la frase. Los artículos NO van: el libro escribe «a chair» y aquí va «chair».",
+  "$categorias": "sustantivo · adjetivo · verbo · gerundio · numero · nacionalidad · adverbio. `gerundio` va aparte de `verbo` a propósito: son las dos cosas que pueden seguir a `be`, y la que NO puede es el verbo en forma base («He is swimming» sí, «He is swim» no). Mezclarlas dejaría al hueco de detrás de `be` sin poder distinguir justo lo que ahí hay que distinguir.",
 
-  "$pendienteTall": "«tall» NO está ni en Básico I ni en Básico II — comprobado al cargar los dos, y es justo la palabra del caso de clase («He is tall», la alumna tecleó «talk»). El banco trae «short» pero como opuesto de «long», no de «tall». O aparece en un nivel posterior o hay que añadirla a mano. Es el mejor recordatorio de por qué la existencia de una palabra no puede filtrarse por unidad: la alumna escribió una palabra correcta que el temario todavía no le había dado.",
+  "$comoAgregar": "Se añade al grupo de su categoría y ya. No hace falta orden ni completitud. Las entradas de varias palabras («orange juice», «going for a walk») se guardan como vienen: sync-vocabulary.mjs las separa en palabras sueltas para el corrector, que trabaja palabra a palabra, y asigna la categoría SOLO a la primera —el núcleo—, porque en «buying clothes» la categoría describe a «buying» y decir que «clothes» es un gerundio sacaría del top-1 a la palabra correcta. Los artículos no van: «a chair» se guarda como «chair».",
 
-  "$pendienteMayusculas": "Los meses en minúscula NO se marcan como error, y el libro enseña justo lo contrario («Months begin with a CAPITAL letter. January NOT january», 7.21). No es un fallo del diccionario: el corrector compara en minúsculas a propósito, porque su trabajo es la ortografía y no la capitalización. Cazar «january» pide otra comprobación, del mismo tipo que la de `be` + verbo en forma base: una regla que mira el papel de la palabra. Cuando se haga, la lista de meses ya está aquí.",
+  "$pendienteTall": "«tall» no está en la lista, y es la palabra del caso que originó todo esto: una alumna quiso «He is tall» y tecleó «talk». Se deja anotado en vez de añadirla suelta para que la decisión sea del profesor. Mientras no esté, el corrector no puede sugerirla.",
 
-  "niveles": {
-    "basico1": {
-      "1": {
-        "$paginas": "Things in the classroom (1.38) · Numbers 0–10 (1.8)",
-        "sustantivo": [
-          "board", "door", "window", "chair", "coat", "table",
-          "laptop", "dictionary", "paper", "pen", "bag"
-        ],
-        "numero": [
-          "zero", "one", "two", "three", "four", "five",
-          "six", "seven", "eight", "nine", "ten"
-        ]
-      },
+  "$pendienteMayusculas": "Los meses en minúscula no se marcan como error. No es un fallo del diccionario: el corrector compara en minúsculas porque su trabajo es la ortografía y no la capitalización. Cazar «january» pide otra comprobación, del mismo tipo que la de `be` + verbo en forma base: una regla que mire el papel de la palabra. Cuando se haga, los meses ya están aquí.",
 
-      "2": {
-        "$paginas": "Numbers 11–100 (2.21, 2.22) · Nationalities (2.1)",
-        "numero": [
-          "eleven", "twelve", "thirteen", "fourteen", "fifteen",
-          "sixteen", "seventeen", "eighteen", "nineteen", "twenty",
-          "thirty", "forty", "fifty", "sixty", "seventy", "eighty",
-          "ninety", "hundred"
-        ],
-        "sustantivo": [
-          "Argentina", "Brazil", "Canada", "Chile", "China", "England",
-          "Japan", "Korea", "Mexico", "Peru", "Saudi Arabia", "Spain",
-          "Turkey", "United Kingdom", "United States", "Vietnam"
-        ],
-        "nacionalidad": [
-          "Argentinian", "Brazilian", "Canadian", "Chilean", "Chinese",
-          "English", "Japanese", "Korean", "Mexican", "Peruvian",
-          "Saudi", "Spanish", "Turkish", "British", "American", "Vietnamese"
-        ]
-      },
+  "sustantivo": [
+    "board", "door", "window", "chair", "coat", "table", "laptop", "dictionary",
+    "paper", "pen", "bag",
 
-      "3": {
-        "$paginas": "Personal items (3.1)",
-        "sustantivo": [
-          "cell phone", "watch", "tablet", "wallet", "change purse",
-          "pencil", "notebook", "glasses", "photo", "charger",
-          "ID card", "passport", "umbrella", "camera",
-          "credit card", "debit card", "key", "newspaper"
-        ]
-      },
+    "Argentina", "Brazil", "Canada", "Chile", "China", "England", "Japan",
+    "Korea", "Mexico", "Peru", "Saudi Arabia", "Spain", "Turkey",
+    "United Kingdom", "United States", "Vietnam",
 
-      "4": {
-        "$paginas": "People and family (4.3) · Colors (4.16) · Common adjectives (4.17) · Positive and negative (4.18)",
-        "sustantivo": [
-          "boy", "girl", "man", "woman", "child", "children",
-          "men", "women", "person", "people", "friend", "friends",
-          "husband", "wife", "mother", "father", "son", "daughter",
-          "brother", "sister", "grandmother", "grandfather",
-          "boyfriend", "girlfriend", "parents", "grandparents"
-        ],
-        "adjetivo": [
-          "black", "blue", "brown", "green", "gray", "orange",
-          "pink", "red", "white", "yellow",
-          "big", "small", "old", "new", "fast", "slow",
-          "beautiful", "ugly", "cheap", "expensive", "long", "short",
-          "clean", "dirty", "easy", "difficult",
-          "good", "great", "fantastic", "bad", "awful", "terrible"
-        ],
-        "adverbio": ["very"]
-      },
+    "cell phone", "watch", "tablet", "wallet", "change purse", "pencil",
+    "notebook", "glasses", "photo", "charger", "ID card", "passport",
+    "umbrella", "camera", "credit card", "debit card", "key", "newspaper",
 
-      "5": {
-        "$paginas": "Food and drink (5.2, 5.3) · Common verb phrases 1 (5.13, 5.14)",
-        "sustantivo": [
-          "fish", "meat", "pasta", "rice", "eggs", "yogurt",
-          "vegetables", "potatoes", "salad", "fruit", "bread",
-          "butter", "cheese", "sugar", "sandwich", "cereal", "chocolate",
-          "coffee", "tea", "milk", "water", "orange juice",
-          "breakfast", "lunch", "dinner",
-          "morning", "afternoon", "evening",
-          "apartment", "radio", "fast food", "dog", "cat", "cats",
-          "bank", "class", "classes"
-        ],
-        "verbo": [
-          "have", "eat", "drink", "live", "watch", "listen", "read",
-          "speak", "want", "like", "work", "study", "go", "need"
-        ]
-      },
+    "boy", "girl", "man", "woman", "child", "children", "men", "women",
+    "person", "people", "friend", "friends", "husband", "wife", "mother",
+    "father", "son", "daughter", "brother", "sister", "grandmother",
+    "grandfather", "boyfriend", "girlfriend", "parents", "grandparents",
 
-      "6": {
-        "$paginas": "Jobs and places of work (6.1, 6.2, 6.3) · A typical day (6.14, 6.15)",
-        "sustantivo": [
-          "teacher", "doctor", "nurse", "journalist", "waiter", "waitress",
-          "salesperson", "receptionist", "policeman", "policewoman",
-          "factory worker", "taxi driver",
-          "hospital", "store", "restaurant", "office", "school",
-          "factory", "home", "street",
-          "company", "college", "student", "economics",
-          "shower", "gym", "housework", "homework", "bath", "bed",
-          "movies", "bus", "train", "car"
-        ],
-        "adjetivo": ["unemployed", "retired"],
-        "verbo": ["get", "take", "finish", "make", "do", "get up"]
-      }
-    },
+    "fish", "meat", "pasta", "rice", "eggs", "yogurt", "vegetables",
+    "potatoes", "salad", "fruit", "bread", "butter", "cheese", "sugar",
+    "sandwich", "cereal", "chocolate", "coffee", "tea", "milk", "water",
+    "orange juice", "breakfast", "lunch", "dinner",
+    "morning", "afternoon", "evening",
+    "apartment", "radio", "fast food", "dog", "cat", "cats", "bank",
+    "class", "classes",
 
-    "basico2": {
-      "7": {
-        "$paginas": "Common verb phrases 2 · Free time (7.4) · Months (7.21) · Ordinal numbers (7.23, 7.24)",
-        "verbo": [
-          "go out", "play", "exercise", "stay", "hike", "swim",
-          "meet", "relax", "travel"
-        ],
-        "sustantivo": [
-          "computer", "games", "beach", "movies", "theater", "tennis",
-          "mountains", "piano", "friends", "night",
-          "January", "February", "March", "April", "May", "June",
-          "July", "August", "September", "October", "November", "December"
-        ],
-        "numero": [
-          "first", "second", "third", "fourth", "fifth", "sixth",
-          "seventh", "eighth", "ninth", "tenth", "eleventh", "twelfth",
-          "thirteenth", "fourteenth", "fifteenth", "sixteenth",
-          "seventeenth", "eighteenth", "nineteenth", "twentieth",
-          "twenty-first", "twenty-second", "twenty-third", "twenty-fourth",
-          "twenty-fifth", "twenty-sixth", "twenty-seventh", "twenty-eighth",
-          "twenty-ninth", "thirtieth", "thirty-first"
-        ]
-      },
+    "teacher", "doctor", "nurse", "journalist", "waiter", "waitress",
+    "salesperson", "receptionist", "policeman", "policewoman",
+    "factory worker", "taxi driver", "hospital", "store", "restaurant",
+    "office", "school", "factory", "home", "street", "company", "college",
+    "student", "economics",
+    "shower", "gym", "housework", "homework", "bath", "bed", "movies",
+    "bus", "train", "car",
 
-      "8": {
-        "$paginas": "Activities (8.13)",
-        "gerundio": [
-          "buying clothes", "camping", "cooking", "bike riding", "doing yoga",
-          "eating out", "flying", "going for a walk", "going to the movies",
-          "painting", "reading", "running", "shopping", "singing",
-          "sleeping", "swimming", "traveling", "watching TV shows"
-        ],
-        "sustantivo": ["clothes", "bike", "yoga", "walk", "shows"]
-      },
+    "computer", "games", "beach", "theater", "tennis", "mountains", "piano",
+    "night",
+    "January", "February", "March", "April", "May", "June", "July",
+    "August", "September", "October", "November", "December",
 
-      "9": {
-        "$paginas": "Common verb phrases 2 · Traveling (9.5) · Clothes (9.14)",
-        "verbo": [
-          "book", "pack", "leave", "carry", "wear", "wait",
-          "rent", "arrive", "call", "buy"
-        ],
-        "sustantivo": [
-          "tickets", "suitcase", "house", "sunglasses", "taxi", "train",
-          "bus", "flight", "city", "presents",
-          "sweater", "T-shirt", "shirt", "pants", "jeans", "shorts",
-          "suit", "dress", "skirt", "jacket", "socks", "sneakers",
-          "shoes", "hat", "cap"
-        ]
-      },
+    "clothes", "bike", "yoga", "walk", "shows",
 
-      "10": {
-        "$paginas": "In a hotel room (10.2) · In a hotel (10.3)",
-        "sustantivo": [
-          "bed", "pillow", "lamp", "light", "remote control", "floor",
-          "bathroom", "bathtub", "towel", "toilet", "closet",
-          "swimming pool", "spa", "restrooms", "kitchen", "elevator",
-          "gift shop", "reception", "yard", "parking lot"
-        ]
-      }
-    }
-  }
+    "tickets", "suitcase", "house", "sunglasses", "taxi", "flight", "city",
+    "presents", "sweater", "T-shirt", "shirt", "pants", "jeans", "shorts",
+    "suit", "dress", "skirt", "jacket", "socks", "sneakers", "shoes",
+    "hat", "cap",
+
+    "pillow", "lamp", "light", "remote control", "floor", "bathroom",
+    "bathtub", "towel", "toilet", "closet", "swimming pool", "spa",
+    "restrooms", "kitchen", "elevator", "gift shop", "reception", "yard",
+    "parking lot"
+  ],
+
+  "adjetivo": [
+    "black", "blue", "brown", "green", "gray", "orange", "pink", "red",
+    "white", "yellow",
+    "big", "small", "old", "new", "fast", "slow", "beautiful", "ugly",
+    "cheap", "expensive", "long", "short", "clean", "dirty", "easy",
+    "difficult", "good", "great", "fantastic", "bad", "awful", "terrible",
+    "unemployed", "retired"
+  ],
+
+  "verbo": [
+    "have", "eat", "drink", "live", "watch", "listen", "read", "speak",
+    "want", "like", "work", "study", "go", "need",
+    "get", "take", "finish", "make", "do", "get up",
+    "go out", "play", "exercise", "stay", "hike", "swim", "meet", "relax",
+    "travel",
+    "book", "pack", "leave", "carry", "wear", "wait", "rent", "arrive",
+    "call", "buy"
+  ],
+
+  "gerundio": [
+    "buying clothes", "camping", "cooking", "bike riding", "doing yoga",
+    "eating out", "flying", "going for a walk", "going to the movies",
+    "painting", "reading", "running", "shopping", "singing", "sleeping",
+    "swimming", "traveling", "watching TV shows"
+  ],
+
+  "numero": [
+    "zero", "one", "two", "three", "four", "five", "six", "seven", "eight",
+    "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen",
+    "sixteen", "seventeen", "eighteen", "nineteen", "twenty", "thirty",
+    "forty", "fifty", "sixty", "seventy", "eighty", "ninety", "hundred",
+
+    "first", "second", "third", "fourth", "fifth", "sixth", "seventh",
+    "eighth", "ninth", "tenth", "eleventh", "twelfth", "thirteenth",
+    "fourteenth", "fifteenth", "sixteenth", "seventeenth", "eighteenth",
+    "nineteenth", "twentieth", "twenty-first", "twenty-second",
+    "twenty-third", "twenty-fourth", "twenty-fifth", "twenty-sixth",
+    "twenty-seventh", "twenty-eighth", "twenty-ninth", "thirtieth",
+    "thirty-first"
+  ],
+
+  "nacionalidad": [
+    "Argentinian", "Brazilian", "Canadian", "Chilean", "Chinese", "English",
+    "Japanese", "Korean", "Mexican", "Peruvian", "Saudi", "Spanish",
+    "Turkish", "British", "American", "Vietnamese"
+  ],
+
+  "adverbio": ["very"]
 }

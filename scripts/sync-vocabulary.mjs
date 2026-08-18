@@ -14,16 +14,22 @@
      · Desgramatizador NO recibe nada por ahora: analiza texto libre y no tiene
        corrector. Cuando lo tenga, se añade aquí y no en otro sitio.
 
-   Lo que se genera son DOS cosas con trabajos distintos, y conviene no
-   confundirlas nunca (ver `$dosTrabajosDistintos` en vocabulary.json):
+   Se generan DOS cosas con trabajos distintos, y conviene no confundirlas
+   nunca (ver `$dosTrabajosDistintos` en vocabulary.json):
 
-     PALABRAS  — la unión de todo. Decide si una palabra existe. Si esto se
-                 filtrara por la unidad del alumno, una palabra correcta de una
-                 unidad posterior saldría marcada como error.
-     UNIDAD_DE — el número de unidad de cada palabra. Solo para desempatar
-                 sugerencias que están a la misma distancia.
-     CATEGORIA_DE — sustantivo/adjetivo/verbo/… Sirve para que el hueco detrás
-                 de `be` prefiera adjetivos, que es el caso que originó todo.
+     PALABRAS      — la unión de todo. Decide si una palabra existe.
+     CATEGORIA_DE  — sustantivo/adjetivo/verbo/… Solo ordena sugerencias, y solo
+                     dentro de una misma distancia. Sirve para que el hueco de
+                     detrás de `be` prefiera adjetivos, que es el caso que
+                     originó todo.
+
+   NO hay dato de unidad, y no es un olvido. Hubo una versión organizada por
+   unidad del curso y se aplanó por dos razones que apuntan al mismo sitio: la
+   unidad se midió como criterio de orden y salió NEUTRA (98% → 98%, cero
+   ganados y cero perdidos), y agrupar vocabulario por unidades reproduce una
+   selección y disposición ajena, que es la parte de una compilación que sí
+   puede tener dueño — las palabras sueltas no. Un dato que no aporta nada y sí
+   abre una discusión sobra por los dos lados.
    ============================================================================ */
 import { readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
@@ -33,95 +39,73 @@ const here = dirname(fileURLToPath(import.meta.url));   // Grammar HUB/scripts
 const apps = join(here, '..', '..');                    // Apps/
 const src = JSON.parse(readFileSync(join(here, '..', 'vocabulary.json'), 'utf8'));
 
+/* `gerundio` va aparte de `verbo` a propósito: son las dos cosas que pueden
+   seguir a `be` y la que NO puede es el verbo en forma base. «He is swimming»
+   sí, «He is swim» no. */
+const CATEGORIAS = new Set(['sustantivo', 'adjetivo', 'verbo', 'gerundio', 'numero', 'nacionalidad', 'adverbio']);
+
 /* ---------- Validación ----------------------------------------------------
    Una entrada mal escrita no rompe nada: deja de reconocerse esa palabra y el
    corrector la marca como errata en silencio, que es exactamente el fallo que
    este archivo viene a evitar. Por eso se comprueba aquí. */
 const problemas = [];
-/* `gerundio` va aparte de `verbo` a propósito: son las dos cosas que pueden
-   seguir a `be` y la que NO puede es el verbo en forma base. «He is swimming» sí,
-   «He is swim» no. Mezclarlas dejaría al hueco de detrás de `be` sin poder
-   distinguirlas, que es justo lo que hay que distinguir ahí. */
-const CATEGORIAS = new Set(['sustantivo', 'adjetivo', 'verbo', 'gerundio', 'numero', 'nacionalidad', 'adverbio']);
-const vistas = new Map();   // palabra suelta → primera unidad en que aparece
-
 const PALABRAS = new Set();
-const UNIDAD_DE = {};
 const CATEGORIA_DE = {};
 const FRASES = [];
 
-for (const [nivel, unidades] of Object.entries(src.niveles || {})) {
-  for (const [unidad, grupos] of Object.entries(unidades)) {
-    const nUnidad = Number(unidad);
-    if (!Number.isInteger(nUnidad) || nUnidad < 1) {
-      problemas.push(`${nivel}: la unidad «${unidad}» no es un número`);
+for (const [categoria, lista] of Object.entries(src)) {
+  if (categoria.startsWith('$')) continue;              // documentación
+  if (!CATEGORIAS.has(categoria)) {
+    problemas.push(`categoría desconocida «${categoria}»`);
+    continue;
+  }
+  if (!Array.isArray(lista)) {
+    problemas.push(`${categoria}: se esperaba una lista`);
+    continue;
+  }
+  for (const entrada of lista) {
+    if (typeof entrada !== 'string' || !entrada.trim()) {
+      problemas.push(`${categoria}: entrada vacía o no textual`);
       continue;
     }
-    for (const [categoria, lista] of Object.entries(grupos)) {
-      if (categoria.startsWith('$')) continue;          // documentación
-      if (!CATEGORIAS.has(categoria)) {
-        problemas.push(`${nivel}/${unidad}: categoría desconocida «${categoria}»`);
+    if (/^(a|an|the)\s/i.test(entrada)) {
+      problemas.push(`«${entrada}»: sin artículo — «a chair» se guarda como «chair»`);
+    }
+    if (entrada.includes('  ') || entrada !== entrada.trim()) {
+      problemas.push(`«${entrada}»: espacios de más`);
+    }
+
+    if (entrada.includes(' ')) FRASES.push(entrada);
+
+    /* La frase se separa en palabras sueltas porque el corrector trabaja
+       palabra a palabra: «orange juice» tiene que dejar «orange» y «juice» en
+       el diccionario o «juise» no se corrige. La frase entera se guarda aparte,
+       que es otro uso. */
+    let esNucleo = true;
+    for (const palabra of entrada.split(/\s+/)) {
+      const limpia = palabra.toLowerCase().replace(/[.,;:!?]/g, '');
+      if (!limpia) continue;
+      if (!/^[a-záéíóúñü'-]+$/i.test(limpia)) {
+        problemas.push(`«${entrada}»: «${palabra}» tiene caracteres raros`);
         continue;
       }
-      if (!Array.isArray(lista)) {
-        problemas.push(`${nivel}/${unidad}/${categoria}: se esperaba una lista`);
-        continue;
-      }
-      for (const entrada of lista) {
-        if (typeof entrada !== 'string' || !entrada.trim()) {
-          problemas.push(`${nivel}/${unidad}/${categoria}: entrada vacía o no textual`);
-          continue;
-        }
-        if (/^(a|an|the)\s/i.test(entrada)) {
-          problemas.push(`«${entrada}»: sin artículo — el libro escribe «a chair», aquí va «chair»`);
-        }
-        if (entrada.includes('  ') || entrada !== entrada.trim()) {
-          problemas.push(`«${entrada}»: espacios de más`);
-        }
+      PALABRAS.add(limpia);
 
-        if (entrada.includes(' ')) FRASES.push(entrada);
+      /* La categoría va SOLO al núcleo de la entrada, que es su primera
+         palabra. En «buying clothes» la categoría es «gerundio» y describe a
+         «buying»; pegársela también a «clothes» diría que «clothes» es un
+         gerundio, y esa etiqueta se usa para ordenar sugerencias — una mentira
+         ahí saca del top-1 a la palabra correcta. El resto de palabras de la
+         frase entran en el diccionario sin categoría, y la reciben si aparecen
+         listadas por su cuenta, que es como está «clothes».
 
-        /* La frase se separa en palabras sueltas porque el corrector trabaja
-           palabra a palabra: «orange juice» tiene que dejar «orange» y «juice»
-           en el diccionario o «juise» no se corrige. La frase entera se guarda
-           aparte, que es otro uso. */
-        let esNucleo = true;
-        for (const palabra of entrada.split(/\s+/)) {
-          const limpia = palabra.toLowerCase().replace(/[.,;:!?]/g, '');
-          if (!limpia) continue;
-          if (!/^[a-záéíóúñü'-]+$/i.test(limpia)) {
-            problemas.push(`«${entrada}»: «${palabra}» tiene caracteres raros`);
-            continue;
-          }
-          PALABRAS.add(limpia);
-          /* Primera unidad gana: si «watch» aparece en la 3 como sustantivo y
-             en la 5 como verbo, el alumno ya la vio en la 3. Para «esto ya lo
-             conoces» la primera vez es la que cuenta. */
-          if (!(limpia in UNIDAD_DE) || nUnidad < UNIDAD_DE[limpia]) {
-            UNIDAD_DE[limpia] = nUnidad;
-          }
-          /* La categoría va SOLO al núcleo de la entrada, que es su primera
-             palabra. En «buying clothes» la categoría es «gerundio» y describe a
-             «buying»; pegársela también a «clothes» diría que «clothes» es un
-             gerundio, y esa etiqueta se usa para ordenar sugerencias — una
-             mentira ahí saca del top-1 a la palabra correcta. El resto de
-             palabras de la frase entran en el diccionario sin categoría, y la
-             reciben si aparecen listadas por su cuenta en algún sitio, que es
-             como está «clothes» en su unidad.
-
-             La categoría, en cambio, se ACUMULA entre entradas: «watch» es
-             sustantivo en una unidad y verbo en otra, «swimming» es gerundio y
-             sustantivo («swimming pool»). Quedarse con una sola sería mentir
-             igual, por omisión. */
-          if (esNucleo) {
-            (CATEGORIA_DE[limpia] ??= []).includes(categoria) ||
-              CATEGORIA_DE[limpia].push(categoria);
-            esNucleo = false;
-          }
-          const antes = vistas.get(limpia);
-          if (antes && antes !== `${nivel}/${nUnidad}`) { /* repetida entre unidades: legítimo */ }
-          else vistas.set(limpia, `${nivel}/${nUnidad}`);
-        }
+         La categoría, en cambio, se ACUMULA entre entradas: «watch» es
+         sustantivo y verbo, «swimming» es gerundio y sustantivo («swimming
+         pool»). Quedarse con una sola sería mentir igual, por omisión. */
+      if (esNucleo) {
+        (CATEGORIA_DE[limpia] ??= []).includes(categoria) ||
+          CATEGORIA_DE[limpia].push(categoria);
+        esNucleo = false;
       }
     }
   }
@@ -137,33 +121,29 @@ if (PALABRAS.size === 0) {
 }
 
 const ordenadas = [...PALABRAS].sort();
-const cabecera = (comando) =>
+const cabecera =
   `/* AUTO-GENERATED from Grammar HUB/vocabulary.json — do not edit by hand.\n` +
-  `   Change vocabulary.json and run \`${comando}\` in Grammar HUB.\n\n` +
-  `   PALABRAS es la UNIÓN de todos los niveles y unidades: decide si una palabra\n` +
-  `   existe. Nunca se filtra por la unidad del alumno — una palabra correcta de\n` +
-  `   una unidad posterior no puede salir marcada como error.\n` +
-  `   UNIDAD_DE y CATEGORIA_DE solo ordenan sugerencias. */\n\n`;
+  `   Change vocabulary.json and run \`npm run sync-vocabulary\` in Grammar HUB.\n\n` +
+  `   PALABRAS decide si una palabra existe y nunca se recorta.\n` +
+  `   CATEGORIA_DE solo ordena sugerencias, dentro de una misma distancia. */\n\n`;
 
 const cuerpo = (exportar) =>
   `${exportar}const VOCAB_PALABRAS = ${JSON.stringify(ordenadas, null, 0)};\n\n` +
-  `${exportar}const VOCAB_UNIDAD_DE = ${JSON.stringify(UNIDAD_DE, null, 0)};\n\n` +
   `${exportar}const VOCAB_CATEGORIA_DE = ${JSON.stringify(CATEGORIA_DE, null, 0)};\n\n` +
   `${exportar}const VOCAB_FRASES = ${JSON.stringify(FRASES.sort(), null, 0)};\n`;
 
 // Grammaster — ESM
 writeFileSync(
   join(apps, 'Grammaster', 'src', 'data', 'vocabulary.generated.js'),
-  cabecera('npm run sync-vocabulary') + cuerpo('export '),
+  cabecera + cuerpo('export '),
   'utf8'
 );
 
 // Question Lab — vanilla: se cuelga de window, como el resto de sus generados
 writeFileSync(
   join(apps, 'Question Lab', 'vocabulary.generated.js'),
-  cabecera('npm run sync-vocabulary') + cuerpo('') +
+  cabecera + cuerpo('') +
   `\nwindow.VOCAB_PALABRAS = VOCAB_PALABRAS;\n` +
-  `window.VOCAB_UNIDAD_DE = VOCAB_UNIDAD_DE;\n` +
   `window.VOCAB_CATEGORIA_DE = VOCAB_CATEGORIA_DE;\n` +
   `window.VOCAB_FRASES = VOCAB_FRASES;\n`,
   'utf8'

@@ -8,6 +8,14 @@ Grammaster/src/data/grammar.js"*, o sea que es una copia de los datos de la app.
 Preguntarle si un contenido corresponde es circular. **Este archivo es la única
 referencia que no sale de la propia app**, así que manda cuando haya desacuerdo.
 
+> **Las tablas llevan el código de unidad, no el título de la lección.** Se
+> quitaron los títulos a propósito el 2026-08-18. Nadie los usaba —se buscaron en
+> los cuatro repos y solo aparecían aquí— y eran el material más claramente
+> autoral de la suite: que la unidad 4B enseñe adjetivos es un hecho sobre un
+> curso, pero cómo se titula esa lección es una frase que escribió alguien en la
+> editorial. Con vistas a monetizar, un dato que no aporta nada y sí abre una
+> discusión sobra por los dos lados. **No los repongas «para completar».**
+
 | Curso | Libro |
 |---|---|
 | Inglés Básico I | American English File — Starter A |
@@ -24,18 +32,18 @@ referencia que no sale de la propia app**, así que manda cuando haya desacuerdo
 
 | Unidad | Gramática |
 |---|---|
-| 1A A cappuccino, please | Verb be (singular): I and you |
-| 1B World music | Verb be (singular): he, she, it |
-| 2A Are you on vacation? | Verb be (plural): we, you, they |
-| 2B That's my bus! | Wh- and How questions with be |
-| 3A Where are my keys? | Singular and plural nouns; a / an |
-| 3B Souvenirs | This / that / these / those |
-| 4A Meet the family | Possessive adjectives; possessive 's |
-| 4B The perfect car | Adjectives |
-| 5A A big breakfast? | Simple present (+) and (−): I, you, we, they |
-| 5B A very long flight | Simple present (?): I, you, we, they |
-| 6A A school reunion | Simple present: he, she, it |
-| 6B Good morning, goodnight | Adverbs of frequency |
+| 1A | Verb be (singular): I and you |
+| 1B | Verb be (singular): he, she, it |
+| 2A | Verb be (plural): we, you, they |
+| 2B | Wh- and How questions with be |
+| 3A | Singular and plural nouns; a / an |
+| 3B | This / that / these / those |
+| 4A | Possessive adjectives; possessive 's |
+| 4B | Adjectives |
+| 5A | Simple present (+) and (−): I, you, we, they |
+| 5B | Simple present (?): I, you, we, they |
+| 6A | Simple present: he, she, it |
+| 6B | Adverbs of frequency |
 
 **Resumen:** verbo *to be* completo · sustantivos singular/plural y a/an ·
 demostrativos · posesivos y genitivo sajón · adjetivos · presente simple completo ·
@@ -47,18 +55,18 @@ adverbios de frecuencia.
 
 | Unidad | Gramática |
 |---|---|
-| 7A Have a nice weekend! | Word order in questions: be and simple present |
-| 7B Lights, camera, action! | Imperatives; object pronouns |
-| 8A Can I park here? | Can / can't |
-| 8B I love cooking | Like / love / hate + verb + -ing |
-| 9A Everything's fine! | Present continuous |
-| 9B Working undercover | Present continuous or simple present? |
-| 10A A room with a view | There's a… / there are some… |
-| 10B Where were you? | Simple past: be (was/were) |
-| 11A A new life in the US | Simple past: regular verbs |
-| 11B How was your day? | Simple past irregular verbs: get, go, have, do |
-| 12A Strangers on a train | Simple past: regular and irregular verbs |
-| 12B Review the past | Simple past review |
+| 7A | Word order in questions: be and simple present |
+| 7B | Imperatives; object pronouns |
+| 8A | Can / can't |
+| 8B | Like / love / hate + verb + -ing |
+| 9A | Present continuous |
+| 9B | Present continuous or simple present? |
+| 10A | There's a… / there are some… |
+| 10B | Simple past: be (was/were) |
+| 11A | Simple past: regular verbs |
+| 11B | Simple past irregular verbs: get, go, have, do |
+| 12A | Simple past: regular and irregular verbs |
+| 12B | Simple past review |
 
 **Resumen:** orden de palabras en preguntas · imperativos y pronombres objeto ·
 **can/can't** · verbos de gusto + gerundio · **presente continuo** · contraste con
@@ -70,24 +78,24 @@ presente simple · there is/are · **pasado simple** (be, regulares, irregulares
 
 | Unidad | Gramática |
 |---|---|
-| 1A Welcome to the class | Verb be (+); subject pronouns |
-| 1B One world | Verb be (−) and (?) |
-| 1C What's your email? | Possessive adjectives |
-| 2A Are you neat or messy? | Singular and plural nouns |
-| 2B Made in America | Adjectives |
-| 2C Slow down! | Imperatives; let's |
-| 3A America: the good and the bad | Simple present (+) and (−) |
-| 3B 9 to 5 | Simple present (?) |
-| 3C Love me, love my dog | Word order in questions |
-| 4A Family photos | Possessive 's; Whose…? |
-| 4B From morning to night | Prepositions of time and place |
-| 4C Blue Zones | Position of adverbs; expressions of frequency |
-| 5A Vote for me! | Can / can't |
-| 5B A quiet life? | Present continuous: be + verb + -ing |
-| 5C A city for all seasons | Simple present or present continuous? |
-| 6A A North African story | Object pronouns |
-| 6B The second Friday in July | Like + (verb + -ing) |
-| 6C Making music | Review: be or do? |
+| 1A | Verb be (+); subject pronouns |
+| 1B | Verb be (−) and (?) |
+| 1C | Possessive adjectives |
+| 2A | Singular and plural nouns |
+| 2B | Adjectives |
+| 2C | Imperatives; let's |
+| 3A | Simple present (+) and (−) |
+| 3B | Simple present (?) |
+| 3C | Word order in questions |
+| 4A | Possessive 's; Whose…? |
+| 4B | Prepositions of time and place |
+| 4C | Position of adverbs; expressions of frequency |
+| 5A | Can / can't |
+| 5B | Present continuous: be + verb + -ing |
+| 5C | Simple present or present continuous? |
+| 6A | Object pronouns |
+| 6B | Like + (verb + -ing) |
+| 6C | Review: be or do? |
 
 ---
 
@@ -95,24 +103,24 @@ presente simple · there is/are · **pasado simple** (be, regulares, irregulares
 
 | Unidad | Gramática |
 |---|---|
-| 7A Selfies | Simple past of be: was / were |
-| 7B Wrong name, wrong place | Simple past: regular verbs |
-| 7C Happy New Year? | Simple past: irregular verbs |
-| 8A A murder mystery | Simple past: regular and irregular |
-| 8B A house with a history | There is / there are, some / any |
-| 8C Haunted rooms | There was / there were |
-| 9A #mydinnerlastnight | Countable / uncountable; a/an, some/any |
-| 9B White gold | Quantifiers: how much / how many, a lot of |
-| 9C Facts and figures | Comparative adjectives |
-| 10A The most dangerous place… | Superlative adjectives |
-| 10B Five continents in a day | **Be going to (plans)**; future time expressions |
-| 10C The fortune-teller | **Be going to (predictions)** |
-| 11A Culture shock | Adverbs of manner and modifiers |
-| 11B Experiences or things? | Verbs + infinitive |
-| 11C How smart is your phone? | Definite article: the or no the |
-| 12A I've seen it ten times! | **Present perfect** |
-| 12B He's been everywhere! | Present perfect or simple past? |
-| 12C The AEF interview | Review: question formation |
+| 7A | Simple past of be: was / were |
+| 7B | Simple past: regular verbs |
+| 7C | Simple past: irregular verbs |
+| 8A | Simple past: regular and irregular |
+| 8B | There is / there are, some / any |
+| 8C | There was / there were |
+| 9A | Countable / uncountable; a/an, some/any |
+| 9B | Quantifiers: how much / how many, a lot of |
+| 9C | Comparative adjectives |
+| 10A | Superlative adjectives |
+| 10B | **Be going to (plans)**; future time expressions |
+| 10C | **Be going to (predictions)** |
+| 11A | Adverbs of manner and modifiers |
+| 11B | Verbs + infinitive |
+| 11C | Definite article: the or no the |
+| 12A | **Present perfect** |
+| 12B | Present perfect or simple past? |
+| 12C | Review: question formation |
 
 ---
 
@@ -120,24 +128,24 @@ presente simple · there is/are · **pasado simple** (be, regulares, irregulares
 
 | Unidad | Gramática |
 |---|---|
-| 1A Are you? Can you? Do you? Did you? | Word order in questions |
-| 1B The perfect date? | Simple present |
-| 1C The Remake Project | Present continuous |
-| 2A OMG! Where's my passport? | Simple past: regular and irregular |
-| 2B That's me in the picture! | **Past continuous** |
-| 2C One dark October evening | Time sequencers and connectors |
-| 3A TripAside | Be going to (plans and predictions) |
-| 3B Put it on your calendar! | Present continuous (future arrangements) |
-| 3C Word games | Defining relative clauses |
-| 4A Who does what? | Present perfect + yet and already |
-| 4B In your cart | Present perfect or simple past? (1) |
-| 4C #greatweekend | Something, anything, nothing, etc. |
-| 5A I want it NOW! | Comparative adjectives and adverbs; as…as |
-| 5B Twelve lost wallets | Superlatives (+ ever + present perfect) |
-| 5C How much is enough? | Quantifiers; too, (not) enough |
-| 6A Think positive – or negative? | **Will / won't (predictions)** |
-| 6B I'll always love you | **Will / won't (other uses)** |
-| 6C The meaning of dreaming | Review of verb forms |
+| 1A | Word order in questions |
+| 1B | Simple present |
+| 1C | Present continuous |
+| 2A | Simple past: regular and irregular |
+| 2B | **Past continuous** |
+| 2C | Time sequencers and connectors |
+| 3A | Be going to (plans and predictions) |
+| 3B | Present continuous (future arrangements) |
+| 3C | Defining relative clauses |
+| 4A | Present perfect + yet and already |
+| 4B | Present perfect or simple past? (1) |
+| 4C | Something, anything, nothing, etc. |
+| 5A | Comparative adjectives and adverbs; as…as |
+| 5B | Superlatives (+ ever + present perfect) |
+| 5C | Quantifiers; too, (not) enough |
+| 6A | **Will / won't (predictions)** |
+| 6B | **Will / won't (other uses)** |
+| 6C | Review of verb forms |
 
 ---
 
@@ -145,24 +153,24 @@ presente simple · there is/are · **pasado simple** (be, regulares, irregulares
 
 | Unidad | Gramática |
 |---|---|
-| 7A First day nerves | Uses of the infinitive |
-| 7B Happiness is… | Uses of the gerund |
-| 7C Could you pass the test? | **Have to, don't have to, must, must not, can't** |
-| 8A Should I stay or should I go? | **Should** |
-| 8B Murphy's Law | **First conditional** (if + present, will + base) |
-| 8C Who is Vivienne? | Possessive pronouns |
-| 9A Beware of the dog | **Second conditional** (if + past, **would** + base) |
-| 9B Fearof.net | Present perfect + for and since |
-| 9C Scream queens | Present perfect or simple past? (2) |
-| 10A Into the net | Expressing movement |
-| 10B Early birds | Word order of phrasal verbs |
-| 10C International inventions | **The passive** |
-| 11A Ask the teacher | **Used to** |
-| 11B Help! I can't decide! | **Might** |
-| 11C Twinstrangers.net | So, neither + auxiliaries |
-| 12A Unbelievable! | **Past perfect** |
-| 12B Think before you speak | **Reported speech** |
-| 12C The AEF quiz | Questions without auxiliaries |
+| 7A | Uses of the infinitive |
+| 7B | Uses of the gerund |
+| 7C | **Have to, don't have to, must, must not, can't** |
+| 8A | **Should** |
+| 8B | **First conditional** (if + present, will + base) |
+| 8C | Possessive pronouns |
+| 9A | **Second conditional** (if + past, **would** + base) |
+| 9B | Present perfect + for and since |
+| 9C | Present perfect or simple past? (2) |
+| 10A | Expressing movement |
+| 10B | Word order of phrasal verbs |
+| 10C | **The passive** |
+| 11A | **Used to** |
+| 11B | **Might** |
+| 11C | So, neither + auxiliaries |
+| 12A | **Past perfect** |
+| 12B | **Reported speech** |
+| 12C | Questions without auxiliaries |
 
 ---
 
@@ -170,26 +178,26 @@ presente simple · there is/are · **pasado simple** (be, regulares, irregulares
 
 | Unidad | Gramática |
 |---|---|
-| 1A Eating in…and out | Simple present and continuous; action and nonaction verbs |
-| 1B Modern families | Future forms: present continuous, be going to, will/won't |
-| 2A Spending money | Present perfect and simple past |
-| 2B Changing lives | Present perfect + for/since; **present perfect continuous** |
-| 3A Survive the drive | Comparatives vs. superlatives |
-| 3B Men, women, and children | Articles: a/an, the, no article |
-| 4A Bad manners? | Obligation and prohibition: have to, must, should |
-| 4B Yes, I can! | Ability and possibility: **can, could, be able to** |
-| 5A Sporting superstitions | **Past tenses: simple, continuous, perfect** |
-| 5B #thewaywemet | **Past and present habits and states** |
-| 6A Behind the scenes | **Passive (all tenses)** |
-| 6B Every picture tells a story | **Modals of deduction: might, can't, must** |
-| 7A Live and learn | **First conditional** + future time clauses |
-| 7B The hotel of Mom and Dad | **Second conditional**; choosing between conditionals |
-| 8A The right job for you | Gerunds vs. infinitives |
-| 8B Have a nice day! | **Reported speech**: sentences and questions |
-| 9A Lucky encounters | **Third conditional** |
-| 9B Digital detox | Quantifiers |
-| 10A Idols and icons | Relative clauses: defining and nondefining |
-| 10B And the murderer is… | **Tag questions** |
+| 1A | Simple present and continuous; action and nonaction verbs |
+| 1B | Future forms: present continuous, be going to, will/won't |
+| 2A | Present perfect and simple past |
+| 2B | Present perfect + for/since; **present perfect continuous** |
+| 3A | Comparatives vs. superlatives |
+| 3B | Articles: a/an, the, no article |
+| 4A | Obligation and prohibition: have to, must, should |
+| 4B | Ability and possibility: **can, could, be able to** |
+| 5A | **Past tenses: simple, continuous, perfect** |
+| 5B | **Past and present habits and states** |
+| 6A | **Passive (all tenses)** |
+| 6B | **Modals of deduction: might, can't, must** |
+| 7A | **First conditional** + future time clauses |
+| 7B | **Second conditional**; choosing between conditionals |
+| 8A | Gerunds vs. infinitives |
+| 8B | **Reported speech**: sentences and questions |
+| 9A | **Third conditional** |
+| 9B | Quantifiers |
+| 10A | Relative clauses: defining and nondefining |
+| 10B | **Tag questions** |
 
 ---
 

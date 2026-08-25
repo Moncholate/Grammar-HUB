@@ -45,7 +45,7 @@ const HeaderNav = ({ lang, setLang }) => {
 
         {/* Tema de la suite — esquina superior izquierda */}
         <div className="absolute top-4 left-5 flex flex-col items-start">
-          <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide px-1 mb-0.5">
+          <span className="text-[10px] font-semibold text-muted uppercase tracking-wide px-1 mb-0.5">
             {lang === 'es' ? 'Tema' : 'Theme'}
           </span>
           <ThemeToggle lang={lang} />
@@ -53,7 +53,7 @@ const HeaderNav = ({ lang, setLang }) => {
 
         {/* Selector de idioma — esquina superior derecha */}
         <div className="absolute top-4 right-5 flex flex-col items-start">
-          <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide px-1 mb-0.5">
+          <span className="text-[10px] font-semibold text-muted uppercase tracking-wide px-1 mb-0.5">
             {lang === 'es' ? 'Idioma' : 'Language'}
           </span>
           <div className="flex bg-slate-100 border border-slate-300 rounded-lg p-0.5">
@@ -80,7 +80,7 @@ const HeaderNav = ({ lang, setLang }) => {
         {/* Título y subtítulo */}
         <div className="text-center leading-tight">
           <p className="font-extrabold text-slate-900 text-2xl tracking-tight">Grammar HUB</p>
-          <p className="text-sm text-slate-400 mt-0.5">
+          <p className="text-sm text-muted mt-0.5">
             {lang === 'es' ? 'Tu laboratorio de inglés' : 'Your English laboratory'}
           </p>
         </div>

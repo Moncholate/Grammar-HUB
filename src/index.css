@@ -189,3 +189,16 @@ button:disabled { cursor: not-allowed; }
    amber-800: 1,85:1 solo mientras el ratón está encima. Compuesto para tocar
    únicamente ese elemento en ese estado. */
 :root[data-theme="dark"] .hover\:bg-amber-200:hover.text-amber-800 { color: #fde68a !important; }
+
+/* ── Etiquetas del selector de nivel ─────────────────────────────────────────
+   La rampa 600→700→800 refuerza la del tinte de la caja (Básico → Intermedio,
+   cada vez más intenso). En CLARO da 5,68 / 7,07 / 8,31, pero en oscuro esas
+   mismas paradas caen a 2,16 / 1,92 / 1,36 sobre la caja ya oscurecida: el
+   requisito se invierte con el tema, como pasa con `accent.ink` en los tokens.
+   Aquí la rampa se aplana a un solo indigo-400 y no se invierte parada por
+   parada, porque en oscuro la caja SÍ conserva su ramp de intensidad y basta
+   con que la etiqueta se lea sobre las tres (4,55 / 5,10 / 4,55).
+   No usan `--marca`: se probó y se queda en 4,37 sobre dos de las tres cajas. */
+:root[data-theme="dark"] legend.text-indigo-600,
+:root[data-theme="dark"] legend.text-indigo-700,
+:root[data-theme="dark"] legend.text-indigo-800 { color: #818cf8 !important; }

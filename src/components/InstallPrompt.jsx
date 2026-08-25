@@ -90,7 +90,7 @@ const InstallPrompt = ({ paused = false }) => {
           <button
             onClick={cerrar}
             aria-label="Ahora no"
-            className="text-slate-400 hover:text-slate-600 transition-colors touch-manipulation p-1"
+            className="text-muted hover:text-ink transition-colors touch-manipulation p-1"
             style={{ WebkitTapHighlightColor: 'transparent' }}
           >
             <X size={16} />
@@ -145,7 +145,7 @@ const InstallPrompt = ({ paused = false }) => {
               app ya esté instalada, y no hay forma de detectarlo desde la web. */}
           <button
             onClick={() => { markInstalled(); setAbiertoAMano(false); }}
-            className="w-full mt-2 text-xs text-slate-400 hover:text-slate-600 py-1.5 touch-manipulation"
+            className="w-full mt-2 text-xs text-muted hover:text-ink py-1.5 touch-manipulation"
             style={{ WebkitTapHighlightColor: 'transparent' }}
           >
             Ya la tengo instalada

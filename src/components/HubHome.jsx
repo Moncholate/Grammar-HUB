@@ -14,7 +14,7 @@ const apps = [
     id: 'grammaster',
     title: 'Grammaster',
     logo: 'https://moncholate.github.io/GramMaster/apple-touch-icon.png',
-    btnClass: 'bg-indigo-500 hover:bg-indigo-600 active:bg-indigo-700',
+    btnClass: 'bg-indigo-700 hover:bg-indigo-800 active:bg-indigo-900',
     ringClass: 'ring-indigo-200',
     logoBg: 'from-indigo-50 to-violet-50',
     url: 'https://moncholate.github.io/GramMaster/',
@@ -23,7 +23,7 @@ const apps = [
     id: 'desgramatizador',
     title: 'Desgramatizador',
     logo: 'https://moncholate.github.io/DesGramatizador/apple-touch-icon.png',
-    btnClass: 'bg-rose-500 hover:bg-rose-600 active:bg-rose-700',
+    btnClass: 'bg-rose-700 hover:bg-rose-800 active:bg-rose-900',
     ringClass: 'ring-rose-200',
     logoBg: 'from-rose-50 to-pink-50',
     url: 'https://moncholate.github.io/DesGramatizador/',
@@ -32,7 +32,7 @@ const apps = [
     id: 'questionlab',
     title: 'Question Lab',
     logo: 'https://moncholate.github.io/Question-Lab/apple-touch-icon.png',
-    btnClass: 'bg-teal-500 hover:bg-teal-600 active:bg-teal-700',
+    btnClass: 'bg-teal-700 hover:bg-teal-800 active:bg-teal-900',
     ringClass: 'ring-teal-200',
     logoBg: 'from-teal-50 to-cyan-50',
     url: 'https://moncholate.github.io/Question-Lab/',
@@ -42,9 +42,9 @@ const apps = [
 // Tinte progresivo por etapa: más intensidad = más avanzado (mismo lenguaje
 // que las familias de tiempos: la intensidad codifica progresión).
 const STAGE_TINTS = [
-  { box: 'bg-indigo-50/50 border-indigo-100',  label: 'text-indigo-400' },
-  { box: 'bg-indigo-50 border-indigo-200',     label: 'text-indigo-500' },
-  { box: 'bg-indigo-100/70 border-indigo-300', label: 'text-indigo-600' },
+  { box: 'bg-indigo-50/50 border-indigo-100',  label: 'text-indigo-600' },
+  { box: 'bg-indigo-50 border-indigo-200',     label: 'text-indigo-700' },
+  { box: 'bg-indigo-100/70 border-indigo-300', label: 'text-indigo-800' },
 ];
 
 const HubHome = ({ lang, level, setLevel, onPhraseOpenChange, onAppOpenChange }) => {
@@ -179,7 +179,7 @@ const HubHome = ({ lang, level, setLevel, onPhraseOpenChange, onAppOpenChange })
         <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-1.5">
           {t.hero}
         </h1>
-        <p className="text-slate-500 text-sm">{t.heroSub}</p>
+        <p className="text-muted text-sm">{t.heroSub}</p>
       </div>
 
       {/* Por que la suite entera esta hecha de bloques. Abierta la primera vez;
@@ -231,8 +231,8 @@ const HubHome = ({ lang, level, setLevel, onPhraseOpenChange, onAppOpenChange })
                 >
                   <span className={`text-2xl leading-none ${unlocked ? '' : 'opacity-30 grayscale'}`}>{b.icon}</span>
                   <div className="min-w-0">
-                    <p className={`text-xs font-bold leading-tight ${unlocked ? 'text-slate-800' : 'text-slate-400'}`}>{name}</p>
-                    <p className="text-[10px] text-slate-400 leading-tight mt-0.5">{desc}</p>
+                    <p className={`text-xs font-bold leading-tight ${unlocked ? 'text-slate-800' : 'text-muted'}`}>{name}</p>
+                    <p className="text-[10px] text-muted leading-tight mt-0.5">{desc}</p>
                   </div>
                 </div>
               );
@@ -291,7 +291,7 @@ const HubHome = ({ lang, level, setLevel, onPhraseOpenChange, onAppOpenChange })
       <div className="w-full max-w-2xl">
         <div className="flex items-center gap-2 mb-2 px-1">
           <span className={`w-5 h-5 rounded-full text-[11px] font-bold flex items-center justify-center flex-shrink-0 ${level ? 'bg-indigo-600 text-white' : 'bg-slate-500 text-white'}`}>2</span>
-          <span className={`text-sm font-bold ${level ? 'text-slate-700' : 'text-slate-400'}`}>{t.step2}</span>
+          <span className={`text-sm font-bold ${level ? 'text-slate-700' : 'text-muted'}`}>{t.step2}</span>
         </div>
       <div className="grid sm:grid-cols-3 gap-3 w-full">
         {apps.map((app) => (
@@ -314,7 +314,7 @@ const HubHome = ({ lang, level, setLevel, onPhraseOpenChange, onAppOpenChange })
             </div>
             <div className="px-4 pb-4 pt-3">
               <h2 className="text-base font-bold text-slate-900 mb-0.5">{app.title}</h2>
-              <p className="text-xs text-slate-500 mb-3">{t[app.id]?.tagline}</p>
+              <p className="text-xs text-muted mb-3">{t[app.id]?.tagline}</p>
               <div className={`w-full ${app.btnClass} text-white text-sm font-semibold py-2 rounded-lg transition-colors flex items-center justify-center gap-1.5`}>
                 {t.open}
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -330,10 +330,10 @@ const HubHome = ({ lang, level, setLevel, onPhraseOpenChange, onAppOpenChange })
       {/* Footer. La firma se queda como estaba; debajo va el copyright, más
           apagado, porque no es lo que el alumno viene a leer. El aviso que pesa
           a efectos legales es el del código y el LICENSE del repositorio. */}
-      <p className="mt-8 text-xs text-slate-400 text-center">
-        <span className="font-medium text-slate-500">Grammar HUB</span> – By Besto Teacher Víctor Morales
+      <p className="mt-8 text-xs text-muted text-center">
+        <span className="font-medium text-muted">Grammar HUB</span> – By Besto Teacher Víctor Morales
       </p>
-      <p className="mt-1 text-[11px] text-slate-400 text-center">
+      <p className="mt-1 text-[11px] text-muted text-center">
         © 2026 Víctor Manuel Morales Muñoz · {t.derechos}
       </p>
     </div>

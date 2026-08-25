@@ -216,12 +216,25 @@ export async function correr({ nombre, puerto, conducir, pantallas, cambiarTema,
     if (tema === 'oscuro') await cambiarTema(page);
     console.log(`\n── modo ${tema} ──`);
     let enTema = 0;
+    /* Un elemento que vive en la cabecera o en la home aparece en TODAS las
+       vistas. Sin esto, una app de una sola página con cuatro estados repetía
+       cada fallo cuatro veces: 125 líneas para 30 problemas. Un recuento
+       inflado no es solo ruido — invita a no leer la lista. */
+    const vistos = new Set();
 
     for (const vista of vistas) {
       if (vista.ir) await vista.ir(page);
       const hallados = await page.evaluate(AUDITOR);
-      const nuevos = hallados.filter(f => !perdonar(f));
-      perdonados += hallados.length - nuevos.length;
+      // Los perdonados se cuentan ANTES de deduplicar, o los duplicados se
+      // colarían en ese contador y diría que se perdonó lo que solo se repetía.
+      const sinPerdon = hallados.filter(f => !perdonar(f));
+      perdonados += hallados.length - sinPerdon.length;
+      const nuevos = sinPerdon.filter(f => {
+        const clave = `${f.txt}|${f.fg}|${f.bg}|${f.px}|${f.peso}`;
+        if (vistos.has(clave)) return false;
+        vistos.add(clave);
+        return true;
+      });
       if (!nuevos.length) continue;
 
       enTema += nuevos.length;

@@ -77,7 +77,7 @@ const ParEjemplo = ({ p }) => (
       </p>
     )}
     {p.mal && (
-      <p className="flex items-start gap-2 text-[13px] leading-snug text-slate-500"
+      <p className="flex items-start gap-2 text-[13px] leading-snug text-muted"
          style={{ fontFamily: "'Atkinson Hyperlegible', system-ui, sans-serif" }}>
         <span aria-hidden="true" className="mt-px text-rose-600">✗</span>
         <span className="line-through decoration-rose-400"><span className="sr-only">Incorrecto: </span>{p.mal}</span>
@@ -99,19 +99,19 @@ const PhraseBody = ({ p, t, lang, big }) => (
     {p.en && (
       <p
         lang="en"
-        className="mt-2.5 text-[13px] leading-snug text-slate-500 italic"
+        className="mt-2.5 text-[13px] leading-snug text-muted italic"
         style={{ fontFamily: "'Atkinson Hyperlegible', system-ui, sans-serif" }}
       >
-        <span className="not-italic font-semibold text-slate-400 mr-1">{t.phraseOriginal}:</span>
+        <span className="not-italic font-semibold text-muted mr-1">{t.phraseOriginal}:</span>
         “{p.en}”
       </p>
     )}
 
     <div className="mt-3 pt-2.5 border-t border-slate-100">
-      <p className="text-[11px] font-semibold text-slate-500 leading-snug">
+      <p className="text-[11px] font-semibold text-muted leading-snug">
         {CATEGORIES[p.cat][lang]}
       </p>
-      <p className="text-[11px] text-slate-400 leading-snug">
+      <p className="text-[11px] text-muted leading-snug">
         {/* "Fuente" no se imprime: la posición y el separador ya lo dicen, y una
             tercera etiqueta volvería a cargar la tarjeta. Pero sí se anuncia. */}
         <span className="sr-only">{t.phraseSource}: </span>
@@ -171,10 +171,10 @@ const DailyPhrase = ({ lang, level, onOpenChange }) => {
         className="w-full max-w-2xl mb-5 flex items-center gap-2 bg-white rounded-xl border border-slate-200 px-3.5 py-2.5 text-left shadow-sm hover:border-slate-300 transition-colors touch-manipulation"
         style={{ WebkitTapHighlightColor: 'transparent' }}
       >
-        <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
+        <span className="text-[11px] font-bold uppercase tracking-wider text-muted">
           {t.phraseTitle}
         </span>
-        <span className="ml-auto text-slate-400 text-xs font-bold" aria-hidden="true">›</span>
+        <span className="ml-auto text-muted text-xs font-bold" aria-hidden="true">›</span>
       </button>
 
       {open && (
@@ -196,7 +196,7 @@ const DailyPhrase = ({ lang, level, onOpenChange }) => {
             {/* Agarradera: en celular esto se abre desde abajo y conviene que se lea como tal */}
             <div className="gh-grabber sm:hidden mx-auto mb-3 h-1 w-10 rounded-full" aria-hidden="true" />
 
-            <p id="gh-phrase-title" className="mb-3 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+            <p id="gh-phrase-title" className="mb-3 text-[10px] font-bold uppercase tracking-wider text-muted">
               {t.phraseTitle}
             </p>
 

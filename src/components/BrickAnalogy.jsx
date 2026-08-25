@@ -28,7 +28,7 @@ const BrickAnalogy = ({ lang }) => {
     return (
       <button
         onClick={() => { setRevelado(false); setAbierta(true); }}
-        className="mb-5 text-xs font-semibold text-slate-500 hover:text-slate-800 underline underline-offset-2 decoration-slate-300"
+        className="mb-5 text-xs font-semibold text-muted hover:text-ink underline underline-offset-2 decoration-slate-300"
       >
         {t.whyBricksTitle}
       </button>
@@ -89,8 +89,8 @@ const BrickAnalogy = ({ lang }) => {
                    donde estaba. Y las dos clases de borde sí están cubiertas. */
                 className="h-full w-full rounded-lg border-2 border-dashed border-slate-300 hover:border-indigo-300 transition-colors flex flex-col items-center justify-center gap-1 cursor-pointer"
               >
-                <span aria-hidden="true" className="text-3xl font-black text-slate-400">?</span>
-                <span className="text-xs text-slate-500">{t.whyBricksAsk}</span>
+                <span aria-hidden="true" className="text-3xl font-black text-muted">?</span>
+                <span className="text-xs text-muted">{t.whyBricksAsk}</span>
                 <span className="text-xs font-bold text-indigo-600 underline underline-offset-2">{t.whyBricksReveal}</span>
               </button>
             )}

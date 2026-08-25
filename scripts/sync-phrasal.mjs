@@ -103,6 +103,20 @@ export const DETERMINERS = ${JSON.stringify(datos.determiners)};
 writeFileSync(join(apps, 'Desgramatizador', 'pos-highlighter', 'src', 'nlp', 'phrasal.generated.js'), esm);
 console.log('  ✓ Desgramatizador/src/nlp/phrasal.generated.js');
 
+/* ---- Grammaster: ESM, solo la lista ----
+   Faltaba, y era el hueco de siempre: Desgramatizador y Question Lab tenían los
+   frasales y Grammaster no, que es justo la app donde el ALUMNO los escribe. Su
+   campo Verbo los rechazaba con «no está en nuestra lista de verbos» —a los 13
+   que el propio vocabulario del curso enseña incluidos— y si el alumno seguía
+   igual, la app generaba «She get ups».
+   Solo se reparte `verbs`: aquí no hace falta distinguir objeto de adverbial,
+   que es para lo que las otras dos usan el resto del archivo. */
+writeFileSync(
+  join(apps, 'Grammaster', 'src', 'data', 'phrasal.generated.js'),
+  `${BANNER}\nexport const PHRASAL_VERB_LIST = ${JSON.stringify(datos.verbs)};\n`
+);
+console.log('  ✓ Grammaster/src/data/phrasal.generated.js');
+
 /* ---- Question Lab: vanilla, así que global ---- */
 const ql = `${BANNER}window.GRAMMAR_PHRASAL = ${JSON.stringify(datos, null, 2)};\n`;
 writeFileSync(join(apps, 'Question Lab', 'phrasal.generated.js'), ql);

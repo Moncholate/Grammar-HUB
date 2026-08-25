@@ -15,6 +15,8 @@
 
   "$comoAgregar": "Se añade al grupo de su categoría y ya. No hace falta orden ni completitud. Las entradas de varias palabras («orange juice», «going for a walk») se guardan como vienen: sync-vocabulary.mjs las separa en palabras sueltas para el corrector, que trabaja palabra a palabra, y asigna la categoría SOLO a la primera —el núcleo—, porque en «buying clothes» la categoría describe a «buying» y decir que «clothes» es un gerundio sacaría del top-1 a la palabra correcta. Los artículos no van: «a chair» se guarda como «chair».",
 
+  "$cuatroNacionalidades": "«Italian», «Portuguese», «Arabic» y «Colombian» las añadió Claude, no el profesor, y conviene que se sepa. No son vocabulario nuevo: Grammaster ya las capitalizaba en la oración generada desde su propia lista interna, así que estaban dentro de la app sin estar aquí. Al unificar las dos listas había que elegir entre traerlas o quitarles la mayúscula, y quitársela habría sido una regresión. Si el profesor decide que no van, se borran y la regla las deja de tocar — no dependen de nada más.",
+
   "$mayusculas": "RESUELTO. El corrector sigue comparando en minúsculas —su trabajo es la ortografía, no la capitalización— y la capitalización la lleva ahora `capitals-engine.js`, una comprobación aparte del mismo tipo que la de `be` + verbo en forma base. La lista la deriva `sync-vocabulary.mjs` de aquí: TODAS las nacionalidades, más los meses y los días. Los días se añadieron para esto: son un conjunto CERRADO del idioma, como los meses, no una selección de nadie. Los países quedan FUERA a propósito, aunque estén aquí con mayúscula: el español también los capitaliza, así que «chile» por «Chile» no es el error que esta regla existe para cazar, y meterlos traería homógrafos (Turkey/turkey, China/china) sin enseñar nada. Ver la cabecera del motor para el porqué completo.",
 
   "$tallResuelto": "«tall» YA ESTÁ, desde el vocabulario de los cursos elementales. Es la palabra del caso que originó todo esto: una alumna quiso «He is tall» y tecleó «talk». Estuvo ausente los dos cursos básicos completos, que es exactamente por lo que la existencia de una palabra no puede filtrarse por unidad ni por nivel — ella escribió una palabra correcta que su temario todavía no le había dado.",
@@ -143,7 +145,8 @@
     "Japanese", "Korean", "Mexican", "Peruvian", "Saudi", "Spanish",
     "Turkish", "British", "American", "Vietnamese", "Irish", "German",
     "Moroccan", "Egyptian", "Russian", "Czech", "French", "Thai", "African",
-    "Asian", "Australian", "European", "North American", "South American"
+    "Asian", "Australian", "European", "North American", "South American",
+    "Italian", "Portuguese", "Arabic", "Colombian"
   ],
 
   "adverbio": [

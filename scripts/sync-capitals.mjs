@@ -73,12 +73,27 @@ const NACIONALIDADES = vocab.nacionalidad || [];
    MODAL, y en esta suite se usa muchísimo más que el mes. */
 const AMBIGUAS = ['may', 'march', 'august'];
 
+/* Las palabras que el vocabulario guarda EN MINÚSCULA en algún sitio. Sirven de
+   veto: si una parte de una nacionalidad compuesta es además una palabra
+   corriente, no puede entrar sola en la regla.
+
+   EL FALLO QUE ESTO ARREGLA: «North America» se partía en «north» + «america»,
+   así que `north` y `south` acababan exigiendo mayúscula por su cuenta y «go
+   south» salía marcado como error. Una oración correcta señalada como incorrecta
+   — el fallo caro, el que la cabecera del motor dice evitar por encima de todo.
+   Se pierde el aviso sobre el «North» de «North American», y se pierde a
+   propósito: vale mucho más callar ahí que gritar en cada «go south». */
+const enMinuscula = new Set([...enVocab].filter(p => p === p.toLowerCase())
+  .flatMap(p => p.split(/\s+/)));
+
 const CANONICO = {};
 for (const p of [...MESES, ...DIAS, ...NACIONALIDADES]) {
-  // Las nacionalidades de varias palabras («North American») se guardan enteras
-  // y también palabra a palabra: el motor trabaja token a token.
+  // Las compuestas («North American») se parten porque el motor trabaja token a
+  // token; cada parte entra solo si es mayúscula Y no es palabra corriente.
   for (const parte of p.split(/\s+/)) {
-    if (/^[A-Z]/.test(parte)) CANONICO[parte.toLowerCase()] = parte;
+    if (!/^[A-Z]/.test(parte)) continue;
+    if (enMinuscula.has(parte.toLowerCase())) continue;
+    CANONICO[parte.toLowerCase()] = parte;
   }
 }
 

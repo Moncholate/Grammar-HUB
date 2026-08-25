@@ -1,5 +1,7 @@
 /* Anillo de foco accesible, generado desde design-tokens (no editar allí). */
 @import './dua.generated.css';
+/* Roles y marca como variables, generados desde design-tokens. */
+@import './colores.generated.css';
 
 @font-face{font-family:'Lexend';font-style:normal;font-weight:400 700;font-display:swap;src:url('./fonts/Lexend.woff2') format('woff2');}
 @font-face{font-family:'Atkinson Hyperlegible';font-style:normal;font-weight:400;font-display:swap;src:url('./fonts/AtkinsonHyperlegible-Regular.woff2') format('woff2');}
@@ -181,7 +183,7 @@ button:disabled { cursor: not-allowed; }
 /* El selector de nivel: en reposo ya estaba cubierto arriba, pero al pasar el
    ratón vuelve a indigo-600 por la variante `hover:`, que es OTRA clase y el
    override de arriba no alcanza. Quedaba en 2,81:1 justo al apuntarlo. */
-:root[data-theme="dark"] .hover\:text-indigo-600:hover { color: #a5b4fc !important; }  /* 8.86:1 sobre #141826 */
+:root[data-theme="dark"] .hover\:text-indigo-600:hover { color: var(--marca) !important; }  /* 5.70:1 sobre #141826 · marca, no rol */
 
 /* El hover oscurece el fondo ámbar a un neutro, pero la tinta seguía siendo
    amber-800: 1,85:1 solo mientras el ratón está encima. Compuesto para tocar

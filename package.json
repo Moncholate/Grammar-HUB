@@ -12,10 +12,11 @@
     "sync-gamification": "node scripts/sync-gamification.mjs",
     "sync-phrasal": "node scripts/sync-phrasal.mjs",
     "check": "node tools/check-install.mjs && node tools/check-analogia.mjs",
-    "sync": "npm run sync-curriculum && npm run sync-gamification && npm run sync-phrasal && npm run sync-vocabulary && npm run sync-spelling",
+    "sync": "npm run sync-curriculum && npm run sync-gamification && npm run sync-phrasal && npm run sync-vocabulary && npm run sync-spelling && npm run sync-capitals",
     "sync-vocabulary": "node scripts/sync-vocabulary.mjs",
     "sync-spelling": "node scripts/sync-spelling.mjs",
-    "check-contraste": "node check-contraste-render.mjs"
+    "check-contraste": "node check-contraste-render.mjs",
+    "sync-capitals": "node scripts/sync-capitals.mjs"
   },
   "dependencies": {
     "compromise": "^14.15.0",

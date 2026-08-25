@@ -1,0 +1,102 @@
+/* ============================================================================
+   Grammar Hub · sync del motor de MAYÚSCULAS
+   Lee capitals-engine.js + vocabulary.json y genera el consumible de cada app.
+   Uso:  node scripts/sync-capitals.mjs   (desde Grammar HUB)
+
+   Mismo patrón que sync-spelling.mjs: el motor es LÓGICA compartida y la lista
+   son DATOS derivados del vocabulario, que es la fuente única.
+
+   Reparto:
+     · Grammaster → src/data/capitals.generated.js   (ESM)
+
+   Question Lab y Desgramatizador NO reciben nada TODAVÍA, y es una decisión, no
+   un olvido. La regla necesita un sitio donde avisar palabra por palabra, y
+   Grammaster lo tiene —tres campos con su línea de aviso debajo—; QL solo
+   propone verbos dentro del diagnóstico de «falta el verbo», y Desgramatizador
+   analiza texto libre sin corregir a nadie. Darles el archivo sin tener dónde
+   enseñarlo dejaría un generado muerto y sin registrar en `build.mjs` ni en
+   `sw.js`, que es exactamente lo que rompió tres despliegues de QL en agosto.
+   Cuando tengan dónde, se añaden aquí y no en otro sitio.
+
+   ── De dónde sale la lista ─────────────────────────────────────────────────
+   De vocabulary.json, y solo del conjunto donde el español y el inglés NO
+   coinciden: nacionalidades, meses y días. El porqué largo está en la cabecera
+   del motor; en corto, es el único sitio donde hay interferencia que corregir.
+   Los países quedan fuera aunque estén con mayúscula en el vocabulario: el
+   español también los capitaliza.
+
+   MESES y DIAS se declaran aquí y no como categoría del vocabulario porque son
+   conjuntos CERRADOS del idioma, no una selección de nadie, y porque las
+   categorías de vocabulary.json son gramaticales (un mes es un sustantivo, y
+   con eso es con lo que tiene que ordenarse en las sugerencias).
+   ============================================================================ */
+import { readFileSync, writeFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { dirname, join } from 'node:path';
+
+const here = dirname(fileURLToPath(import.meta.url));
+const hub = join(here, '..');
+const apps = join(hub, '..');
+
+const engine = readFileSync(join(hub, 'capitals-engine.js'), 'utf8');
+const vocab = JSON.parse(readFileSync(join(hub, 'vocabulary.json'), 'utf8'));
+
+const EXPORTA = ['revisarMayusculas', 'corregirMayusculas'];
+const faltan = EXPORTA.filter(n => !new RegExp(`export const ${n}\\b`).test(engine));
+if (faltan.length) {
+  console.error(`capitals-engine.js ya no exporta: ${faltan.join(', ')}`);
+  process.exit(1);
+}
+
+const MESES = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
+               'August', 'September', 'October', 'November', 'December'];
+const DIAS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
+/* Que estén en el vocabulario NO es un detalle burocrático: si un mes falta
+   allí, el corrector ortográfico no lo conoce y marcaría «January» como errata
+   justo después de que esta regla le pidiera al alumno que lo escribiera así.
+   Las dos comprobaciones tienen que ver el mismo mundo. */
+const enVocab = new Set(Object.entries(vocab)
+  .filter(([k]) => !k.startsWith('$'))
+  .flatMap(([, v]) => v));
+const ausentes = [...MESES, ...DIAS].filter(p => !enVocab.has(p));
+if (ausentes.length) {
+  console.error(`Faltan en vocabulary.json: ${ausentes.join(', ')}`);
+  console.error('Sin ellas el corrector las marcaría como erratas. Añádelas a `sustantivo`.');
+  process.exit(1);
+}
+
+const NACIONALIDADES = vocab.nacionalidad || [];
+
+/* Ambiguas: tienen un uso legítimo en minúscula, así que el motor solo las
+   marca con prueba de que se habla del mes. `may` es la importante — es un
+   MODAL, y en esta suite se usa muchísimo más que el mes. */
+const AMBIGUAS = ['may', 'march', 'august'];
+
+const CANONICO = {};
+for (const p of [...MESES, ...DIAS, ...NACIONALIDADES]) {
+  // Las nacionalidades de varias palabras («North American») se guardan enteras
+  // y también palabra a palabra: el motor trabaja token a token.
+  for (const parte of p.split(/\s+/)) {
+    if (/^[A-Z]/.test(parte)) CANONICO[parte.toLowerCase()] = parte;
+  }
+}
+
+const BANNER =
+  '/* AUTO-GENERATED from Grammar HUB/capitals-engine.js + vocabulary.json — do not edit.\n' +
+  '   Regenerate: node scripts/sync-capitals.mjs (from Grammar HUB). */\n';
+
+const datos = (exportar) =>
+  `\n${exportar}const CAPS_CANONICO = ${JSON.stringify(CANONICO)};\n` +
+  `${exportar}const CAPS_AMBIGUAS = ${JSON.stringify(AMBIGUAS)};\n`;
+
+/* ---- Grammaster: ESM tal cual ---- */
+writeFileSync(
+  join(apps, 'Grammaster', 'src', 'data', 'capitals.generated.js'),
+  BANNER + engine + datos('export ')
+);
+console.log('  ✓ Grammaster/src/data/capitals.generated.js');
+
+console.log(`mayúsculas sincronizadas: ${Object.keys(CANONICO).length} palabras ` +
+            `(${MESES.length} meses, ${DIAS.length} días, ${NACIONALIDADES.length} nacionalidades), ` +
+            `${AMBIGUAS.length} ambiguas`);

@@ -36,6 +36,8 @@
    aporta.
    ============================================================================ */
 import { spawn } from 'node:child_process';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 
 /* ── El auditor, que corre DENTRO del navegador ───────────────────────────── */
 export const AUDITOR = () => {
@@ -170,6 +172,26 @@ export const AUDITOR = () => {
    no tenerlo, porque además da permiso para no mirar.
    -------------------------------------------------------------------------- */
 export async function correr({ nombre, puerto, conducir, pantallas, cambiarTema, revisados = [], viewport }) {
+  /* `npm i -D playwright` lo escribe en package.json, que es justo lo que NO
+     puede pasar: el despliegue corre `npm ci` y se bajaría los navegadores en
+     cada build. Se avisa aquí porque este es el único sitio donde alguien tiene
+     motivo para instalarlo, así que es donde se comete el error — y lo cometí
+     yo montando la sonda de Grammar HUB, con el aviso ya escrito en la cabecera
+     de los tres guiones. Un aviso que hay que acordarse de leer no es una
+     guardia. */
+  try {
+    const pkg = JSON.parse(readFileSync(join(process.cwd(), 'package.json'), 'utf8'));
+    if (pkg.devDependencies?.playwright || pkg.dependencies?.playwright) {
+      console.error('\n  Playwright está en package.json, y no puede estar.\n');
+      console.error('  El despliegue corre `npm ci`: con esto se bajaría los navegadores');
+      console.error('  en cada build. Tiene que vivir solo en node_modules.\n');
+      console.error('      npm pkg delete devDependencies.playwright');
+      console.error('      npm install --package-lock-only\n');
+      console.error('  (node_modules no se toca, así que la sonda sigue funcionando.)\n');
+      process.exit(1);
+    }
+  } catch { /* sin package.json legible, no hay nada que comprobar */ }
+
   let chromium;
   try {
     ({ chromium } = await import('playwright'));

@@ -7,16 +7,17 @@
    son DATOS derivados del vocabulario, que es la fuente única.
 
    Reparto:
-     · Grammaster → src/data/capitals.generated.js   (ESM)
+     · Grammaster   → src/data/capitals.generated.js   (ESM)
+     · Question Lab → capitals.generated.js            (global window.GH_CAPS)
 
-   Question Lab y Desgramatizador NO reciben nada TODAVÍA, y es una decisión, no
-   un olvido. La regla necesita un sitio donde avisar palabra por palabra, y
-   Grammaster lo tiene —tres campos con su línea de aviso debajo—; QL solo
-   propone verbos dentro del diagnóstico de «falta el verbo», y Desgramatizador
-   analiza texto libre sin corregir a nadie. Darles el archivo sin tener dónde
-   enseñarlo dejaría un generado muerto y sin registrar en `build.mjs` ni en
-   `sw.js`, que es exactamente lo que rompió tres despliegues de QL en agosto.
-   Cuando tengan dónde, se añaden aquí y no en otro sitio.
+   Desgramatizador NO recibe nada, y es una decisión: analiza texto que el
+   alumno PEGA —muchas veces del libro, ya correcto— y no corrige a nadie.
+   Avisar ahí de mayúsculas sería ruido sobre material ajeno. Cuando tenga un
+   sitio donde corregir producción propia, se añade aquí y no en otro sitio.
+
+   Al añadir una app nueva hay que registrar el generado en TODOS sus sitios
+   —en QL son `index.html`, `ACTIVOS` de `build.mjs` y `urlsToCache` de
+   `sw.js`—. Olvidar uno rompió tres despliegues en agosto.
 
    ── De dónde sale la lista ─────────────────────────────────────────────────
    De vocabulary.json, y solo del conjunto donde el español y el inglés NO
@@ -104,6 +105,15 @@ const BANNER =
 const datos = (exportar) =>
   `\n${exportar}const CAPS_CANONICO = ${JSON.stringify(CANONICO)};\n` +
   `${exportar}const CAPS_AMBIGUAS = ${JSON.stringify(AMBIGUAS)};\n`;
+
+/* ---- Question Lab: global window.GH_CAPS (vanilla, sin imports) ---- */
+const enginePlain = engine.replace(/^export\s+/gm, '');
+writeFileSync(
+  join(apps, 'Question Lab', 'capitals.generated.js'),
+  `${BANNER}window.GH_CAPS = (function(){\n${enginePlain}${datos('')}\n` +
+  `  return { ${EXPORTA.join(', ')}, CAPS_CANONICO, CAPS_AMBIGUAS };\n})();\n`
+);
+console.log('  ✓ Question Lab/capitals.generated.js');
 
 /* ---- Grammaster: ESM tal cual ---- */
 writeFileSync(

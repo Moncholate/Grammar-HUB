@@ -11,7 +11,6 @@
 /* Modo oscuro (disparado por data-theme; el resolver del <head> lo fija) */
 :root[data-theme="dark"], :root[data-theme="dark"] body { background-color: #0c0e15; color: #eceff8; }
 :root[data-theme="dark"] .bg-white { background-color: #141826 !important; }
-:root[data-theme="dark"] .bg-white\/80 { background-color: rgba(20,24,38,.82) !important; }
 :root[data-theme="dark"] .applogo { background-image: none !important; background-color: #1a1f2e !important; }
 :root[data-theme="dark"] .bg-\[\#f5f6fb\] { background-color: #0c0e15 !important; }
 :root[data-theme="dark"] .bg-gray-50, :root[data-theme="dark"] .bg-slate-50 { background-color: #1a1f2e !important; }
@@ -147,17 +146,10 @@ button:disabled { cursor: not-allowed; }
 :root[data-theme="dark"] .hover\:text-gray-800:hover,
 :root[data-theme="dark"] .hover\:text-slate-700:hover { color: #eceff8 !important; }
 
-/* Tintes de color en hover. El de arriba cubría los neutros; faltaban estos.
-   En oscuro el hover NO conserva el tono, solo eleva la superficie: lo que
-   tiene que comunicar es "esto se puede tocar", no de qué color era el tinte
-   claro original. Un tinte ámbar o índigo real sobre fondo oscuro se ve como un
-   parche, y además obligaría a revisar el contraste de cada texto encima. */
-:root[data-theme="dark"] .hover\:bg-indigo-50:hover,
-:root[data-theme="dark"] .hover\:bg-blue-50:hover,
-:root[data-theme="dark"] .hover\:bg-teal-50:hover,
-:root[data-theme="dark"] .hover\:bg-amber-50:hover,
-:root[data-theme="dark"] .hover\:bg-red-50:hover,
-:root[data-theme="dark"] .hover\:bg-rose-50:hover { background-color: #1d2233 !important; }
+/* Aquí vivían los tintes de COLOR en hover (indigo/blue/teal/amber/red/rose -50)
+   copiados de las apps: el hub no tiene ninguno. Lo suyo son los neutros de
+   abajo. Si algún día una tarjeta estrena un hover de color, la regla vuelve —
+   con el tinte de color apagado a superficie, como en las gemelas. */
 :root[data-theme="dark"] .hover\:bg-slate-100:hover,
 :root[data-theme="dark"] .hover\:bg-slate-200:hover,
 :root[data-theme="dark"] .hover\:bg-indigo-100:hover,
@@ -179,7 +171,6 @@ button:disabled { cursor: not-allowed; }
 /* Tinta de marca que la capa no invertía y quedaba oscura sobre fondo oscuro.
    Compuestos a propósito: los chips sobre tinte claro conservan su texto. */
 :root[data-theme="dark"] .bg-white.text-indigo-600 { color: #c7d2fe !important; }   /* 2.81 → 11.85 */
-:root[data-theme="dark"] .hover\:text-red-700:hover { color: #fca5a5 !important; }  /* 2.44 → 8.89 */
 /* El selector de nivel: en reposo ya estaba cubierto arriba, pero al pasar el
    ratón vuelve a indigo-600 por la variante `hover:`, que es OTRA clase y el
    override de arriba no alcanza. Quedaba en 2,81:1 justo al apuntarlo. */

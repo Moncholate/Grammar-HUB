@@ -40,52 +40,50 @@ export function ThemeToggle({ lang = 'es', compacto = false }) {
 
 const HeaderNav = ({ lang, setLang }) => {
   return (
-    <header className="bg-white/80 backdrop-blur-sm border-b border-slate-100 sticky top-0 z-40">
-      <div className="relative max-w-2xl mx-auto px-5 py-4 flex flex-col items-center gap-2">
+    /* MISMA CABECERA QUE LAS OTRAS TRES: marca a la izquierda, controles a la
+       derecha, a todo el ancho con `px-4 py-3`. Antes iba centrada, con el logo
+       a 64px, el título a 2xl y los controles anclados en las esquinas con
+       rótulos «TEMA» e «IDIOMA» que ninguna otra app lleva. El hub es lo primero
+       que el alumno abre y desde donde salta a las apps: que la barra dé un
+       brinco en cada salto era justo lo que se venía arreglando en las demás.
+       `min-w-0` + `truncate` para que la marca ceda antes de que los controles
+       se salgan de la pantalla, como en Grammaster y Desgramatizador. */
+    <header className="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-40 px-4 py-3 flex items-center justify-between gap-3">
 
-        {/* Tema de la suite — esquina superior izquierda */}
-        <div className="absolute top-4 left-5 flex flex-col items-start">
-          <span className="text-[10px] font-semibold text-muted uppercase tracking-wide px-1 mb-0.5">
-            {lang === 'es' ? 'Tema' : 'Theme'}
-          </span>
-          <ThemeToggle lang={lang} />
-        </div>
-
-        {/* Selector de idioma — esquina superior derecha */}
-        <div className="absolute top-4 right-5 flex flex-col items-start">
-          <span className="text-[10px] font-semibold text-muted uppercase tracking-wide px-1 mb-0.5">
-            {lang === 'es' ? 'Idioma' : 'Language'}
-          </span>
-          <div className="flex bg-slate-100 border border-slate-300 rounded-lg p-0.5">
-            <button
-              onClick={() => setLang('es')}
-              className={`px-3 py-1 rounded text-sm font-bold transition-all ${lang === 'es' ? 'bg-white shadow-sm text-indigo-600' : 'hover:bg-slate-50 text-slate-600'}`}
-              title="Español"
-            >ES</button>
-            <button
-              onClick={() => setLang('en')}
-              className={`px-3 py-1 rounded text-sm font-bold transition-all ${lang === 'en' ? 'bg-white shadow-sm text-indigo-600' : 'hover:bg-slate-50 text-slate-600'}`}
-              title="English"
-            >EN</button>
-          </div>
-        </div>
-
-        {/* Logo */}
+      {/* Marca */}
+      <div className="flex items-center gap-3 min-w-0">
         <img
           src={`${import.meta.env.BASE_URL}apple-touch-icon.png`}
           alt="Grammar HUB"
-          className="w-16 h-16 rounded-2xl shadow-md"
+          className="w-10 h-10 rounded-[22%] shadow-sm shrink-0"
         />
-
-        {/* Título y subtítulo */}
-        <div className="text-center leading-tight">
-          <p className="font-extrabold text-slate-900 text-2xl tracking-tight">Grammar HUB</p>
-          <p className="text-sm text-muted mt-0.5">
+        <div className="min-w-0">
+          <p className="font-bold text-slate-800 text-lg sm:text-xl leading-tight truncate">Grammar HUB</p>
+          <p className="text-xs text-muted truncate">
             {lang === 'es' ? 'Tu laboratorio de inglés' : 'Your English laboratory'}
           </p>
         </div>
-
       </div>
+
+      {/* Controles: idioma y tema, en el mismo orden que en las apps */}
+      <div className="flex items-center gap-1.5 shrink-0">
+        <div className="flex bg-slate-100 border border-slate-200 rounded-lg p-0.5">
+          <button
+            onClick={() => setLang('es')}
+            aria-pressed={lang === 'es'}
+            className={`px-2 py-0.5 rounded text-xs font-bold transition-all ${lang === 'es' ? 'bg-white shadow-sm text-indigo-600' : 'text-slate-600 hover:text-slate-800'}`}
+            title="Español"
+          >ES</button>
+          <button
+            onClick={() => setLang('en')}
+            aria-pressed={lang === 'en'}
+            className={`px-2 py-0.5 rounded text-xs font-bold transition-all ${lang === 'en' ? 'bg-white shadow-sm text-indigo-600' : 'text-slate-600 hover:text-slate-800'}`}
+            title="English"
+          >EN</button>
+        </div>
+        <ThemeToggle lang={lang} />
+      </div>
+
     </header>
   );
 };

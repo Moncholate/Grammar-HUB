@@ -19,8 +19,20 @@ oraciones fijas porque no caben en el molde sujeto-verbo-complemento (dos
 cláusulas, sujetos impersonales…).
 
 **Sobre los marcadores:** los que van en `código` ya existen en la app y salen
-como chips junto al campo Complemento. Los marcados **(nuevo)** habría que
-agregarlos.
+como chips junto al campo Complemento. Los **(nuevo)** habría que agregarlos, y
+llevan anotado el curso en que se enseñan — dato del profesor, 28-ago-2026.
+
+---
+
+## Un uso puede llegar DESPUÉS que su tiempo
+
+Salió al anotar los cursos de los marcadores: el Presente Perfecto se enseña en
+Elem. II, pero *yet* y *already* son de Inter. I. O sea que uno de sus usos —el
+del pasado reciente— llega un curso más tarde que el tiempo.
+
+Si esto se confirma en más casos, cada uso puede llevar su propio curso y la
+tabla mostrar solo los que tocan, igual que ya hace con los tiempos. Está
+anotado donde corresponde: **(uso de Inter. I)**.
 
 ---
 
@@ -35,8 +47,11 @@ agregarlos.
 
 - [ ] **Acción en curso ahora mismo** — *She is working now.* (generable) — `now`, `right now`, `at the moment`
 - [ ] **Periodo temporal alrededor de ahora** (no exactamente en este segundo) — *He is studying a lot these days.* (generable) — `these days`, `this week`, `currently`
-- [ ] **Plan futuro ya acordado** — *I am meeting Ana tomorrow.* — tomorrow, tonight **(nuevo)**
-      · Ojo: choca con *going to* y suele verse más adelante. Marcar solo si el curso lo trata.
+- [x] **Plan futuro ya acordado** — *I am meeting Ana tomorrow.* (generable) — `tomorrow`, `tonight`, `next week`
+      · **Confirmado por el profesor: intercambiable con «be going to».** Los dos
+        dicen lo mismo para un plan. La app ya no avisa de incoherencia cuando
+        el Presente Continuo lleva un marcador de futuro (antes sí, y contradecía
+        la clase).
 
 ## Pasado Simple · Bás. II, 11A
 
@@ -47,20 +62,25 @@ agregarlos.
 ## Futuro con *going to* · Elem. II, 10B
 
 - [ ] **Planes e intenciones decididas de antes** — *They are going to travel next month.* (generable) — `next month`, `tonight`, `this weekend`
+      · Mismo contenido que el Presente Continuo de arriba: **se enseñan como
+        intercambiables**. Si este uso se queda, conviene que la tabla lo diga en
+        los dos sitios.
 - [ ] **Predicción con evidencia a la vista** — *Look at those clouds — it's going to rain.* — sin marcador
 
 ## Presente Perfecto · Elem. II, 12A
 
-- [ ] **Experiencia de vida, sin decir cuándo** — *I have been to Peru.* (generable) — ever, never **(nuevo)**
+- [ ] **Experiencia de vida, sin decir cuándo** — *I have been to Peru.* (generable) — never **(nuevo · Bás. I)**, ever **(nuevo · Elem. II)**
 - [ ] **Acción pasada con resultado en el presente** — *She has lost her keys.* (generable) — sin marcador
 - [ ] **Empezó en el pasado y sigue hasta ahora** — *We have lived here for ten years.* (generable) — `for 2 years`, `since 2020`, `since Monday`
-- [ ] **Pasado muy reciente / novedad** — *They have just arrived.* (generable) — just, already, yet **(nuevo)**
+- [ ] **Pasado muy reciente / novedad** — *They have just arrived.* (generable) — just **(nuevo)**, already **(nuevo · Inter. I)**, yet **(nuevo · Inter. I)**
+      · **(uso de Inter. I)** — el tiempo es de Elem. II, pero sus marcadores llegan
+        un curso después.
 
 ## Pasado Continuo · Inter. I, 2B
 
 - [ ] **Acción en progreso en un momento del pasado** — *At 8 pm she was working.* (generable) — `at 8 pm`, `at that moment`, `all morning`
-- [ ] **Acción larga interrumpida por una corta** — *I was cooking when he arrived.* — `when I arrived`, when **(nuevo)**
-- [ ] **Dos acciones pasadas a la vez** — *She was reading while he was cooking.* — `while she slept`, while **(nuevo)**
+- [ ] **Acción larga interrumpida por una corta** — *I was cooking when he arrived.* — `when I arrived`, when **(nuevo · Inter. I)**
+- [ ] **Dos acciones pasadas a la vez** — *She was reading while he was cooking.* — `while she slept`, while **(nuevo · Inter. I)**
 
 ## Futuro Simple con *will* · Inter. I, 6A
 
@@ -86,11 +106,21 @@ agregarlos.
 
 ---
 
+## Los cursos de los marcadores nuevos (dato del profesor)
+
+| Marcador | Curso |
+|---|---|
+| never | Bás. I |
+| ever | Elem. II |
+| already, yet | Inter. I |
+| when, while | Inter. I |
+| just, then, after that | por confirmar |
+
 ## Notas para después de la revisión
 
-1. Los marcadores **(nuevo)** —*ever, never, just, already, yet, when, while, then*—
-   no están hoy en las listas de la app. Si el uso que los trae se queda, se
-   agregan junto a los demás.
+1. Los marcadores **(nuevo)** no están hoy en las listas de la app. Si el uso que
+   los trae se queda, se agregan con su curso, para que no aparezcan antes de
+   tiempo.
 2. Los usos que hablan de **dos cláusulas** (*when*, *while*) llevan ejemplo fijo:
    el motor construye una oración, no dos. Si más adelante interesa, la
    condicional ya demuestra que se puede hacer con dos.

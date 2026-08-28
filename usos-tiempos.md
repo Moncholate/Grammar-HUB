@@ -24,15 +24,30 @@ llevan anotado el curso en que se enseñan — dato del profesor, 28-ago-2026.
 
 ---
 
-## Un uso puede llegar DESPUÉS que su tiempo
+## Un uso llega DESPUÉS que su tiempo, y no es la excepción
 
-Salió al anotar los cursos de los marcadores: el Presente Perfecto se enseña en
-Elem. II, pero *yet* y *already* son de Inter. I. O sea que uno de sus usos —el
-del pasado reciente— llega un curso más tarde que el tiempo.
+Confirmado con los cursos que dio el profesor (28-ago-2026). El Presente
+Perfecto se enseña entero en **Elem. II**, pero sus usos entran en tres momentos
+distintos:
 
-Si esto se confirma en más casos, cada uso puede llevar su propio curso y la
-tabla mostrar solo los que tocan, igual que ya hace con los tiempos. Está
-anotado donde corresponde: **(uso de Inter. I)**.
+| Curso | Uso | Marcadores |
+|---|---|---|
+| Elem. II | experiencia de vida · resultado presente | ever, never |
+| Inter. I | ya / todavía no | already, yet |
+| Inter. II | empezó y sigue | for, since |
+
+O sea que **dos de sus cuatro usos llegan uno y dos cursos más tarde que el
+tiempo**. Con un solo caso era una curiosidad; con tres momentos en el mismo
+tiempo es la regla, y tiene una consecuencia de diseño:
+
+**cada uso lleva su propio curso, no el de su tiempo.** Si no, la tabla le
+muestra a un alumno de Elem. II un uso con *since* que no verá hasta dos cursos
+después. Está anotado en cada uso: **(uso de Inter. I)**, **(uso de Inter. II)**.
+
+Lo mismo vale para los chips de marcador que ya salen junto al campo
+Complemento: hoy un alumno de Elem. II que elige Presente Perfecto ve
+`since 2020` y `for 2 years`. Cuando los marcadores lleven curso, esos chips
+tienen que filtrarse igual.
 
 ---
 
@@ -69,12 +84,22 @@ anotado donde corresponde: **(uso de Inter. I)**.
 
 ## Presente Perfecto · Elem. II, 12A
 
-- [ ] **Experiencia de vida, sin decir cuándo** — *I have been to Peru.* (generable) — never **(nuevo · Bás. I)**, ever **(nuevo · Elem. II)**
+- [ ] **Experiencia de vida, sin decir cuándo** — *I have been to Peru.* (generable) — ever **(nuevo · Elem. II)**, never **(nuevo · Elem. II)**
+      · *never* se ve antes, en Bás. I, pero como ADVERBIO DE FRECUENCIA. Como
+        marcador de experiencia («I have never been to Peru») entra en Elem. II,
+        con el tiempo. La misma palabra en dos papeles y dos cursos: si los
+        marcadores llevan curso, tiene que ser por papel y no por palabra.
 - [ ] **Acción pasada con resultado en el presente** — *She has lost her keys.* (generable) — sin marcador
 - [ ] **Empezó en el pasado y sigue hasta ahora** — *We have lived here for ten years.* (generable) — `for 2 years`, `since 2020`, `since Monday`
-- [ ] **Pasado muy reciente / novedad** — *They have just arrived.* (generable) — just **(nuevo)**, already **(nuevo · Inter. I)**, yet **(nuevo · Inter. I)**
-      · **(uso de Inter. I)** — el tiempo es de Elem. II, pero sus marcadores llegan
-        un curso después.
+      · **(uso de Inter. II)** — *for* y *since* se enseñan ahí, dos cursos después
+        del tiempo.
+- [ ] **Ya está hecho, o todavía no** — *She has already finished.* / *They haven't arrived yet.* (generable) — already **(nuevo · Inter. I)**, yet **(nuevo · Inter. I)**
+      · **(uso de Inter. I)** — el tiempo es de Elem. II y estos
+        marcadores llegan un curso después.
+      · Reescrito: la primera versión decía «pasado muy reciente» y se apoyaba en
+        *just*, que **el profesor no ve en ningún curso**. Sin *just*, lo que
+        enseña el par *already/yet* no es la cercanía sino si la acción está
+        completada o pendiente.
 
 ## Pasado Continuo · Inter. I, 2B
 
@@ -110,11 +135,12 @@ anotado donde corresponde: **(uso de Inter. I)**.
 
 | Marcador | Curso |
 |---|---|
-| never | Bás. I |
-| ever | Elem. II |
+| ever, never | Elem. II (*never* se ve antes en Bás. I, pero como adverbio de frecuencia) |
 | already, yet | Inter. I |
 | when, while | Inter. I |
-| just, then, after that | por confirmar |
+| for, since | Inter. II |
+| ~~just~~ | **no está en el temario** — no se agrega |
+| then, after that | por confirmar |
 
 ## Notas para después de la revisión
 

@@ -19,6 +19,7 @@
 import React from 'react';
 import { ArrowLeft } from 'lucide-react';
 import Dado from './Dado';
+import Grupos from './Grupos';
 import { apps } from './HubHome';
 import { translations } from '../i18n';
 
@@ -44,6 +45,8 @@ const PanelDocente = ({ lang = 'es', onVolver }) => {
 
       <div className="flex-1 px-5 py-6 flex flex-col gap-8">
         <Dado lang={lang} />
+
+        <Grupos lang={lang} />
 
         {/* LA TABLA DE TIEMPOS vive en Grammaster, que es donde está el motor que
             la genera: traerla aquí obligaría a copiar ese motor, y copiar es lo

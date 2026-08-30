@@ -136,6 +136,21 @@ correr({
           await lanzar.click(); await page.waitForTimeout(700);
           await lanzar.click(); await page.waitForTimeout(700);   // dos, para que haya historial
         }
+
+        /* Los grupos: sin lista pegada solo se ve el cuadro de texto, así que
+           las fichas de nombres, el contador y las tarjetas del reparto no
+           existirían en el DOM. Con `if` porque en el segundo pase la lista ya
+           está cargada — el arnés no recarga entre temas. */
+        const caja = page.locator('textarea');
+        if (await caja.count()) {
+          await caja.fill(['Ana Pérez', 'Luis Soto', 'María López', 'Diego Rojas', 'Camila Díaz', 'Tomás Vera'].join('\n'));
+          const usar = page.locator('button:has-text("Usar esta lista"), button:has-text("Use this list")').first();
+          if (await usar.count()) { await usar.click(); await page.waitForTimeout(400); }
+        }
+        const ausente = page.locator('button[aria-pressed="true"]:has-text("Luis Soto")').first();
+        if (await ausente.count()) { await ausente.click(); await page.waitForTimeout(200); }
+        const repartir = page.locator('button:has-text("Repartir"), button:has-text("Split")').first();
+        if (await repartir.count()) { await repartir.click(); await page.waitForTimeout(500); }
       },
     },
   ],

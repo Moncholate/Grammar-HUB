@@ -11,6 +11,18 @@
 /* Modo oscuro (disparado por data-theme; el resolver del <head> lo fija) */
 :root[data-theme="dark"], :root[data-theme="dark"] body { background-color: #0c0e15; color: #eceff8; }
 :root[data-theme="dark"] .bg-white { background-color: #141826 !important; }
+/* LOS CAMPOS DE ESCRITURA. El hub no tuvo ninguno hasta que llegaron las
+   herramientas de clase, así que esta regla —que Grammaster y Desgramatizador
+   tienen desde el principio— faltaba aquí. Sin ella, Tailwind le pasa al campo
+   el `color` heredado (la tinta clara del tema oscuro) y el navegador le deja su
+   fondo blanco: texto casi invisible justo donde el profesor escribe la lista.
+   Lo vio él, no la sonda; la sonda no miraba los campos porque su texto no es un
+   nodo de texto. Ya los mira. */
+:root[data-theme="dark"] input,
+:root[data-theme="dark"] textarea,
+:root[data-theme="dark"] select { background-color: #141826 !important; color: #eceff8 !important; }
+:root[data-theme="dark"] input::placeholder,
+:root[data-theme="dark"] textarea::placeholder { color: #6c7488 !important; }
 :root[data-theme="dark"] .applogo { background-image: none !important; background-color: #1a1f2e !important; }
 :root[data-theme="dark"] .bg-\[\#f5f6fb\] { background-color: #0c0e15 !important; }
 :root[data-theme="dark"] .bg-gray-50, :root[data-theme="dark"] .bg-slate-50 { background-color: #1a1f2e !important; }

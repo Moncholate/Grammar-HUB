@@ -47,7 +47,7 @@ const STAGE_TINTS = [
   { box: 'bg-indigo-100/70 border-indigo-300', label: 'text-indigo-800' },
 ];
 
-const HubHome = ({ lang, level, setLevel, onPhraseOpenChange, onAppOpenChange }) => {
+const HubHome = ({ lang, level, setLevel, onPhraseOpenChange, onAppOpenChange, onDocente }) => {
   const [selectedApp, setSelectedApp] = useState(null);
   const iframeRef = useRef(null);
   const touchStartX = useRef(null);
@@ -326,6 +326,19 @@ const HubHome = ({ lang, level, setLevel, onPhraseOpenChange, onAppOpenChange })
         ))}
       </div>
       </div>
+
+      {/* La puerta a las herramientas de clase. Va discreta y al final a
+          propósito: el alumno no viene a esto, y el profesor sabe que está.
+          No se esconde ni se protege con clave porque no hay nada que
+          proteger — esas herramientas no guardan datos de nadie. */}
+      {onDocente && (
+        <button
+          onClick={onDocente}
+          className="mt-8 text-xs font-medium text-slate-600 hover:text-slate-800 underline underline-offset-2"
+        >
+          {t.docenteEntrada}
+        </button>
+      )}
 
       {/* Footer. La firma se queda como estaba; debajo va el copyright, más
           apagado, porque no es lo que el alumno viene a leer. El aviso que pesa

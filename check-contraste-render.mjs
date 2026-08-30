@@ -64,6 +64,11 @@ correr({
     {
       nombre: 'Inicio',
       ir: async (page) => {
+        /* Las herramientas de clase REEMPLAZAN la vista del hub, así que en el
+           segundo pase la página llega dentro del panel. Volver primero, o
+           «Inicio» mediría el panel y daría un verde que no significa nada. */
+        const volver = page.getByRole('button', { name: 'Hub', exact: true });
+        if (await volver.count()) { await volver.first().click(); await page.waitForTimeout(350); }
         await cerrarFrase(page);
         const logros = page.locator('button[aria-controls="gh-insignias"]').first();
         if (await logros.count() && await logros.getAttribute('aria-expanded') === 'true') {
@@ -106,6 +111,31 @@ correr({
         if (await abrir.count()) { await abrir.click(); await page.waitForTimeout(400); }
         const destapar = page.locator('section button[type="button"]').first();
         if (await destapar.count()) { await destapar.click(); await page.waitForTimeout(400); }
+      },
+    },
+    {
+      /* Las herramientas del profesor: la única pantalla que no es para el
+         alumno, y la única con tipografía gigante (el resultado del dado se lee
+         proyectado). Va LA ÚLTIMA porque reemplaza la vista del hub — «Inicio»
+         sabe volver—, y se TIRA una vez: sin tirar, la caja solo tiene el «Toca
+         Lanzar» y no se mediría ni el número, ni el sujeto, ni los chips del
+         historial. */
+      nombre: 'Herramientas de clase',
+      ir: async (page) => {
+        await cerrarFrase(page);
+        const puerta = page.locator('button:has-text("Herramientas de clase"), button:has-text("Classroom tools")').first();
+        if (await puerta.count()) { await puerta.click(); await page.waitForTimeout(400); }
+        for (const dado of ['Sujeto', 'Subject', 'Forma', 'Form']) {
+          const b = page.getByRole('button', { name: dado, exact: true });
+          if (await b.count() && await b.first().getAttribute('aria-pressed') === 'false') {
+            await b.first().click();
+          }
+        }
+        const lanzar = page.locator('button:has-text("Lanzar"), button:has-text("Roll")').first();
+        if (await lanzar.count()) {
+          await lanzar.click(); await page.waitForTimeout(700);
+          await lanzar.click(); await page.waitForTimeout(700);   // dos, para que haya historial
+        }
       },
     },
   ],

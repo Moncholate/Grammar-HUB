@@ -9,6 +9,7 @@ export const translations = {
     /* Nombra el destino a proposito: dentro de la app hay sus propios «atras»
        y un «Volver» generico se llevaba los clics dirigidos a ellos. */
     backToHub: 'Hub',
+    docenteEntrada: 'Herramientas de clase (docente)',
     /* La analogia de los bloques: por que la suite entera esta hecha de piezas.
        El instructivo NO dice que figura armar -- eso hay que decirlo explicito,
        porque un instructivo LEGO de verdad lleva a UNA figura y el idioma no. */
@@ -50,6 +51,7 @@ export const translations = {
     derechos: 'All rights reserved',
     back: 'Back',
     backToHub: 'Hub',
+    docenteEntrada: 'Classroom tools (teacher)',
     whyBricksTitle: 'Why bricks?',
     whyBricksCore: 'Imagine the words of a language are bricks and grammar is the instruction booklet.',
     whyBricksBooklet: 'The booklet does not tell you which model to build (that one is yours to choose), it tells you how the pieces fit. You can speak without knowing the grammar: that is how you learned your first language. But with the booklet at hand you know what comes first and what connects to what, and you stop building blind.',

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import HeaderNav from './components/HeaderNav';
 import HubHome from './components/HubHome';
+import PanelDocente from './components/PanelDocente';
 import InstallPrompt from './components/InstallPrompt';
 import { LEVELS } from './i18n';
 
@@ -23,6 +24,10 @@ const App = () => {
   const [phraseOpen, setPhraseOpen] = useState(false);
   // Y con una app abierta en el iframe tampoco: flotaría sobre la app.
   const [appOpen, setAppOpen] = useState(false);
+  /* Las herramientas de clase son otra VISTA, no otra app: no van en el iframe
+     porque no son de nadie, y no van dentro del hub del alumno porque no son
+     para él. */
+  const [vista, setVista] = useState('hub');
 
   const setLevel = (id) => {
     setLevelState(id);
@@ -33,11 +38,15 @@ const App = () => {
     <div className="min-h-screen bg-[#f5f6fb] flex flex-col">
       <HeaderNav lang={lang} setLang={setLang} />
       <main className="flex-1 w-full flex flex-col">
-        <HubHome lang={lang} level={level} setLevel={setLevel}
-                 onPhraseOpenChange={setPhraseOpen} onAppOpenChange={setAppOpen} />
+        {vista === 'docente'
+          ? <PanelDocente lang={lang} onVolver={() => setVista('hub')} />
+          : <HubHome lang={lang} level={level} setLevel={setLevel}
+                     onPhraseOpenChange={setPhraseOpen} onAppOpenChange={setAppOpen}
+                     onDocente={() => setVista('docente')} />}
       </main>
-      {/* Decide solo si corresponde mostrarse (ver usePwaInstall) */}
-      <InstallPrompt paused={phraseOpen || appOpen} />
+      {/* Decide solo si corresponde mostrarse (ver usePwaInstall). En las
+          herramientas también espera: flotaría sobre el dado. */}
+      <InstallPrompt paused={phraseOpen || appOpen || vista === 'docente'} />
     </div>
   );
 };

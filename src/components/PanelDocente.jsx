@@ -19,6 +19,7 @@
 import React from 'react';
 import { ArrowLeft } from 'lucide-react';
 import Dado from './Dado';
+import { apps } from './HubHome';
 import { translations } from '../i18n';
 
 const PanelDocente = ({ lang = 'es', onVolver }) => {
@@ -41,8 +42,31 @@ const PanelDocente = ({ lang = 'es', onVolver }) => {
         </span>
       </div>
 
-      <div className="flex-1 px-5 py-6">
+      <div className="flex-1 px-5 py-6 flex flex-col gap-8">
         <Dado lang={lang} />
+
+        {/* LA TABLA DE TIEMPOS vive en Grammaster, que es donde está el motor que
+            la genera: traerla aquí obligaría a copiar ese motor, y copiar es lo
+            que esta suite ya pagó caro. Esto es la puerta —`#tiempos` la abre
+            directa— y se abre en otra pestaña a propósito: en clase se proyecta
+            y se deja puesta mientras el hub sigue donde estaba. */}
+        <section className="w-full max-w-xl mx-auto">
+          <h2 className="text-lg font-bold text-slate-900 mb-1">
+            {es ? 'Tabla de tiempos' : 'Tense table'}
+          </h2>
+          <p className="text-sm text-muted mb-3">
+            {es ? 'Cada tiempo con su uso, su auxiliar y qué le pasa al verbo en + − ?. Se abre en Grammaster, en otra pestaña.'
+                : 'Every tense with its use, its auxiliary and what happens to the verb in + − ?. It opens in Grammaster, in another tab.'}
+          </p>
+          <a
+            href={`${apps.find(a => a.id === 'grammaster').url}#tiempos`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold transition-colors"
+          >
+            {es ? 'Abrir la tabla' : 'Open the table'} →
+          </a>
+        </section>
       </div>
     </div>
   );

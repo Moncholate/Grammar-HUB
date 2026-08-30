@@ -9,7 +9,7 @@ import BrickAnalogy from './BrickAnalogy';
 // Colores alineados a la identidad de los logos de bloques:
 // Grammaster índigo (#6366F1) · Desgramatizador coral (#FB7185 = rose-400) ·
 // Question Lab turquesa (#2DD4BF = teal-400).
-const apps = [
+export const apps = [
   {
     id: 'grammaster',
     title: 'Grammaster',

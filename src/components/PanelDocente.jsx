@@ -19,13 +19,26 @@
    se perdería justo cuando el profesor va a sortear algo mientras corre el
    tiempo. Ese es el caso normal, no el raro.
 
+   PANTALLA COMPLETA, para proyectar. Se pide sobre el contenedor de las
+   herramientas y no sobre la página entera: así la cabecera del hub se queda
+   fuera sola, sin tener que esconderla a mano.
+
+   Dos cosas que no son obvias:
+     · el navegador puede negarla —iPhone no la da nunca fuera de un vídeo—, así
+       que si falla se queda el modo «a lo ancho» (fijo sobre la página), que es
+       casi todo lo que se gana y no depende de nadie.
+     · las herramientas reciben `grande` y deciden ELLAS qué crece: el resultado,
+       no los controles. Un dado con el número gigante y los botones normales es
+       lo que se ve desde el fondo de la sala; escalarlo todo por igual deja los
+       controles ocupando media pantalla.
+
    NADA SE GUARDA. Es la regla de esta sección, dicha por el profesor para el
    generador de grupos y aplicada a todo: lo que se escribe aquí vive mientras
    la pestaña está abierta. Así no hay nombres de alumnos en ningún repositorio
    ni en ningún despliegue, y no hay nada que explicar sobre qué queda guardado.
    ========================================================================== */
-import React, { useState } from 'react';
-import { ArrowLeft } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { ArrowLeft, Maximize2, Minimize2 } from 'lucide-react';
 import Dado from './Dado';
 import Ruleta from './Ruleta';
 import Grupos from './Grupos';
@@ -37,6 +50,37 @@ const PanelDocente = ({ lang = 'es', nivel = null, onVolver }) => {
   const es = lang === 'es';
   const t = translations[lang];
   const [vista, setVista] = useState('dado');
+  const [presentando, setPresentando] = useState(false);
+  const caja = useRef(null);
+
+  /* El estado lo manda el navegador, no el botón: si el profesor sale con Esc
+     —que es como se sale— la pantalla volvería a su sitio pero el botón seguiría
+     diciendo «salir». */
+  useEffect(() => {
+    /* Solo interesa SALIR: entrar lo hace el botón. Y hay que escucharlo porque
+       de la pantalla completa se sale con Esc, no con el botón. */
+    const alSalir = () => { if (!document.fullscreenElement) setPresentando(false); };
+    /* Esc también cierra el modo «a lo ancho» cuando el navegador negó la
+       pantalla completa (iPhone): ahí no hay evento de fullscreen que escuchar. */
+    const alTeclear = (e) => { if (e.key === 'Escape' && !document.fullscreenElement) setPresentando(false); };
+    document.addEventListener('fullscreenchange', alSalir);
+    document.addEventListener('keydown', alTeclear);
+    return () => {
+      document.removeEventListener('fullscreenchange', alSalir);
+      document.removeEventListener('keydown', alTeclear);
+    };
+  }, []);
+
+  const alternarPantalla = async () => {
+    if (presentando) {
+      try { if (document.fullscreenElement) await document.exitFullscreen(); } catch { /* ya estaba fuera */ }
+      setPresentando(false);
+      return;
+    }
+    setPresentando(true);
+    try { await caja.current?.requestFullscreen?.(); }
+    catch { /* sin API o denegada: queda el modo a lo ancho, que ya sirve */ }
+  };
 
   const HERRAMIENTAS = [
     { id: 'dado', rotulo: es ? 'Dado' : 'Dice' },
@@ -61,7 +105,8 @@ const PanelDocente = ({ lang = 'es', nivel = null, onVolver }) => {
         </span>
       </div>
 
-      <div className="px-4 pt-3 flex flex-wrap gap-1.5">
+      <div ref={caja} className={presentando ? 'fixed inset-0 z-50 bg-white overflow-auto flex flex-col' : 'contents'}>
+      <div className="px-4 pt-3 flex flex-wrap items-center gap-1.5">
         {HERRAMIENTAS.map(h => (
           <button
             key={h.id}
@@ -75,20 +120,30 @@ const PanelDocente = ({ lang = 'es', nivel = null, onVolver }) => {
             {h.rotulo}
           </button>
         ))}
+
+        {/* Para proyectar. Va junto a las pestañas porque en clase se toca con
+            la actividad ya elegida. */}
+        <button
+          onClick={alternarPantalla}
+          className="ml-auto flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold border border-slate-200 bg-white text-slate-600 hover:border-slate-300 transition-colors"
+        >
+          {presentando ? <Minimize2 size={15} /> : <Maximize2 size={15} />}
+          {presentando ? (es ? 'Salir' : 'Exit') : (es ? 'Pantalla completa' : 'Full screen')}
+        </button>
       </div>
 
-      <div className="flex-1 px-5 py-6">
-        <div className={vista === 'dado' ? '' : 'hidden'}><Dado lang={lang} nivel={nivel} /></div>
-        <div className={vista === 'ruleta' ? '' : 'hidden'}><Ruleta lang={lang} /></div>
-        <div className={vista === 'grupos' ? '' : 'hidden'}><Grupos lang={lang} /></div>
-        <div className={vista === 'tiempo' ? '' : 'hidden'}><Temporizador lang={lang} /></div>
+      <div className={`flex-1 px-5 py-6 ${presentando ? 'flex flex-col justify-center' : ''}`}>
+        <div className={vista === 'dado' ? '' : 'hidden'}><Dado lang={lang} nivel={nivel} grande={presentando} /></div>
+        <div className={vista === 'ruleta' ? '' : 'hidden'}><Ruleta lang={lang} grande={presentando} /></div>
+        <div className={vista === 'grupos' ? '' : 'hidden'}><Grupos lang={lang} grande={presentando} /></div>
+        <div className={vista === 'tiempo' ? '' : 'hidden'}><Temporizador lang={lang} grande={presentando} /></div>
 
         {/* LA TABLA DE TIEMPOS vive en Grammaster, que es donde está el motor que
             la genera: traerla aquí obligaría a copiar ese motor, y copiar es lo
             que esta suite ya pagó caro. Esto es la puerta —`#tiempos` la abre
             directa— y se abre en otra pestaña a propósito: en clase se proyecta
             y se deja puesta mientras el hub sigue donde estaba. */}
-        <section className="w-full max-w-xl mx-auto mt-10 pt-6 border-t border-slate-200">
+        <section className={`w-full max-w-xl mx-auto mt-10 pt-6 border-t border-slate-200 ${presentando ? 'hidden' : ''}`}>
           <h2 className="text-lg font-bold text-slate-900 mb-1">
             {es ? 'Tabla de tiempos' : 'Tense table'}
           </h2>
@@ -105,6 +160,7 @@ const PanelDocente = ({ lang = 'es', nivel = null, onVolver }) => {
             {es ? 'Abrir la tabla' : 'Open the table'} →
           </a>
         </section>
+      </div>
       </div>
     </div>
   );

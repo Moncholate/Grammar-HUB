@@ -19,7 +19,10 @@
 import React, { useState } from 'react';
 import { parsearNombres, repartir } from '../grupos';
 
-const Grupos = ({ lang = 'es' }) => {
+/* `grande` = proyectando: lo que se mira son los grupos, así que las tarjetas se
+   reparten a lo ancho y los nombres crecen. Las fichas de la lista y los
+   controles se quedan igual — esos se tocan de cerca, no se leen de lejos. */
+const Grupos = ({ lang = 'es', grande = false }) => {
   const es = lang === 'es';
   const [texto, setTexto] = useState('');
   const [nombres, setNombres] = useState([]);
@@ -46,7 +49,7 @@ const Grupos = ({ lang = 'es' }) => {
   const generar = () => setGrupos(repartir(presentes, { modo, n }));
 
   return (
-    <section className="w-full max-w-xl mx-auto">
+    <section className={grande ? 'w-full' : 'w-full max-w-xl mx-auto'}>
       <h2 className="text-lg font-bold text-slate-900 mb-1">{es ? 'Grupos' : 'Groups'}</h2>
       <p className="text-sm text-muted mb-4">
         {es ? 'Pega la lista del curso, apaga a quien faltó y reparte. No guarda nada.'
@@ -143,7 +146,7 @@ const Grupos = ({ lang = 'es' }) => {
           {grupos && (
             /* Los grupos se proyectan: nombres grandes y una tarjeta por grupo.
                `aria-live` para que el reparto también se anuncie. */
-            <div aria-live="polite" className="mt-4 grid gap-3 sm:grid-cols-2">
+            <div aria-live="polite" className={`mt-4 grid gap-3 ${grande ? 'sm:grid-cols-3 lg:grid-cols-4' : 'sm:grid-cols-2'}`}>
               {grupos.map((g, i) => (
                 <div key={i} className="rounded-xl border border-slate-200 bg-white p-3">
                   <p className="text-xs font-bold text-indigo-600 mb-1.5">
@@ -151,7 +154,7 @@ const Grupos = ({ lang = 'es' }) => {
                   </p>
                   <ul className="space-y-0.5">
                     {g.map(nombre => (
-                      <li key={nombre} className="text-base text-slate-900">{nombre}</li>
+                      <li key={nombre} className={`text-slate-900 ${grande ? 'text-[1.6vw]' : 'text-base'}`}>{nombre}</li>
                     ))}
                   </ul>
                 </div>

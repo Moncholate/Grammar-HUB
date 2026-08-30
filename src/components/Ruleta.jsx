@@ -38,7 +38,9 @@ const sector = (indice, total) => {
   return `M100,100 L${x0.toFixed(2)},${y0.toFixed(2)} A96,96 0 ${paso > 180 ? 1 : 0},1 ${x1.toFixed(2)},${y1.toFixed(2)} Z`;
 };
 
-const Ruleta = ({ lang = 'es' }) => {
+/* `grande` = proyectando: la rueda pasa a medirse en alto de pantalla y el
+   cartel del resultado crece con ella. Es el que se lee; la rueda es el gancho. */
+const Ruleta = ({ lang = 'es', grande = false }) => {
   const es = lang === 'es';
   const [texto, setTexto] = useState('');
   const [items, setItems] = useState([]);
@@ -88,7 +90,7 @@ const Ruleta = ({ lang = 'es' }) => {
   const quedan = items.length - usados.length;
 
   return (
-    <section className="w-full max-w-xl mx-auto">
+    <section className={grande ? 'w-full max-w-3xl mx-auto' : 'w-full max-w-xl mx-auto'}>
       <h2 className="text-lg font-bold text-slate-900 mb-1">{es ? 'Ruleta' : 'Wheel'}</h2>
       <p className="text-sm text-muted mb-4">
         {es ? 'Para el warm-up: pon los verbos o las preguntas, una por línea, y gira. No guarda nada.'
@@ -126,7 +128,7 @@ const Ruleta = ({ lang = 'es' }) => {
                 viewBox="0 0 200 200"
                 role="img"
                 aria-label={es ? `Ruleta con ${items.length} tarjetas` : `Wheel with ${items.length} cards`}
-                className="w-56 h-56 sm:w-64 sm:h-64"
+                className={grande ? 'w-[46vh] h-[46vh]' : 'w-56 h-56 sm:w-64 sm:h-64'}
                 style={{
                   transform: `rotate(${rotacion}deg)`,
                   transition: girando ? `transform ${GIRO_MS}ms cubic-bezier(.15,.9,.2,1)` : 'none',
@@ -169,7 +171,7 @@ const Ruleta = ({ lang = 'es' }) => {
             {elegido == null ? (
               <p className="text-muted text-sm">{es ? 'Toca Girar' : 'Tap Spin'}</p>
             ) : (
-              <p className="text-2xl sm:text-3xl font-bold text-slate-900">{items[elegido]}</p>
+              <p className={`font-bold text-slate-900 ${grande ? 'text-[5vw] leading-tight' : 'text-2xl sm:text-3xl'}`}>{items[elegido]}</p>
             )}
           </div>
 

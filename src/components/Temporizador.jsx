@@ -21,7 +21,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { formatoReloj, estadoReloj, PRESETS } from '../temporizador';
 
-const Temporizador = ({ lang = 'es' }) => {
+/* `grande` = proyectando. El reloj es lo único que importa a diez metros, así
+   que se lleva casi toda la pantalla. */
+const Temporizador = ({ lang = 'es', grande = false }) => {
   const es = lang === 'es';
   const [total, setTotal] = useState(180);        // lo que se puso, en segundos
   const [restante, setRestante] = useState(180);
@@ -123,9 +125,9 @@ const Temporizador = ({ lang = 'es' }) => {
         aria-live="polite"
         className="rounded-2xl border border-slate-200 bg-white px-6 py-8 text-center"
       >
-        <p className={`text-6xl sm:text-7xl font-extrabold tabular-nums ${color}`}>{formatoReloj(restante)}</p>
+        <p className={`font-extrabold tabular-nums ${color} ${grande ? 'text-[20vw] leading-none' : 'text-6xl sm:text-7xl'}`}>{formatoReloj(restante)}</p>
         {estado === 'fin' && (
-          <p className="mt-1 text-base font-bold text-red-700">{es ? '¡Se acabó el tiempo!' : "Time's up!"}</p>
+          <p className={`mt-1 font-bold text-red-700 ${grande ? 'text-[4vw]' : 'text-base'}`}>{es ? '¡Se acabó el tiempo!' : "Time's up!"}</p>
         )}
       </div>
 

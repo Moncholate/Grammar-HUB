@@ -43,7 +43,11 @@ const reducirMovimiento = () =>
     ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
     : false;
 
-const Dado = ({ lang = 'es', nivel = null }) => {
+/* `grande` = proyectando. Crece SOLO el resultado: el número se lee desde el
+   fondo de la sala y los controles se quedan como están, que es lo que hace que
+   quepan todos arriba. Las medidas van en `vw` para que se ajusten al proyector
+   —1024 o 1920 de ancho— en vez de a un tamaño fijo. */
+const Dado = ({ lang = 'es', nivel = null, grande = false }) => {
   const es = lang === 'es';
   const tiempos = tiemposHasta(nivel);
   const [caras, setCaras] = useState(6);
@@ -149,28 +153,28 @@ const Dado = ({ lang = 'es', nivel = null }) => {
           cante; `polite` y no `assertive` porque no interrumpe nada. */}
       <div
         aria-live="polite"
-        className={`rounded-2xl border border-slate-200 bg-white px-6 py-8 text-center transition-transform ${
-          tirando ? 'scale-[0.98]' : 'scale-100'
-        }`}
+        className={`rounded-2xl border border-slate-200 bg-white text-center transition-transform ${
+          grande ? 'px-6 py-10' : 'px-6 py-8'
+        } ${tirando ? 'scale-[0.98]' : 'scale-100'}`}
       >
         {!resultado ? (
           <p className="text-muted text-sm">{es ? 'Toca Lanzar' : 'Tap Roll'}</p>
         ) : (
           <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
             {activos.numero && (
-              <span className="text-6xl font-extrabold text-slate-900 tabular-nums">{resultado.numero}</span>
+              <span className={`font-extrabold text-slate-900 tabular-nums ${grande ? 'text-[16vw] leading-none' : 'text-6xl'}`}>{resultado.numero}</span>
             )}
             {activos.sujeto && (
-              <span className="text-4xl font-bold text-blue-600">{resultado.sujeto}</span>
+              <span className={`font-bold text-blue-600 ${grande ? 'text-[9vw] leading-none' : 'text-4xl'}`}>{resultado.sujeto}</span>
             )}
             {activos.forma && (
-              <span className="text-3xl font-bold text-slate-700">
+              <span className={`font-bold text-slate-700 ${grande ? 'text-[7vw] leading-none' : 'text-3xl'}`}>
                 <span className="font-mono mr-1.5">{signoForma(resultado.forma)}</span>
                 {etiquetaForma(resultado.forma)}
               </span>
             )}
             {activos.tiempo && resultado.tiempo && (
-              <span className="text-3xl font-bold text-indigo-700">
+              <span className={`font-bold text-indigo-700 ${grande ? 'text-[7vw] leading-none' : 'text-3xl'}`}>
                 {es ? resultado.tiempo.es : resultado.tiempo.en}
               </span>
             )}

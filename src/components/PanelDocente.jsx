@@ -38,12 +38,13 @@
    ni en ningún despliegue, y no hay nada que explicar sobre qué queda guardado.
    ========================================================================== */
 import React, { useState, useRef, useEffect } from 'react';
-import { ArrowLeft, Maximize2, Minimize2 } from 'lucide-react';
+import { ArrowLeft, Maximize2, Minimize2, ExternalLink } from 'lucide-react';
 import Dado from './Dado';
 import Ruleta from './Ruleta';
 import Grupos from './Grupos';
 import Temporizador from './Temporizador';
 import { apps } from './HubHome';
+import { CAPSULA, pestana } from '../ui';
 import { translations } from '../i18n';
 
 const PanelDocente = ({ lang = 'es', nivel = null, onVolver }) => {
@@ -86,7 +87,10 @@ const PanelDocente = ({ lang = 'es', nivel = null, onVolver }) => {
     { id: 'dado', rotulo: es ? 'Dado' : 'Dice' },
     { id: 'ruleta', rotulo: es ? 'Ruleta' : 'Wheel' },
     { id: 'grupos', rotulo: es ? 'Grupos' : 'Groups' },
-    { id: 'tiempo', rotulo: es ? 'Temporizador' : 'Timer' },
+    /* «Reloj» y no «Temporizador»: con la palabra larga la cápsula medía 347px y
+       se salía de una pantalla de 360. La herramienta se sigue titulando
+       «Temporizador» dentro; esto es solo la pestaña. */
+    { id: 'tiempo', rotulo: es ? 'Reloj' : 'Timer' },
   ];
 
   return (
@@ -100,35 +104,59 @@ const PanelDocente = ({ lang = 'es', nivel = null, onVolver }) => {
           <ArrowLeft size={16} />
           {t.backToHub}
         </button>
-        <span className="text-sm font-bold text-slate-900">
+        <span className="text-sm font-bold text-slate-900 min-w-0 truncate">
           {es ? 'Herramientas de clase' : 'Classroom tools'}
         </span>
+
+        {/* LA TABLA DE TIEMPOS, aquí y no como sección propia: ocupaba metro y
+            medio de pantalla debajo de cada herramienta, y en teléfono eso es
+            media vista para algo que se toca una vez. En el encabezado no cuesta
+            ni un píxel de alto y sigue estando a mano.
+            Vive en Grammaster —donde está el motor que la genera— y se abre en
+            otra pestaña: en clase se proyecta y se deja puesta. */}
+        <a
+          href={`${apps.find(a => a.id === 'grammaster').url}#tiempos`}
+          target="_blank"
+          rel="noopener noreferrer"
+          title={es ? 'Tabla de tiempos (se abre en Grammaster)' : 'Tense table (opens in Grammaster)'}
+          /* El hover NO cambia el fondo: en oscuro el tinte -100 se eleva a #2a3042 y
+              la tinta de marca sobre ese gris cae a 4,23:1 — lo cazó
+              check-contraste-tw. Un anillo dice lo mismo y no toca el par. */
+          className="ml-auto shrink-0 flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold text-indigo-700 bg-indigo-50 hover:ring-1 hover:ring-indigo-300 transition-all"
+        >
+          {es ? 'Tiempos' : 'Tenses'}
+          <ExternalLink size={13} />
+        </a>
       </div>
 
       <div ref={caja} className={presentando ? 'fixed inset-0 z-50 bg-white overflow-auto flex flex-col' : 'contents'}>
-      <div className="px-4 pt-3 flex flex-wrap items-center gap-1.5">
-        {HERRAMIENTAS.map(h => (
-          <button
-            key={h.id}
-            onClick={() => setVista(h.id)}
-            aria-pressed={vista === h.id}
-            className={`px-3 py-1.5 rounded-lg text-sm font-semibold border transition-colors ${
-              vista === h.id ? 'bg-indigo-600 text-white border-indigo-600'
-                             : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300'
-            }`}
-          >
-            {h.rotulo}
-          </button>
-        ))}
+      <div className="px-4 pt-3 flex flex-wrap items-center gap-2">
+        {/* Las cuatro dentro de una cápsula: así se leen como «una de estas» y
+            no como cuatro botones sueltos con el mismo peso que todo lo demás. */}
+        <div className={CAPSULA} role="tablist">
+          {HERRAMIENTAS.map(h => (
+            <button
+              key={h.id}
+              onClick={() => setVista(h.id)}
+              aria-pressed={vista === h.id}
+              className={pestana(vista === h.id)}
+            >
+              {h.rotulo}
+            </button>
+          ))}
+        </div>
 
-        {/* Para proyectar. Va junto a las pestañas porque en clase se toca con
-            la actividad ya elegida. */}
+        {/* Para proyectar. Se queda DENTRO del contenedor que va a pantalla
+            completa: si viviera en el encabezado, proyectando no habría botón
+            para salir —solo Esc—. Apagado, porque no compite con la acción. */}
         <button
           onClick={alternarPantalla}
-          className="ml-auto flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold border border-slate-200 bg-white text-slate-600 hover:border-slate-300 transition-colors"
+          className="ml-auto flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:bg-slate-100 transition-colors"
         >
           {presentando ? <Minimize2 size={15} /> : <Maximize2 size={15} />}
-          {presentando ? (es ? 'Salir' : 'Exit') : (es ? 'Pantalla completa' : 'Full screen')}
+          <span className="hidden sm:inline">
+            {presentando ? (es ? 'Salir' : 'Exit') : (es ? 'Pantalla completa' : 'Full screen')}
+          </span>
         </button>
       </div>
 
@@ -138,28 +166,6 @@ const PanelDocente = ({ lang = 'es', nivel = null, onVolver }) => {
         <div className={vista === 'grupos' ? '' : 'hidden'}><Grupos lang={lang} grande={presentando} /></div>
         <div className={vista === 'tiempo' ? '' : 'hidden'}><Temporizador lang={lang} grande={presentando} /></div>
 
-        {/* LA TABLA DE TIEMPOS vive en Grammaster, que es donde está el motor que
-            la genera: traerla aquí obligaría a copiar ese motor, y copiar es lo
-            que esta suite ya pagó caro. Esto es la puerta —`#tiempos` la abre
-            directa— y se abre en otra pestaña a propósito: en clase se proyecta
-            y se deja puesta mientras el hub sigue donde estaba. */}
-        <section className={`w-full max-w-xl mx-auto mt-10 pt-6 border-t border-slate-200 ${presentando ? 'hidden' : ''}`}>
-          <h2 className="text-lg font-bold text-slate-900 mb-1">
-            {es ? 'Tabla de tiempos' : 'Tense table'}
-          </h2>
-          <p className="text-sm text-muted mb-3">
-            {es ? 'Cada tiempo con su uso, su auxiliar y qué le pasa al verbo en + − ?. Se abre en Grammaster, en otra pestaña.'
-                : 'Every tense with its use, its auxiliary and what happens to the verb in + − ?. It opens in Grammaster, in another tab.'}
-          </p>
-          <a
-            href={`${apps.find(a => a.id === 'grammaster').url}#tiempos`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold transition-colors"
-          >
-            {es ? 'Abrir la tabla' : 'Open the table'} →
-          </a>
-        </section>
       </div>
       </div>
     </div>

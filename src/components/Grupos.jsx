@@ -18,6 +18,7 @@
    ========================================================================== */
 import React, { useState } from 'react';
 import { parsearNombres, repartir } from '../grupos';
+import { ACCION, opcion, ENLACE, NUMERO } from '../ui';
 
 /* `grande` = proyectando: lo que se mira son los grupos, así que las tarjetas se
    reparten a lo ancho y los nombres crecen. Las fichas de la lista y los
@@ -68,7 +69,7 @@ const Grupos = ({ lang = 'es', grande = false }) => {
           <button
             onClick={usarLista}
             disabled={!parsearNombres(texto).length}
-            className="mt-2 px-3 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-300 text-white text-sm font-semibold transition-colors"
+            className={`mt-2 ${ACCION}`}
           >
             {es ? 'Usar esta lista' : 'Use this list'}
           </button>
@@ -107,7 +108,7 @@ const Grupos = ({ lang = 'es', grande = false }) => {
             </span>
             <button
               onClick={() => { setNombres([]); setGrupos(null); }}
-              className="text-xs font-medium text-slate-600 underline underline-offset-2 hover:text-slate-800"
+              className={ENLACE}
             >
               {es ? 'cambiar lista' : 'change list'}
             </button>
@@ -119,10 +120,7 @@ const Grupos = ({ lang = 'es', grande = false }) => {
                 key={id}
                 onClick={() => setModo(id)}
                 aria-pressed={modo === id}
-                className={`px-3 py-1.5 rounded-lg text-sm font-semibold border transition-colors ${
-                  modo === id ? 'bg-indigo-600 text-white border-indigo-600'
-                              : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300'
-                }`}
+                className={opcion(modo === id)}
               >
                 {rotulo}
               </button>
@@ -131,14 +129,14 @@ const Grupos = ({ lang = 'es', grande = false }) => {
               type="number" min="1" max="30" value={n}
               onChange={(e) => setN(Math.max(1, Math.min(30, Number(e.target.value) || 1)))}
               aria-label={modo === 'porGrupo' ? (es ? 'personas por grupo' : 'people per group') : (es ? 'cantidad de grupos' : 'number of groups')}
-              className="w-16 px-2 py-1 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 outline-none"
+              className={NUMERO}
             />
           </div>
 
           <button
             onClick={generar}
             disabled={!presentes.length}
-            className="w-full py-3 bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-300 text-white rounded-xl font-semibold transition-colors"
+            className={ACCION}
           >
             {grupos ? (es ? 'Repartir otra vez' : 'Split again') : (es ? 'Repartir' : 'Split')}
           </button>

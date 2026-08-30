@@ -171,7 +171,10 @@ button:disabled { cursor: not-allowed; }
 :root[data-theme="dark"] .hover\:bg-red-100:hover { background-color: #2a3042 !important; }
 :root[data-theme="dark"] .hover\:text-gray-700:hover,
 :root[data-theme="dark"] .hover\:text-slate-600:hover,
-:root[data-theme="dark"] .hover\:text-slate-800:hover { color: #eceff8 !important; }
+:root[data-theme="dark"] .hover\:text-slate-800:hover,
+/* -900 lo estrenaron las pestañas de las herramientas de clase. La rampa se
+   cubre entera para que la siguiente parada no vuelva a quedarse fuera. */
+:root[data-theme="dark"] .hover\:text-slate-900:hover { color: #eceff8 !important; }
 
 /* Tinta de color sobre un tinte que la capa oscurece: el fondo se invierte y el
    texto de marca no, así que queda tinta oscura sobre fondo oscuro (2.61:1).
@@ -179,6 +182,18 @@ button:disabled { cursor: not-allowed; }
    conservan su fondo claro. Lo detecta `check-dark.mjs`. */
 :root[data-theme="dark"] .bg-slate-50.text-indigo-600,
 :root[data-theme="dark"] .bg-slate-50 .text-indigo-600 { color: #c7d2fe !important; }  /* 11.00:1 */
+
+/* LOS BOTONES DE LAS HERRAMIENTAS DE CLASE. La opción encendida va en tinte
+   índigo con tinta `indigo-700`, y la pestaña activa en blanco con la misma
+   tinta: el índigo sólido se reservó para LA acción, así que estas dos tenían
+   que distinguirse sin robárselo. En oscuro esa tinta cae a 1,92:1 sobre el
+   tinte y a 2,24:1 sobre la tarjeta — lo cazó la sonda antes de publicar.
+   `--marca` en su valor oscuro da 4,90 y 5,70. Se usa la variable y no un hex
+   copiado: es lo que vigila `check-roles-css`. */
+:root[data-theme="dark"] .bg-indigo-50.text-indigo-700,
+:root[data-theme="dark"] .bg-indigo-50 .text-indigo-700,
+:root[data-theme="dark"] .bg-white.text-indigo-700,
+:root[data-theme="dark"] .bg-white .text-indigo-700 { color: var(--marca) !important; }
 
 /* Tinta de marca que la capa no invertía y quedaba oscura sobre fondo oscuro.
    Compuestos a propósito: los chips sobre tinte claro conservan su texto.

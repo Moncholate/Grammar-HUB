@@ -34,6 +34,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { FORM_SIGNS, FORM_ORDER } from '../forms.generated.jsx';
 import { tiemposHasta, nombreDeCurso } from '../tiempos';
+import { ACCION, opcion, NUMERO } from '../ui';
 
 const SUJETOS = ['I', 'you', 'he', 'she', 'it', 'we', 'they'];
 
@@ -127,11 +128,7 @@ const Dado = ({ lang = 'es', nivel = null, grande = false }) => {
             key={d.k}
             onClick={() => alternar(d.k)}
             aria-pressed={activos[d.k]}
-            className={`px-3 py-1.5 rounded-lg text-sm font-semibold border transition-colors ${
-              activos[d.k]
-                ? 'bg-indigo-600 text-white border-indigo-600'
-                : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300'
-            }`}
+            className={opcion(activos[d.k])}
           >
             {d.nombre}
           </button>
@@ -143,7 +140,7 @@ const Dado = ({ lang = 'es', nivel = null, grande = false }) => {
             <input
               type="number" min="2" max="999" value={caras}
               onChange={(e) => setCaras(Math.max(2, Math.min(999, Number(e.target.value) || 2)))}
-              className="w-16 px-2 py-1 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 outline-none"
+              className={NUMERO}
             />
           </label>
         )}
@@ -184,7 +181,7 @@ const Dado = ({ lang = 'es', nivel = null, grande = false }) => {
 
       <button
         onClick={lanzar}
-        className="mt-3 w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-semibold transition-colors"
+        className={`mt-3 ${ACCION}`}
       >
         {es ? 'Lanzar' : 'Roll'}
       </button>

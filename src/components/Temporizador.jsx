@@ -20,6 +20,7 @@
    ========================================================================== */
 import React, { useState, useRef, useEffect } from 'react';
 import { formatoReloj, estadoReloj, PRESETS } from '../temporizador';
+import { ACCION, APAGADO, opcion, NUMERO } from '../ui';
 
 /* `grande` = proyectando. El reloj es lo único que importa a diez metros, así
    que se lleva casi toda la pantalla. */
@@ -101,10 +102,7 @@ const Temporizador = ({ lang = 'es', grande = false }) => {
             key={m}
             onClick={() => poner(m)}
             aria-pressed={total === m * 60}
-            className={`px-3 py-1.5 rounded-lg text-sm font-semibold border transition-colors ${
-              total === m * 60 ? 'bg-indigo-600 text-white border-indigo-600'
-                               : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300'
-            }`}
+            className={opcion(total === m * 60)}
           >
             {m} min
           </button>
@@ -115,7 +113,7 @@ const Temporizador = ({ lang = 'es', grande = false }) => {
             type="number" min="1" max="90"
             onChange={(e) => poner(Math.max(1, Math.min(90, Number(e.target.value) || 1)))}
             aria-label={es ? 'minutos' : 'minutes'}
-            className="w-16 px-2 py-1 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 outline-none"
+            className={NUMERO}
           />
         </label>
       </div>
@@ -135,13 +133,13 @@ const Temporizador = ({ lang = 'es', grande = false }) => {
         <button
           onClick={corriendo ? pausar : arrancar}
           disabled={!corriendo && restante <= 0}
-          className="flex-1 py-3 bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-300 text-white rounded-xl font-semibold transition-colors"
+          className={`flex-1 ${ACCION}`}
         >
           {corriendo ? (es ? 'Pausar' : 'Pause') : (es ? 'Empezar' : 'Start')}
         </button>
         <button
           onClick={reiniciar}
-          className="px-4 py-3 rounded-xl border border-slate-300 bg-white text-slate-700 font-semibold hover:border-slate-400 transition-colors"
+          className={`shrink-0 ${APAGADO}`}
         >
           {es ? 'Reiniciar' : 'Reset'}
         </button>

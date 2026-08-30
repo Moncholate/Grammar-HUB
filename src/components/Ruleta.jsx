@@ -19,6 +19,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { parsearLista } from '../lista';
 import { siguienteIndice, deltaHasta, ordenInicial, centroDelSector } from '../ruleta';
+import { ACCION, ENLACE } from '../ui';
 
 const TINTES = ['#e0e7ff', '#c7d2fe'];   // indigo-100 / indigo-200: la rueda no compite con el resultado
 const GIRO_MS = 3000;
@@ -109,7 +110,7 @@ const Ruleta = ({ lang = 'es', grande = false }) => {
           <button
             onClick={usarLista}
             disabled={!parsearLista(texto).length}
-            className="mt-2 px-3 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-300 text-white text-sm font-semibold transition-colors"
+            className={`mt-2 ${ACCION}`}
           >
             {es ? 'Usar esta lista' : 'Use this list'}
           </button>
@@ -157,7 +158,7 @@ const Ruleta = ({ lang = 'es', grande = false }) => {
             <button
               onClick={girar}
               disabled={girando}
-              className="mt-3 w-full py-3 bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-300 text-white rounded-xl font-semibold transition-colors"
+              className={`mt-3 ${ACCION}`}
             >
               {girando ? (es ? 'Girando…' : 'Spinning…') : (es ? 'Girar' : 'Spin')}
             </button>
@@ -189,7 +190,7 @@ const Ruleta = ({ lang = 'es', grande = false }) => {
             )}
             <button
               onClick={() => { setItems([]); setElegido(null); setUsados([]); }}
-              className="text-xs font-medium text-slate-600 underline underline-offset-2 hover:text-slate-800"
+              className={ENLACE}
             >
               {es ? 'cambiar lista' : 'change list'}
             </button>

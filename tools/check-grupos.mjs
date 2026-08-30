@@ -8,7 +8,8 @@
    personas no puede dejar 4+4+1. Un alumno trabajando solo no es un grupo.
 
    Correr:  node tools/check-grupos.mjs        (desde Grammar HUB/) */
-import { parsearNombres, repartir, barajar } from '../src/grupos.js';
+import { repartir } from '../src/grupos.js';
+import { parsearLista as parsearNombres, barajar } from '../src/lista.js';
 
 let problemas = 0;
 const fallo = (m) => { console.log('   ✗ ' + m); problemas++; };

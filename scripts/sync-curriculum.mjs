@@ -125,4 +125,24 @@ export const delCurriculo = (id) => {
 writeFileSync(join(apps, 'Grammaster', 'src', 'data', 'curriculum.generated.js'), gmBody);
 console.log('  ✓ Grammaster/src/data/curriculum.generated.js');
 
+/* ---- El propio hub: módulo ESM con lo justo ----
+   El hub no consumía currículo hasta que sus herramientas de clase quisieron
+   sortear «un tiempo de los que ya viste». Se le da la escala de niveles, sus
+   nombres y los contenidos CON ETIQUETA —los tiempos—, que es lo único que
+   necesita: aquí no se corrige nada, así que las unidades no hacen falta. */
+const tiempos = Object.fromEntries(Object.entries(content).filter(([, v]) => v.label));
+const hubBody = `${BANNER}
+export const NIVELES = ${JSON.stringify(cur.levels)};
+
+/* El nombre de cada curso, ES/EN. */
+export const CURSOS = ${JSON.stringify(cur.labels, null, 2)};
+
+/* Los TIEMPOS con nombre visible y el curso en que se enseñan. Los demás
+   contenidos (modales, wh-, categorías) no llevan etiqueta y por eso no están:
+   el dado sortea tiempos. */
+export const TIEMPOS = ${JSON.stringify(tiempos, null, 2)};
+`;
+writeFileSync(join(apps, 'Grammar HUB', 'src', 'data', 'curriculum.generated.js'), hubBody);
+console.log('  ✓ Grammar HUB/src/data/curriculum.generated.js');
+
 console.log(`Currículo sincronizado — ${cur.levels.length} niveles, ${Object.keys(content).length} contenidos.`);

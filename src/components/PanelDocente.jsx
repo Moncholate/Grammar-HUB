@@ -33,7 +33,7 @@ import Temporizador from './Temporizador';
 import { apps } from './HubHome';
 import { translations } from '../i18n';
 
-const PanelDocente = ({ lang = 'es', onVolver }) => {
+const PanelDocente = ({ lang = 'es', nivel = null, onVolver }) => {
   const es = lang === 'es';
   const t = translations[lang];
   const [vista, setVista] = useState('dado');
@@ -78,7 +78,7 @@ const PanelDocente = ({ lang = 'es', onVolver }) => {
       </div>
 
       <div className="flex-1 px-5 py-6">
-        <div className={vista === 'dado' ? '' : 'hidden'}><Dado lang={lang} /></div>
+        <div className={vista === 'dado' ? '' : 'hidden'}><Dado lang={lang} nivel={nivel} /></div>
         <div className={vista === 'ruleta' ? '' : 'hidden'}><Ruleta lang={lang} /></div>
         <div className={vista === 'grupos' ? '' : 'hidden'}><Grupos lang={lang} /></div>
         <div className={vista === 'tiempo' ? '' : 'hidden'}><Temporizador lang={lang} /></div>

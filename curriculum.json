@@ -4,10 +4,10 @@
   "$porQueUnidades": "La práctica corrige y PUNTÚA. Sin unidad, un alumno de Intermedio II en la semana 3 recibía Pasado Perfecto (12A): fallaba, perdía la racha y no sumaba insignia. La gamificación lo castigaba por no saber algo que nadie le había enseñado. Un curso avanza ~una unidad por clase, 2 clases por semana (3-4 los intensivos): entre la semana 3 y la 6 hay media asignatura.",
   "$quienLoUsa": "Grammaster y Question Lab, cada uno con su archivo generado. Desgramatizador NO, y no es un olvido: lo que enseña son CATEGORÍAS gramaticales (sustantivo, verbo, adjetivo…), y esas no se dan en secuencia como los tiempos — el alumno usa sustantivos y verbos desde la primera clase, aunque «singular and plural nouns» sea una unidad concreta. Ya acota lo que muestra por banda de nivel, que es la granularidad que su contenido tiene; una unidad ahí sería precisión sin significado. Si el profesor quiere mapear categorías a unidades, esto se revisa.",
   "$soloLaPractica": "El filtro se aplica donde se CORRIGE y PUNTÚA. Los constructores y analizadores no se acotan: ahí el alumno explora a propósito y nadie le pone nota.",
-
   "$revision": "Cada cuántos días se le vuelve a preguntar al alumno si su curso sigue en esa unidad. El dato CADUCA SOLO y el fallo es silencioso y siempre hacia el mismo lado: una unidad vieja solo puede hacer la app más chica, escondiendo justo lo que se vio en la última clase. 7 días porque es el ritmo semanal del curso: el que practica a diario la ve una vez por semana, no todos los días. Vive AQUÍ y no en cada app porque el plazo es una decisión del temario, y dos números que dicen lo mismo terminan diciendo cosas distintas (pasó con el nivel de `would`).",
-  "revision": { "dias": 7 },
-
+  "revision": {
+    "dias": 7
+  },
   "levels": [
     "basico1",
     "basico2",
@@ -18,81 +18,428 @@
     "avanzado"
   ],
   "labels": {
-    "basico1":    { "es": "Básico I",      "en": "Basic I" },
-    "basico2":    { "es": "Básico II",     "en": "Basic II" },
-    "elemental1": { "es": "Elemental I",   "en": "Elementary I" },
-    "elemental2": { "es": "Elemental II",  "en": "Elementary II" },
-    "intermedio1":{ "es": "Intermedio I",  "en": "Intermediate I" },
-    "intermedio2":{ "es": "Intermedio II", "en": "Intermediate II" },
-    "avanzado":   { "es": "Intermedio Alto","en": "Upper-Interm." }
+    "basico1": {
+      "es": "Básico I",
+      "en": "Basic I"
+    },
+    "basico2": {
+      "es": "Básico II",
+      "en": "Basic II"
+    },
+    "elemental1": {
+      "es": "Elemental I",
+      "en": "Elementary I"
+    },
+    "elemental2": {
+      "es": "Elemental II",
+      "en": "Elementary II"
+    },
+    "intermedio1": {
+      "es": "Intermedio I",
+      "en": "Intermediate I"
+    },
+    "intermedio2": {
+      "es": "Intermedio II",
+      "en": "Intermediate II"
+    },
+    "avanzado": {
+      "es": "Intermedio Alto",
+      "en": "Upper-Interm."
+    }
   },
-
   "units": {
-    "basico1":     ["1A", "1B", "2A", "2B", "3A", "3B", "4A", "4B", "5A", "5B", "6A", "6B"],
-    "basico2":     ["7A", "7B", "8A", "8B", "9A", "9B", "10A", "10B", "11A", "11B", "12A", "12B"],
-    "elemental1":  ["1A", "1B", "1C", "2A", "2B", "2C", "3A", "3B", "3C", "4A", "4B", "4C", "5A", "5B", "5C", "6A", "6B", "6C"],
-    "elemental2":  ["7A", "7B", "7C", "8A", "8B", "8C", "9A", "9B", "9C", "10A", "10B", "10C", "11A", "11B", "11C", "12A", "12B", "12C"],
-    "intermedio1": ["1A", "1B", "1C", "2A", "2B", "2C", "3A", "3B", "3C", "4A", "4B", "4C", "5A", "5B", "5C", "6A", "6B", "6C"],
-    "intermedio2": ["7A", "7B", "7C", "8A", "8B", "8C", "9A", "9B", "9C", "10A", "10B", "10C", "11A", "11B", "11C", "12A", "12B", "12C"],
-    "avanzado":    ["1A", "1B", "2A", "2B", "3A", "3B", "4A", "4B", "5A", "5B", "6A", "6B", "7A", "7B", "8A", "8B", "9A", "9B", "10A", "10B"]
+    "basico1": [
+      "1A",
+      "1B",
+      "2A",
+      "2B",
+      "3A",
+      "3B",
+      "4A",
+      "4B",
+      "5A",
+      "5B",
+      "6A",
+      "6B"
+    ],
+    "basico2": [
+      "7A",
+      "7B",
+      "8A",
+      "8B",
+      "9A",
+      "9B",
+      "10A",
+      "10B",
+      "11A",
+      "11B",
+      "12A",
+      "12B"
+    ],
+    "elemental1": [
+      "1A",
+      "1B",
+      "1C",
+      "2A",
+      "2B",
+      "2C",
+      "3A",
+      "3B",
+      "3C",
+      "4A",
+      "4B",
+      "4C",
+      "5A",
+      "5B",
+      "5C",
+      "6A",
+      "6B",
+      "6C"
+    ],
+    "elemental2": [
+      "7A",
+      "7B",
+      "7C",
+      "8A",
+      "8B",
+      "8C",
+      "9A",
+      "9B",
+      "9C",
+      "10A",
+      "10B",
+      "10C",
+      "11A",
+      "11B",
+      "11C",
+      "12A",
+      "12B",
+      "12C"
+    ],
+    "intermedio1": [
+      "1A",
+      "1B",
+      "1C",
+      "2A",
+      "2B",
+      "2C",
+      "3A",
+      "3B",
+      "3C",
+      "4A",
+      "4B",
+      "4C",
+      "5A",
+      "5B",
+      "5C",
+      "6A",
+      "6B",
+      "6C"
+    ],
+    "intermedio2": [
+      "7A",
+      "7B",
+      "7C",
+      "8A",
+      "8B",
+      "8C",
+      "9A",
+      "9B",
+      "9C",
+      "10A",
+      "10B",
+      "10C",
+      "11A",
+      "11B",
+      "11C",
+      "12A",
+      "12B",
+      "12C"
+    ],
+    "avanzado": [
+      "1A",
+      "1B",
+      "2A",
+      "2B",
+      "3A",
+      "3B",
+      "4A",
+      "4B",
+      "5A",
+      "5B",
+      "6A",
+      "6B",
+      "7A",
+      "7B",
+      "8A",
+      "8B",
+      "9A",
+      "9B",
+      "10A",
+      "10B"
+    ]
   },
-
   "$etapas": "Un tiempo NO se enseña de golpe y mirar solo la unidad del nombre lleva a preguntar de más. `unitBe` es la etapa temprana (solo el verbo `be`); entre ella y `unit` el tiempo se practica SOLO con `be`. `unitQuestions` y `unitThirdPerson` son lo mismo aplicado a la forma interrogativa y a he/she/it. `unitIrregulars` marca desde cuándo entran los verbos irregulares. Ojo con `be`: empieza en la 1A pero viene repartido por personas (1B he/she/it, 2A plural) y las preguntas Wh- son la 2B. Decisión del profesor (2026-08-08): las apps lo abren en la 2B, cuando está COMPLETO, en vez de modelar cada persona.",
-
   "content": {
-    "to-be-pres":       { "level": "basico1",     "unit": "2B",  "$": "Question Lab lo trata como tiempo aparte. 2B: es cuando el `be` está completo y ya hay preguntas Wh-." },
-    "simple-present":   { "level": "basico1",     "unit": "5A",  "unitBe": "2B", "unitQuestions": "5B", "unitThirdPerson": "6A" },
-    "present-continuous": { "level": "basico2",   "unit": "9A" },
-    "to-be-past":       { "level": "basico2",     "unit": "10B" },
-    "simple-past":      { "level": "basico2",     "unit": "11A", "unitBe": "10B", "unitIrregulars": "11B" },
-    "future-going-to":  { "level": "elemental2",  "unit": "10B" },
-    "present-perfect":  { "level": "elemental2",  "unit": "12A" },
-    "past-continuous":  { "level": "intermedio1", "unit": "2B" },
-    "simple-future":    { "level": "intermedio1", "unit": "6A" },
-    "past-perfect":     { "level": "intermedio2", "unit": "12A" },
-    "used-to":          { "level": "intermedio2", "unit": "11A" },
-    "present-perfect-continuous": { "level": "avanzado", "unit": "2B" },
-
-    "subject-question": { "level": "intermedio2", "unit": "12C", "$": "«Who painted the Mona Lisa?» — Int. II 12C, Questions without auxiliaries." },
-
-    "modal":    { "level": "basico2",     "unit": "8A",  "$": "El modal genérico de Question Lab; su primera aparición es `can`." },
-    "can":      { "level": "basico2",     "unit": "8A" },
-    "would":    { "level": "basico2",     "unit": "10A", "$": "Practical English tras la 9B. Estuvo en Elemental I por una nota vieja del temario, curso y medio tarde." },
-    "could":    { "level": "elemental2",  "unit": "8A",  "$": "Practical English tras la 7C. Como gramática de habilidad pasada llega en AEF 3 4B, pero el alumno ya lo usa antes." },
-    "will":     { "level": "intermedio1", "unit": "6A" },
-    "must":     { "level": "intermedio2", "unit": "7C" },
-    "have-to":  { "level": "intermedio2", "unit": "7C" },
-    "should":   { "level": "intermedio2", "unit": "8A" },
-    "shall":    { "level": "intermedio2", "unit": "8A",  "$": "Sin unidad propia: se nombra junto a `should`." },
-    "might":    { "level": "intermedio2", "unit": "11B" },
-    "may":      { "level": "intermedio2", "unit": "11B", "$": "Sin unidad propia: se nombra junto a `might`." },
-
+    "to-be-pres": {
+      "level": "basico1",
+      "unit": "2B",
+      "$": "Question Lab lo trata como tiempo aparte. 2B: es cuando el `be` está completo y ya hay preguntas Wh-.",
+      "label": {
+        "es": "Verbo be (presente)",
+        "en": "Verb be (present)"
+      }
+    },
+    "simple-present": {
+      "level": "basico1",
+      "unit": "5A",
+      "unitBe": "2B",
+      "unitQuestions": "5B",
+      "unitThirdPerson": "6A",
+      "label": {
+        "es": "Presente Simple",
+        "en": "Simple Present"
+      }
+    },
+    "present-continuous": {
+      "level": "basico2",
+      "unit": "9A",
+      "label": {
+        "es": "Presente Continuo",
+        "en": "Present Continuous"
+      }
+    },
+    "to-be-past": {
+      "level": "basico2",
+      "unit": "10B",
+      "label": {
+        "es": "Verbo be (pasado)",
+        "en": "Verb be (past)"
+      }
+    },
+    "simple-past": {
+      "level": "basico2",
+      "unit": "11A",
+      "unitBe": "10B",
+      "unitIrregulars": "11B",
+      "label": {
+        "es": "Pasado Simple",
+        "en": "Simple Past"
+      }
+    },
+    "future-going-to": {
+      "level": "elemental2",
+      "unit": "10B",
+      "label": {
+        "es": "Futuro (going to)",
+        "en": "Future (going to)"
+      }
+    },
+    "present-perfect": {
+      "level": "elemental2",
+      "unit": "12A",
+      "label": {
+        "es": "Presente Perfecto",
+        "en": "Present Perfect"
+      }
+    },
+    "past-continuous": {
+      "level": "intermedio1",
+      "unit": "2B",
+      "label": {
+        "es": "Pasado Continuo",
+        "en": "Past Continuous"
+      }
+    },
+    "simple-future": {
+      "level": "intermedio1",
+      "unit": "6A",
+      "label": {
+        "es": "Futuro Simple (will)",
+        "en": "Simple Future (will)"
+      }
+    },
+    "past-perfect": {
+      "level": "intermedio2",
+      "unit": "12A",
+      "label": {
+        "es": "Pasado Perfecto",
+        "en": "Past Perfect"
+      }
+    },
+    "used-to": {
+      "level": "intermedio2",
+      "unit": "11A",
+      "label": {
+        "es": "Used to",
+        "en": "Used to"
+      }
+    },
+    "present-perfect-continuous": {
+      "level": "avanzado",
+      "unit": "2B",
+      "label": {
+        "es": "Presente Perfecto Continuo",
+        "en": "Present Perfect Continuous"
+      }
+    },
+    "subject-question": {
+      "level": "intermedio2",
+      "unit": "12C",
+      "$": "«Who painted the Mona Lisa?» — Int. II 12C, Questions without auxiliaries."
+    },
+    "modal": {
+      "level": "basico2",
+      "unit": "8A",
+      "$": "El modal genérico de Question Lab; su primera aparición es `can`."
+    },
+    "can": {
+      "level": "basico2",
+      "unit": "8A"
+    },
+    "would": {
+      "level": "basico2",
+      "unit": "10A",
+      "$": "Practical English tras la 9B. Estuvo en Elemental I por una nota vieja del temario, curso y medio tarde."
+    },
+    "could": {
+      "level": "elemental2",
+      "unit": "8A",
+      "$": "Practical English tras la 7C. Como gramática de habilidad pasada llega en AEF 3 4B, pero el alumno ya lo usa antes."
+    },
+    "will": {
+      "level": "intermedio1",
+      "unit": "6A"
+    },
+    "must": {
+      "level": "intermedio2",
+      "unit": "7C"
+    },
+    "have-to": {
+      "level": "intermedio2",
+      "unit": "7C"
+    },
+    "should": {
+      "level": "intermedio2",
+      "unit": "8A"
+    },
+    "shall": {
+      "level": "intermedio2",
+      "unit": "8A",
+      "$": "Sin unidad propia: se nombra junto a `should`."
+    },
+    "might": {
+      "level": "intermedio2",
+      "unit": "11B"
+    },
+    "may": {
+      "level": "intermedio2",
+      "unit": "11B",
+      "$": "Sin unidad propia: se nombra junto a `might`."
+    },
     "$wh": "Las wh-words también tienen su orden en el libro, y hace falta desde que Question Lab estrenó el modo «Falta la wh»: ahí la wh ES la respuesta del ejercicio, no un detalle de la pregunta. Antes de esto, un alumno de Básico I en la 2B podía tener que escribir «how much», que es la 9B de Elemental II. En Identifica y Responde la wh es incidental y por eso nunca se notó. El grueso sale de Básico I 2B, «Wh- and How questions with be»; las que el temario sitúa aparte llevan su unidad propia y su motivo.",
-
-    "wh-what":       { "level": "basico1", "unit": "2B" },
-    "wh-where":      { "level": "basico1", "unit": "2B" },
-    "wh-who":        { "level": "basico1", "unit": "2B" },
-    "wh-whom":       { "level": "basico1", "unit": "2B", "$": "Variante de `who`; la app la acepta donde `who` vale." },
-    "wh-when":       { "level": "basico1", "unit": "2B" },
-    "wh-why":        { "level": "basico1", "unit": "2B" },
-    "wh-how":        { "level": "basico1", "unit": "2B" },
-    "wh-how-old":    { "level": "basico1", "unit": "2B", "$": "Fórmula de la misma unidad: «How old are you?» es de Starter." },
-    "wh-what-time":  { "level": "basico1", "unit": "2B", "$": "Ídem: «What time is it?»." },
-    "wh-what-color": { "level": "basico1", "unit": "2B", "$": "Los colores son vocabulario de Starter." },
-    "wh-which":      { "level": "basico1", "unit": "2B", "$": "Sin unidad propia en el temario. Se queda con el grupo base: «Which bag is yours?» es una pregunta con `be` y nada indica retrasarla." },
-    "wh-what-kind":  { "level": "basico1", "unit": "2B", "$": "Sin unidad propia. Misma decisión que `which`." },
-    "wh-how-far":    { "level": "basico1", "unit": "2B", "$": "Sin unidad propia. Misma decisión que `which`." },
-    "wh-how-fast":   { "level": "basico1", "unit": "2B", "$": "Sin unidad propia. Misma decisión que `which`." },
-    "wh-how-often":  { "level": "basico1", "unit": "6B", "$": "Básico I 6B, adverbios de frecuencia: preguntar la frecuencia necesita saber expresarla." },
-    "wh-whose":      { "level": "elemental1", "unit": "4A", "$": "Elemental I 4A, «Possessive 's; Whose…?», que es donde el libro la nombra." },
-    "wh-how-much":   { "level": "elemental2", "unit": "9B", "$": "Elemental II 9B, «Quantifiers: how much / how many»." },
-    "wh-how-many":   { "level": "elemental2", "unit": "9B", "$": "Ídem." },
-    "wh-how-long":   { "level": "intermedio2", "unit": "9B", "$": "Intermedio II 9B, «Present perfect + for and since»: la duración se pregunta cuando se sabe expresarla." },
-
-    "conditional-1": { "level": "intermedio2", "unit": "8B" },
-    "conditional-2": { "level": "intermedio2", "unit": "9A" },
-    "conditional-3": { "level": "avanzado",    "unit": "9A" }
+    "wh-what": {
+      "level": "basico1",
+      "unit": "2B"
+    },
+    "wh-where": {
+      "level": "basico1",
+      "unit": "2B"
+    },
+    "wh-who": {
+      "level": "basico1",
+      "unit": "2B"
+    },
+    "wh-whom": {
+      "level": "basico1",
+      "unit": "2B",
+      "$": "Variante de `who`; la app la acepta donde `who` vale."
+    },
+    "wh-when": {
+      "level": "basico1",
+      "unit": "2B"
+    },
+    "wh-why": {
+      "level": "basico1",
+      "unit": "2B"
+    },
+    "wh-how": {
+      "level": "basico1",
+      "unit": "2B"
+    },
+    "wh-how-old": {
+      "level": "basico1",
+      "unit": "2B",
+      "$": "Fórmula de la misma unidad: «How old are you?» es de Starter."
+    },
+    "wh-what-time": {
+      "level": "basico1",
+      "unit": "2B",
+      "$": "Ídem: «What time is it?»."
+    },
+    "wh-what-color": {
+      "level": "basico1",
+      "unit": "2B",
+      "$": "Los colores son vocabulario de Starter."
+    },
+    "wh-which": {
+      "level": "basico1",
+      "unit": "2B",
+      "$": "Sin unidad propia en el temario. Se queda con el grupo base: «Which bag is yours?» es una pregunta con `be` y nada indica retrasarla."
+    },
+    "wh-what-kind": {
+      "level": "basico1",
+      "unit": "2B",
+      "$": "Sin unidad propia. Misma decisión que `which`."
+    },
+    "wh-how-far": {
+      "level": "basico1",
+      "unit": "2B",
+      "$": "Sin unidad propia. Misma decisión que `which`."
+    },
+    "wh-how-fast": {
+      "level": "basico1",
+      "unit": "2B",
+      "$": "Sin unidad propia. Misma decisión que `which`."
+    },
+    "wh-how-often": {
+      "level": "basico1",
+      "unit": "6B",
+      "$": "Básico I 6B, adverbios de frecuencia: preguntar la frecuencia necesita saber expresarla."
+    },
+    "wh-whose": {
+      "level": "elemental1",
+      "unit": "4A",
+      "$": "Elemental I 4A, «Possessive 's; Whose…?», que es donde el libro la nombra."
+    },
+    "wh-how-much": {
+      "level": "elemental2",
+      "unit": "9B",
+      "$": "Elemental II 9B, «Quantifiers: how much / how many»."
+    },
+    "wh-how-many": {
+      "level": "elemental2",
+      "unit": "9B",
+      "$": "Ídem."
+    },
+    "wh-how-long": {
+      "level": "intermedio2",
+      "unit": "9B",
+      "$": "Intermedio II 9B, «Present perfect + for and since»: la duración se pregunta cuando se sabe expresarla."
+    },
+    "conditional-1": {
+      "level": "intermedio2",
+      "unit": "8B"
+    },
+    "conditional-2": {
+      "level": "intermedio2",
+      "unit": "9A"
+    },
+    "conditional-3": {
+      "level": "avanzado",
+      "unit": "9A"
+    },
+    "$label": "Nombre visible del contenido, ES/EN. Solo lo llevan los TIEMPOS: es lo que el dado de las herramientas de clase sortea, y lo que la tabla de tiempos de Grammaster titula. Estaba escrito a mano dentro de Grammaster; vive aquí para que no haya dos listas de nombres que se desincronicen."
   },
-
   "$removed": "2026-07-28, contrastado contra syllabus-aef.md: would-past (no es un tiempo — would + base; el temario solo nombra `would` para la 2ª condicional y el hábito pasado lo cubre `used to`), future-perfect y past-perfect-continuous (no se enseñan en ningún curso)."
 }

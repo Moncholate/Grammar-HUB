@@ -39,7 +39,7 @@ const App = () => {
       <HeaderNav lang={lang} setLang={setLang} />
       <main className="flex-1 w-full flex flex-col">
         {vista === 'docente'
-          ? <PanelDocente lang={lang} onVolver={() => setVista('hub')} />
+          ? <PanelDocente lang={lang} nivel={level} onVolver={() => setVista('hub')} />
           : <HubHome lang={lang} level={level} setLevel={setLevel}
                      onPhraseOpenChange={setPhraseOpen} onAppOpenChange={setAppOpen}
                      onDocente={() => setVista('docente')} />}

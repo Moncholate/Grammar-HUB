@@ -12,6 +12,11 @@
        salen del contenido de la suite —las formas vienen de `forms.generated`,
        o sea de design-tokens— y convierten el sorteo en el ejercicio mismo:
        «he · interrogativa» y a construir.
+     · TIEMPO VERBAL, y solo los que el curso YA VIO. Es la cara que justifica
+       que el dado viva aquí y no en cualquier página: sale «Presente Perfecto ·
+       they · negativa» y la actividad está armada. El curso lo elige el
+       profesor arriba, en el hub, y de ahí sale la lista (`../tiempos.js`,
+       sobre `curriculum.json`). Sin curso elegido salen todos.
 
    DECISIONES QUE NO SON DE ADORNO:
 
@@ -28,6 +33,7 @@
    ========================================================================== */
 import React, { useState, useRef, useEffect } from 'react';
 import { FORM_SIGNS, FORM_ORDER } from '../forms.generated.jsx';
+import { tiemposHasta, nombreDeCurso } from '../tiempos';
 
 const SUJETOS = ['I', 'you', 'he', 'she', 'it', 'we', 'they'];
 
@@ -37,10 +43,11 @@ const reducirMovimiento = () =>
     ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
     : false;
 
-const Dado = ({ lang = 'es' }) => {
+const Dado = ({ lang = 'es', nivel = null }) => {
   const es = lang === 'es';
+  const tiempos = tiemposHasta(nivel);
   const [caras, setCaras] = useState(6);
-  const [activos, setActivos] = useState({ numero: true, sujeto: false, forma: false });
+  const [activos, setActivos] = useState({ numero: true, sujeto: false, forma: false, tiempo: false });
   const [resultado, setResultado] = useState(null);
   const [tirando, setTirando] = useState(false);
   const [historial, setHistorial] = useState([]);
@@ -52,6 +59,7 @@ const Dado = ({ lang = 'es' }) => {
     numero: 1 + azar(Math.max(2, Math.min(999, caras || 6))),
     sujeto: SUJETOS[azar(SUJETOS.length)],
     forma: FORM_ORDER[azar(FORM_ORDER.length)],
+    tiempo: tiempos.length ? tiempos[azar(tiempos.length)] : null,
   });
 
   const lanzar = () => {
@@ -87,6 +95,7 @@ const Dado = ({ lang = 'es' }) => {
     { k: 'numero', nombre: es ? 'Número' : 'Number' },
     { k: 'sujeto', nombre: es ? 'Sujeto' : 'Subject' },
     { k: 'forma', nombre: es ? 'Forma' : 'Form' },
+    { k: 'tiempo', nombre: es ? 'Tiempo' : 'Tense' },
   ];
 
   return (
@@ -95,6 +104,16 @@ const Dado = ({ lang = 'es' }) => {
       <p className="text-sm text-muted mb-4">
         {es ? 'Para sortear en clase. No guarda nada: al cerrar, se va.'
             : 'For classroom draws. Nothing is stored: it is gone when you close.'}
+        {activos.tiempo && (
+          <>
+            {' '}
+            {nivel
+              ? (es ? `Los tiempos son los de ${nombreDeCurso(nivel, lang)}: ${tiempos.length}.`
+                    : `Tenses are the ones from ${nombreDeCurso(nivel, lang)}: ${tiempos.length}.`)
+              : (es ? `Sin curso elegido salen los ${tiempos.length}.`
+                    : `With no course selected, all ${tiempos.length} are in.`)}
+          </>
+        )}
       </p>
 
       {/* Qué se tira */}
@@ -150,6 +169,11 @@ const Dado = ({ lang = 'es' }) => {
                 {etiquetaForma(resultado.forma)}
               </span>
             )}
+            {activos.tiempo && resultado.tiempo && (
+              <span className="text-3xl font-bold text-indigo-700">
+                {es ? resultado.tiempo.es : resultado.tiempo.en}
+              </span>
+            )}
           </div>
         )}
       </div>
@@ -167,7 +191,8 @@ const Dado = ({ lang = 'es' }) => {
           {historial.slice(1).map((h, i) => (
             <span key={i} className="inline-block bg-slate-100 text-slate-700 rounded px-1.5 py-0.5">
               {[activos.numero && h.numero, activos.sujeto && h.sujeto,
-                activos.forma && etiquetaForma(h.forma)].filter(Boolean).join(' · ')}
+                activos.forma && etiquetaForma(h.forma),
+                activos.tiempo && h.tiempo && (es ? h.tiempo.es : h.tiempo.en)].filter(Boolean).join(' · ')}
             </span>
           ))}
         </p>

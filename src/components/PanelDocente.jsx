@@ -38,12 +38,11 @@
    ni en ningún despliegue, y no hay nada que explicar sobre qué queda guardado.
    ========================================================================== */
 import React, { useState, useRef, useEffect } from 'react';
-import { ArrowLeft, Maximize2, Minimize2, Table2 } from 'lucide-react';
+import { ArrowLeft, Maximize2, Minimize2 } from 'lucide-react';
 import Dado from './Dado';
 import Ruleta from './Ruleta';
 import Grupos from './Grupos';
 import Temporizador from './Temporizador';
-import { apps } from './HubHome';
 import { CAPSULA, pestana } from '../ui';
 import { translations } from '../i18n';
 
@@ -51,29 +50,8 @@ const PanelDocente = ({ lang = 'es', nivel = null, onVolver }) => {
   const es = lang === 'es';
   const t = translations[lang];
   const [vista, setVista] = useState('dado');
-  /* La tabla de tiempos es una vista más de `vista`, pero no una pestaña de la
-     cápsula: no es una herramienta que se lance, es material que se consulta.
-     Y se monta la primera vez que se pide —no antes—: es un iframe de otra app,
-     y cargarla al entrar a las herramientas costaría una descarga a quien solo
-     venía a tirar el dado. Una vez montada se queda, como las cuatro. */
-  const [tablaPedida, setTablaPedida] = useState(false);
   const [presentando, setPresentando] = useState(false);
   const caja = useRef(null);
-  const tabla = useRef(null);
-
-  /* La tabla filtra por CURSO —solo los tiempos que ese curso ya vio— y se
-     rotula en el idioma de la suite. Embebida no hereda ninguno de los dos: son
-     dos despliegues distintos, cada uno con su propio recuerdo. Así que se le
-     dicen, con los mismos mensajes que el hub le manda a las apps del iframe.
-     Al cargar y cuando cambian: el profesor puede cambiar el curso desde el hub
-     con la tabla ya abierta. */
-  const decirleALaTabla = () => {
-    const w = tabla.current?.contentWindow;
-    if (!w) return;
-    w.postMessage({ type: 'GRAMMAR_HUB_LANG', lang }, '*');
-    if (nivel) w.postMessage({ type: 'GRAMMAR_HUB_LEVEL', level: nivel }, '*');
-  };
-  useEffect(() => { if (tablaPedida) decirleALaTabla(); }, [lang, nivel, tablaPedida]);
 
   /* El estado lo manda el navegador, no el botón: si el profesor sale con Esc
      —que es como se sale— la pantalla volvería a su sitio pero el botón seguiría
@@ -147,44 +125,25 @@ const PanelDocente = ({ lang = 'es', nivel = null, onVolver }) => {
           ))}
         </div>
 
-        <div className="ml-auto flex items-center gap-1">
-        {/* LA TABLA DE TIEMPOS. No es una quinta pestaña de la cápsula: allí van
-            las herramientas que se lanzan, y esto es material que se consulta.
-            Vive en Grammaster —donde está el motor que la genera— y por eso se
-            trae embebida, NO en otra pestaña del navegador. Abrirla fuera era
-            abandonar el hub a mitad de clase: el profesor perdía el temporizador
-            corriendo y los grupos ya repartidos, que no se guardan en ninguna
-            parte.
-            Está en esta fila y no en el encabezado por lo mismo que el botón de
-            proyectar: fuera del contenedor de pantalla completa, proyectando no
-            habría con qué abrirla ni cerrarla, y proyectada es justo como se usa
-            —se deja puesta y se explica encima—. */}
-        <button
-          onClick={() => { setTablaPedida(true); setVista(v => (v === 'tiempos' ? 'dado' : 'tiempos')); }}
-          aria-pressed={vista === 'tiempos'}
-          title={es ? 'Tabla de tiempos (de Grammaster)' : 'Tense table (from Grammaster)'}
-          /* El hover NO cambia el fondo: en oscuro el tinte -100 se eleva a #2a3042 y
-              la tinta de marca sobre ese gris cae a 4,23:1 — lo cazó
-              check-contraste-tw. Un anillo dice lo mismo y no toca el par. */
-          className={`shrink-0 flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold text-indigo-700 bg-indigo-50 transition-all ${vista === 'tiempos' ? 'ring-1 ring-indigo-400' : 'hover:ring-1 hover:ring-indigo-300'}`}
-        >
-          {es ? 'Tiempos' : 'Tenses'}
-          <Table2 size={13} />
-        </button>
+        {/* LA TABLA DE TIEMPOS YA NO ESTÁ AQUÍ. Estuvo como enlace a Grammaster
+            y luego embebida, y las dos veces por lo mismo: no había forma
+            cómoda de llegar a ella. Ahora tiene pestaña propia en Grammaster,
+            entre la Guía y la Práctica, y esa es la única puerta. Traerla
+            también aquí era ofrecer el mismo material en dos sitios, y el
+            segundo siempre es el que se queda desactualizado. */}
 
         {/* Para proyectar. Se queda DENTRO del contenedor que va a pantalla
             completa: si viviera en el encabezado, proyectando no habría botón
             para salir —solo Esc—. Apagado, porque no compite con la acción. */}
         <button
           onClick={alternarPantalla}
-          className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:bg-slate-100 transition-colors"
+          className="ml-auto flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:bg-slate-100 transition-colors"
         >
           {presentando ? <Minimize2 size={15} /> : <Maximize2 size={15} />}
           <span className="hidden sm:inline">
             {presentando ? (es ? 'Salir' : 'Exit') : (es ? 'Pantalla completa' : 'Full screen')}
           </span>
         </button>
-        </div>
       </div>
 
       <div className={`flex-1 px-5 py-6 ${presentando ? 'flex flex-col justify-center' : ''}`}>
@@ -192,28 +151,6 @@ const PanelDocente = ({ lang = 'es', nivel = null, onVolver }) => {
         <div className={vista === 'ruleta' ? '' : 'hidden'}><Ruleta lang={lang} grande={presentando} /></div>
         <div className={vista === 'grupos' ? '' : 'hidden'}><Grupos lang={lang} grande={presentando} /></div>
         <div className={vista === 'tiempo' ? '' : 'hidden'}><Temporizador lang={lang} grande={presentando} /></div>
-
-        {/* La tabla, embebida de Grammaster por el hash que abre su pestaña de
-            Tiempos. Alto explícito y no 'lo que ocupe': un iframe sin altura
-            colapsa a 150px, y aquí el contenedor tampoco tiene una altura fija
-            que heredar. Proyectando pide todo lo que queda bajo la fila de
-            pestañas; en la vista normal se queda en 70vh para que se siga viendo
-            que hay hub debajo.
-            'contain' en overscroll para que al llegar al final de la tabla el
-            gesto no arrastre la página del hub por detrás. */}
-        {tablaPedida && (
-          <div className={vista === 'tiempos' ? 'w-full' : 'hidden'}>
-            <iframe
-              ref={tabla}
-              onLoad={decirleALaTabla}
-              src={`${apps.find(a => a.id === 'grammaster').url}#tiempos`}
-              title={es ? 'Tabla de tiempos' : 'Tense table'}
-              className="w-full border border-slate-200 rounded-xl bg-white"
-              style={{ height: presentando ? 'calc(100vh - 9rem)' : '70vh', overscrollBehavior: 'contain' }}
-              sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-downloads allow-modals"
-            />
-          </div>
-        )}
 
       </div>
       </div>

@@ -43,6 +43,7 @@ import Dado from './Dado';
 import Ruleta from './Ruleta';
 import Grupos from './Grupos';
 import Temporizador from './Temporizador';
+import Semaforo from './Semaforo';
 import { CAPSULA, pestana } from '../ui';
 import { translations } from '../i18n';
 
@@ -82,14 +83,33 @@ const PanelDocente = ({ lang = 'es', nivel = null, onVolver }) => {
     catch { /* sin API o denegada: queda el modo a lo ancho, que ya sirve */ }
   };
 
-  const HERRAMIENTAS = [
-    { id: 'dado', rotulo: es ? 'Dado' : 'Dice' },
-    { id: 'ruleta', rotulo: es ? 'Ruleta' : 'Wheel' },
-    { id: 'grupos', rotulo: es ? 'Grupos' : 'Groups' },
-    /* «Reloj» y no «Temporizador»: con la palabra larga la cápsula medía 347px y
-       se salía de una pantalla de 360. La herramienta se sigue titulando
-       «Temporizador» dentro; esto es solo la pestaña. */
-    { id: 'tiempo', rotulo: es ? 'Reloj' : 'Timer' },
+  /* DOS GRUPOS Y NO UNA LISTA DE SIETE. Con las de cierre la cápsula se parte en
+     dos filas, y dos filas de botones iguales vuelven a ser la lista que las
+     pestañas evitaban. Rotuladas, el corte deja de ser un accidente del ancho y
+     pasa a decir algo: para qué momento de la clase es cada cosa.
+     Y el orden de los grupos es el de la clase: primero lo de empezar y
+     repartir, después lo de cerrar. */
+  const GRUPOS = [
+    {
+      id: 'durante',
+      rotulo: es ? 'Durante' : 'During',
+      items: [
+        { id: 'dado', rotulo: es ? 'Dado' : 'Dice' },
+        { id: 'ruleta', rotulo: es ? 'Ruleta' : 'Wheel' },
+        { id: 'grupos', rotulo: es ? 'Grupos' : 'Groups' },
+        /* «Reloj» y no «Temporizador»: con la palabra larga la cápsula medía
+           347px y se salía de una pantalla de 360. La herramienta se sigue
+           titulando «Temporizador» dentro; esto es solo la pestaña. */
+        { id: 'tiempo', rotulo: es ? 'Reloj' : 'Timer' },
+      ],
+    },
+    {
+      id: 'cierre',
+      rotulo: es ? 'Cierre' : 'Closing',
+      items: [
+        { id: 'semaforo', rotulo: es ? 'Semáforo' : 'Traffic light' },
+      ],
+    },
   ];
 
   return (
@@ -109,21 +129,26 @@ const PanelDocente = ({ lang = 'es', nivel = null, onVolver }) => {
       </div>
 
       <div ref={caja} className={presentando ? 'fixed inset-0 z-50 bg-white overflow-auto flex flex-col' : 'contents'}>
-      <div className="px-4 pt-3 flex flex-wrap items-center gap-2">
-        {/* Las cuatro dentro de una cápsula: así se leen como «una de estas» y
-            no como cuatro botones sueltos con el mismo peso que todo lo demás. */}
-        <div className={CAPSULA} role="tablist">
-          {HERRAMIENTAS.map(h => (
-            <button
-              key={h.id}
-              onClick={() => setVista(h.id)}
-              aria-pressed={vista === h.id}
-              className={pestana(vista === h.id)}
-            >
-              {h.rotulo}
-            </button>
-          ))}
-        </div>
+      <div className="px-4 pt-3 flex flex-wrap items-end gap-x-4 gap-y-2">
+        {/* Cada grupo en su cápsula: así se leen como «una de estas» y no como
+            siete botones sueltos con el mismo peso que todo lo demás. */}
+        {GRUPOS.map(g => (
+          <div key={g.id} className="flex flex-col gap-1">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-muted">{g.rotulo}</span>
+            <div className={CAPSULA} role="tablist" aria-label={g.rotulo}>
+              {g.items.map(h => (
+                <button
+                  key={h.id}
+                  onClick={() => setVista(h.id)}
+                  aria-pressed={vista === h.id}
+                  className={pestana(vista === h.id)}
+                >
+                  {h.rotulo}
+                </button>
+              ))}
+            </div>
+          </div>
+        ))}
 
         {/* LA TABLA DE TIEMPOS YA NO ESTÁ AQUÍ. Estuvo como enlace a Grammaster
             y luego embebida, y las dos veces por lo mismo: no había forma
@@ -151,6 +176,7 @@ const PanelDocente = ({ lang = 'es', nivel = null, onVolver }) => {
         <div className={vista === 'ruleta' ? '' : 'hidden'}><Ruleta lang={lang} grande={presentando} /></div>
         <div className={vista === 'grupos' ? '' : 'hidden'}><Grupos lang={lang} grande={presentando} /></div>
         <div className={vista === 'tiempo' ? '' : 'hidden'}><Temporizador lang={lang} grande={presentando} /></div>
+        <div className={vista === 'semaforo' ? '' : 'hidden'}><Semaforo lang={lang} nivel={nivel} grande={presentando} /></div>
 
       </div>
       </div>

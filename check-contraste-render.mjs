@@ -66,6 +66,17 @@ correr({
         activas y se quedan en su estado de aviso — auditar la carga limpia
         mediría media pantalla apagada. */
   conducir: async (page) => {
+    /* ¿MONTÓ LA APP? Todo lo de abajo tolera que un elemento no esté —tiene que
+       hacerlo, porque el segundo pase llega con el estado que dejó el primero—,
+       y esa misma tolerancia hace que una app CAÍDA no rompa nada: recorre las
+       pantallas sin encontrar nada, no mide nada y canta verde. Pasó de verdad
+       construyendo el semáforo, con un JSX inválido. Un ancla que tiene que
+       existir sí o sí convierte ese verde en un fallo ruidoso. */
+    const raiz = page.locator('h1');
+    if (!(await raiz.count()) || !(await raiz.first().isVisible())) {
+      throw new Error('la app no montó: no hay <h1> en la página. Mira la consola del navegador antes de creerle a esta sonda.');
+    }
+
     await cerrarFrase(page);
     const nivel = page.locator('button[aria-pressed]').first();
     if (await nivel.count()) { await nivel.click(); await page.waitForTimeout(400); }
@@ -258,6 +269,42 @@ correr({
       },
     },
     {
+      /* EL SEMÁFORO DEL CIERRE, en sus dos estados, porque son dos pantallas
+         distintas y no dos momentos de la misma: contando se proyectan los
+         tres niveles APAGADOS —el reparto no puede verse todavía— y solo al
+         final se encienden. Encendido estrena además los números en color de
+         cada nivel sobre la carcasa oscura, que es un par que no existe en
+         ninguna otra pantalla de la suite.
+         La carcasa es un objeto oscuro FIJO en los dos temas, así que aquí no
+         se mide si la capa oscura la invierte —no debe— sino si el texto que
+         va encima se lee. */
+      nombre: 'Cierre · semáforo contando',
+      ir: async (page) => {
+        await entrarDocente(page);
+        await pestana(page, 'Semáforo', 'Traffic light');
+        const proyectar = page.locator('button:visible:has-text("Proyectar"), button:visible:has-text("Project it")').first();
+        if (await proyectar.count()) { await proyectar.click(); await page.waitForTimeout(400); }
+        const mas = page.locator('button:visible:has-text("+1")');
+        if (await mas.count() === 3) {
+          for (let i = 0; i < 4; i++) await mas.nth(0).click();
+          for (let i = 0; i < 14; i++) await mas.nth(1).click();
+          for (let i = 0; i < 2; i++) await mas.nth(2).click();
+        }
+        await page.waitForTimeout(350);
+      },
+    },
+    {
+      /* El mismo semáforo ENCENDIDO. Va aparte porque llega desde el anterior:
+         el conteo sobrevive entre pantallas y aquí solo hay que destapar. */
+      nombre: 'Cierre · semáforo encendido',
+      ir: async (page) => {
+        await entrarDocente(page);
+        await pestana(page, 'Semáforo', 'Traffic light');
+        const mostrar = page.locator('button:visible:has-text("Mostrar el semáforo"), button:visible:has-text("Show the traffic light")').first();
+        if (await mostrar.count()) { await mostrar.click(); await page.waitForTimeout(700); }
+      },
+    },
+    {
       /* El temporizador se mide EN ROJO: los últimos diez segundos son un estado
          propio y es el que se ve desde el fondo de la sala. Se pone un minuto y
          se deja correr no: se ajusta a mano bajando el preset más corto y
@@ -266,7 +313,7 @@ correr({
       nombre: 'Herramientas · temporizador',
       ir: async (page) => {
         await entrarDocente(page);
-        await pestana(page, 'Temporizador', 'Timer');
+        await pestana(page, 'Reloj', 'Timer');
       },
     },
   ],

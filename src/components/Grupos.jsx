@@ -16,7 +16,7 @@
    lo que pidió el profesor y lo que hace que no haya nombres de alumnos en
    ningún sitio.
    ========================================================================== */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { parsearNombres, repartir } from '../grupos';
 import { leerHistorico, pareceHistorico, ERRORES } from '../listaCurso';
 import { ACCION, opcion, ENLACE, NUMERO } from '../ui';
@@ -24,7 +24,7 @@ import { ACCION, opcion, ENLACE, NUMERO } from '../ui';
 /* `grande` = proyectando: lo que se mira son los grupos, así que las tarjetas se
    reparten a lo ancho y los nombres crecen. Las fichas de la lista y los
    controles se quedan igual — esos se tocan de cerca, no se leen de lejos. */
-const Grupos = ({ lang = 'es', grande = false }) => {
+const Grupos = ({ lang = 'es', grande = false, onCurso }) => {
   const es = lang === 'es';
   const [texto, setTexto] = useState('');
   const [nombres, setNombres] = useState([]);
@@ -38,6 +38,17 @@ const Grupos = ({ lang = 'es', grande = false }) => {
   const [aviso, setAviso] = useState(null);
 
   const presentes = nombres.filter(x => !ausentes.has(x));
+
+  /* QUIÉN ESTÁ HOY, hacia arriba. La lista se pega aquí porque aquí es donde
+     tiene sentido pegarla, pero no es solo de esta herramienta: «La duda» del
+     cierre necesita sacar tres nombres de quien VINO, y pedir la misma lista una
+     tercera vez sería absurdo.
+     Se avisa y no se comparte el estado: Grupos sigue siendo el dueño y sigue
+     funcionando igual si nadie escucha. Las dependencias son `nombres` y
+     `ausentes` y no `presentes`, que es un array nuevo en cada render y
+     dispararía el efecto para siempre. */
+  useEffect(() => { onCurso?.(presentes); }, [nombres, ausentes]);   // eslint-disable-line react-hooks/exhaustive-deps
+
 
   /* Cuando el histórico no se puede leer, el mensaje dice QUÉ pasó. «No pude
      leerlo» no ayuda a arreglar nada, y lo que hay que arreglar suele ser algo

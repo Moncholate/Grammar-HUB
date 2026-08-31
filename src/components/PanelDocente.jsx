@@ -44,6 +44,7 @@ import Ruleta from './Ruleta';
 import Grupos from './Grupos';
 import Temporizador from './Temporizador';
 import Semaforo from './Semaforo';
+import Duda from './Duda';
 import { CAPSULA, pestana } from '../ui';
 import { translations } from '../i18n';
 
@@ -51,6 +52,11 @@ const PanelDocente = ({ lang = 'es', nivel = null, onVolver }) => {
   const es = lang === 'es';
   const t = translations[lang];
   const [vista, setVista] = useState('dado');
+  /* LA LISTA DEL CURSO, DE PASO POR AQUÍ. La pega Grupos y la usa «La duda»,
+     así que el sitio donde vive es el panel: es lo único que las dos ven. Sigue
+     sin guardarse en ninguna parte — vive mientras la pestaña esté abierta,
+     como todo lo demás de esta sección. */
+  const [curso, setCurso] = useState([]);
   const [presentando, setPresentando] = useState(false);
   const caja = useRef(null);
 
@@ -108,6 +114,7 @@ const PanelDocente = ({ lang = 'es', nivel = null, onVolver }) => {
       rotulo: es ? 'Cierre' : 'Closing',
       items: [
         { id: 'semaforo', rotulo: es ? 'Semáforo' : 'Traffic light' },
+        { id: 'duda', rotulo: es ? 'La duda' : 'The doubt' },
       ],
     },
   ];
@@ -174,9 +181,10 @@ const PanelDocente = ({ lang = 'es', nivel = null, onVolver }) => {
       <div className={`flex-1 px-5 py-6 ${presentando ? 'flex flex-col justify-center' : ''}`}>
         <div className={vista === 'dado' ? '' : 'hidden'}><Dado lang={lang} nivel={nivel} grande={presentando} /></div>
         <div className={vista === 'ruleta' ? '' : 'hidden'}><Ruleta lang={lang} grande={presentando} /></div>
-        <div className={vista === 'grupos' ? '' : 'hidden'}><Grupos lang={lang} grande={presentando} /></div>
+        <div className={vista === 'grupos' ? '' : 'hidden'}><Grupos lang={lang} grande={presentando} onCurso={setCurso} /></div>
         <div className={vista === 'tiempo' ? '' : 'hidden'}><Temporizador lang={lang} grande={presentando} /></div>
         <div className={vista === 'semaforo' ? '' : 'hidden'}><Semaforo lang={lang} nivel={nivel} grande={presentando} /></div>
+        <div className={vista === 'duda' ? '' : 'hidden'}><Duda lang={lang} nivel={nivel} curso={curso} grande={presentando} /></div>
 
       </div>
       </div>

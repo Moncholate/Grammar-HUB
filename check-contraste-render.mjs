@@ -305,6 +305,51 @@ correr({
       },
     },
     {
+      /* LA DUDA, en el molde. El nombre de cada tiempo va en `--marca` DENTRO
+         de una frase en tinta normal, que es un par nuevo: acento de marca
+         sobre el fondo de la página, sin tarjeta blanca debajo que lo salve.
+         Se mide antes de arrancar el reloj para que el molde esté quieto. */
+      nombre: 'Cierre · la duda',
+      ir: async (page) => {
+        await entrarDocente(page);
+        await pestana(page, 'La duda', 'The doubt');
+        const otra = page.locator('button:visible:has-text("Otra duda"), button:visible:has-text("Another doubt")').first();
+        if (await otra.count()) { await otra.click(); await page.waitForTimeout(300); }
+        const cambiar = page.locator('button:visible:has-text("Cambiar el molde"), button:visible:has-text("Change the frame")').first();
+        if (await cambiar.count()) { await cambiar.click(); await page.waitForTimeout(300); }
+        await page.waitForTimeout(200);
+      },
+    },
+    {
+      /* EL RELOJ DE LA DUDA EN ROJO. Los últimos diez segundos son un estado
+         propio y es el que se ve desde el fondo de la sala — el mismo criterio
+         que el temporizador de aquí abajo. Se llega bajando el tiempo al mínimo
+         y esperando: 60 s serían un minuto de sonda, así que en vez de eso se
+         mide arrancado y se acepta que el número esté en su estado normal; el
+         rojo lo cubre `text-red-600`, que ya se mide en el temporizador.
+         Lo que SÍ es exclusivo de aquí y hay que medir es la línea de
+         instrucción bajo el molde y el reloj a tamaño de proyección. */
+      nombre: 'Cierre · la duda, escribiendo',
+      ir: async (page) => {
+        await entrarDocente(page);
+        await pestana(page, 'La duda', 'The doubt');
+        const proyectar = page.locator('button:visible:has-text("Proyectar"), button:visible:has-text("Project it")').first();
+        if (await proyectar.count()) { await proyectar.click(); await page.waitForTimeout(500); }
+      },
+    },
+    {
+      /* Y a quién le toca. Sin lista cargada dice «tres voluntarios», que es
+         el estado que un profesor ve el primer día y el que se olvidaría de
+         medir. */
+      nombre: 'Cierre · la duda, a quién le toca',
+      ir: async (page) => {
+        await entrarDocente(page);
+        await pestana(page, 'La duda', 'The doubt');
+        const toca = page.locator('button:visible:has-text("A quién le toca"), button:visible:has-text("Se acabó"), button:visible:has-text("Whose turn"), button:visible:has-text("Time is up")').first();
+        if (await toca.count()) { await toca.click(); await page.waitForTimeout(400); }
+      },
+    },
+    {
       /* El temporizador se mide EN ROJO: los últimos diez segundos son un estado
          propio y es el que se ve desde el fondo de la sala. Se pone un minuto y
          se deja correr no: se ajusta a mano bajando el preset más corto y

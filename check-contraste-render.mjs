@@ -191,6 +191,73 @@ correr({
       },
     },
     {
+      /* EL AVISO DE QUE NO SE PUDO LEER, en pantalla propia: al cargar bien, el
+         aviso se limpia y el textarea desaparece, así que el estado bueno y el
+         malo no caben en la misma medición. Y el malo es el que más falta hace
+         medir: un aviso ilegible aparece justo cuando algo ya salió mal.
+         El fallo simulado es el más fácil de cometer de verdad — seleccionar
+         las filas de alumnos en Excel y dejarse la cabecera de fechas. */
+      nombre: 'Herramientas · histórico ilegible',
+      ir: async (page) => {
+        await entrarDocente(page);
+        await pestana(page, 'Grupos', 'Groups');
+        const cambiar = page.locator('button:visible:has-text("cambiar lista"), button:visible:has-text("change list")').first();
+        if (await cambiar.count()) { await cambiar.click(); await page.waitForTimeout(250); }
+        const caja = page.locator('textarea:visible').first();
+        if (!await caja.count()) return;
+        const T = '\t';
+        await caja.fill([
+          ['#', 'Rut Alumno', 'Apellido Paterno', 'Apellido Materno', 'Nombre', 'Asistencia'].join(T),
+          ['1', '1000000', 'Ramirez', 'Canales', 'Ana', '60%', 'SI'].join(T),
+        ].join('\n'));
+        await page.waitForTimeout(250);
+        const cargar = page.locator('button:visible:has-text("Cargar"), button:visible:has-text("Load")').first();
+        if (await cargar.count()) { await cargar.click(); await page.waitForTimeout(400); }
+      },
+    },
+    {
+      /* GRUPOS DESDE EL HISTÓRICO. Estrena dos pares de color que no salen en
+         ninguna otra pantalla —el cartel índigo que dice de qué clase salió la
+         lista, y el aviso rosa de cuando no se pudo leer— y los dos aparecen
+         SOLO después de pegar algo: lo que no se visita no se mide. El del
+         fallo importa el doble, porque un aviso que solo sale cuando la cosa
+         se rompe es justo el que nadie mira hasta que hace falta.
+         El histórico es inventado: ni un nombre ni un rut real en el repo. */
+      nombre: 'Herramientas · grupos desde el histórico',
+      ir: async (page) => {
+        await entrarDocente(page);
+        await pestana(page, 'Grupos', 'Groups');
+        const cambiar = page.locator('button:visible:has-text("cambiar lista"), button:visible:has-text("change list")').first();
+        if (await cambiar.count()) { await cambiar.click(); await page.waitForTimeout(250); }
+
+        const T = '\t';
+        const clases = ['10-08-26', '12-08-26', '14-08-26'];
+        const alumnos = [
+          ['Ramirez', 'Canales', 'Ana',   '60%',  ['SI', 'NO', 'SI']],
+          ['Soto',    'Pinto',   'Bruno', '30%',  ['NO', 'NO', 'SI']],
+          ['Nunez',   'Lara',    'Carla', '100%', ['SI', 'SI', 'SI']],
+          ['Ortiz',   'Rivas',   'Dario', '60%',  ['SI', 'SI', 'NO']],
+        ];
+        const historico = [
+          'Histórico Asistencia Todo : INI0000-000X | 31-08-2026 14:42',
+          T.repeat(5) + 'Fecha Clase' + T + clases.join(T),
+          T.repeat(5) + 'Fecha Registro de Asistencia' + T + clases.join(T),
+          ['#', 'Rut Alumno', 'Apellido Paterno', 'Apellido Materno', 'Nombre', 'Asistencia'].join(T),
+          ...alumnos.map((a, i) => [i + 1, '1000000' + i, a[0], a[1], a[2], a[3], ...a[4]].join(T)),
+        ].join('\n');
+
+        const caja = page.locator('textarea:visible').first();
+        if (!await caja.count()) return;
+
+        await caja.fill(historico);
+        await page.waitForTimeout(250);
+        const cargar2 = page.locator('button:visible:has-text("Cargar"), button:visible:has-text("Load")').first();
+        if (await cargar2.count()) { await cargar2.click(); await page.waitForTimeout(450); }
+        const repartir = page.locator('button:visible:has-text("Repartir"), button:visible:has-text("Split")').first();
+        if (await repartir.count()) { await repartir.click(); await page.waitForTimeout(400); }
+      },
+    },
+    {
       /* El temporizador se mide EN ROJO: los últimos diez segundos son un estado
          propio y es el que se ve desde el fondo de la sala. Se pone un minuto y
          se deja correr no: se ajusta a mano bajando el preset más corto y

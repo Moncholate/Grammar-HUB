@@ -39,6 +39,17 @@
 :root[data-theme="dark"] .border-indigo-100 { border-color: #2a3152 !important; }
 :root[data-theme="dark"] .border-indigo-200 { border-color: #333b61 !important; }
 :root[data-theme="dark"] .border-indigo-300 { border-color: #404a77 !important; }
+/* EL AVISO DE «no pude leer el histórico», en Grupos. Es el PRIMER rosa con
+   texto del hub, así que no había ni fondo ni tinta: el tinte se quedaba en
+   #fff1f2 y la tinta en #be123c en pleno modo oscuro — un cartel de papel
+   pegado sobre la pantalla negra. Van los tres juntos, como el ámbar de aquí
+   abajo: sin el fondo, la tinta clara cae sobre el rosa claro y es peor.
+   Los valores son los que Grammaster ya usa para su rosa, para que el mismo
+   aviso no se vea de dos maneras según la app. */
+:root[data-theme="dark"] .bg-rose-50 { background-color: #331520 !important; }
+:root[data-theme="dark"] .border-rose-200 { border-color: #572635 !important; }
+:root[data-theme="dark"] .bg-rose-50.text-rose-700,
+:root[data-theme="dark"] .bg-rose-50 .text-rose-700 { color: #fda4af !important; }  /* 1.91 → 7.90:1 sobre #331520 */
 /* Aviso de la frase del día (ítem en debate o sin fuente primaria) */
 :root[data-theme="dark"] .bg-amber-50 { background-color: #2e2410 !important; }
 :root[data-theme="dark"] .border-amber-200 { border-color: #4a3a15 !important; }

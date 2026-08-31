@@ -317,6 +317,12 @@ correr({
         if (await otra.count()) { await otra.click(); await page.waitForTimeout(300); }
         const cambiar = page.locator('button:visible:has-text("Cambiar el molde"), button:visible:has-text("Change the frame")').first();
         if (await cambiar.count()) { await cambiar.click(); await page.waitForTimeout(300); }
+        /* La puerta a la lista del curso va plegada —quien no la quiera no
+           tropieza con ella— y plegada no se mide. Se abre por propiedad y no
+           con un clic: `ir` se ejecuta una vez por tema y un clic la CERRARÍA
+           en el segundo pase, midiendo una pantalla vacía. */
+        const det = page.locator('details:visible').first();
+        if (await det.count()) { await det.evaluate(d => { d.open = true; }); await page.waitForTimeout(250); }
         await page.waitForTimeout(200);
       },
     },

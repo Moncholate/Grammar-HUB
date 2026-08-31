@@ -16,90 +16,31 @@
    lo que pidió el profesor y lo que hace que no haya nombres de alumnos en
    ningún sitio.
    ========================================================================== */
-import React, { useState, useEffect } from 'react';
-import { parsearNombres, repartir } from '../grupos';
-import { leerHistorico, pareceHistorico, ERRORES } from '../listaCurso';
+import React, { useState } from 'react';
+import { repartir } from '../grupos';
+import CargarCurso from './CargarCurso';
 import { ACCION, opcion, ENLACE, NUMERO } from '../ui';
 
 /* `grande` = proyectando: lo que se mira son los grupos, así que las tarjetas se
    reparten a lo ancho y los nombres crecen. Las fichas de la lista y los
    controles se quedan igual — esos se tocan de cerca, no se leen de lejos. */
-const Grupos = ({ lang = 'es', grande = false, onCurso }) => {
+/* LA LISTA NO VIVE AQUÍ, vive en el panel. Vivía aquí y era lo lógico —es
+   donde se pega— hasta que apareció la segunda herramienta que la necesita:
+   «La duda» del cierre. Con una actividad por clase, atarla a Grupos significaba
+   que el sorteo de nombres solo funcionaba los días en que además se repartieran
+   grupos, o sea casi nunca.
+   Grupos sigue mandando sobre lo suyo: el modo, el número y el reparto. */
+const Grupos = ({
+  lang = 'es', grande = false,
+  nombres = [], ausentes = new Set(), origen = null,
+  onCargar, onAlternar, onCambiarLista,
+}) => {
   const es = lang === 'es';
-  const [texto, setTexto] = useState('');
-  const [nombres, setNombres] = useState([]);
-  const [ausentes, setAusentes] = useState(() => new Set());
   const [modo, setModo] = useState('porGrupo');
   const [n, setN] = useState(4);
   const [grupos, setGrupos] = useState(null);
-  /* De dónde salió la lista, para poder decirlo en pantalla. `null` = pegada a
-     mano; si vino del histórico, la clase y la fecha que se usaron. */
-  const [origen, setOrigen] = useState(null);
-  const [aviso, setAviso] = useState(null);
 
   const presentes = nombres.filter(x => !ausentes.has(x));
-
-  /* QUIÉN ESTÁ HOY, hacia arriba. La lista se pega aquí porque aquí es donde
-     tiene sentido pegarla, pero no es solo de esta herramienta: «La duda» del
-     cierre necesita sacar tres nombres de quien VINO, y pedir la misma lista una
-     tercera vez sería absurdo.
-     Se avisa y no se comparte el estado: Grupos sigue siendo el dueño y sigue
-     funcionando igual si nadie escucha. Las dependencias son `nombres` y
-     `ausentes` y no `presentes`, que es un array nuevo en cada render y
-     dispararía el efecto para siempre. */
-  useEffect(() => { onCurso?.(presentes); }, [nombres, ausentes]);   // eslint-disable-line react-hooks/exhaustive-deps
-
-
-  /* Cuando el histórico no se puede leer, el mensaje dice QUÉ pasó. «No pude
-     leerlo» no ayuda a arreglar nada, y lo que hay que arreglar suele ser algo
-     concreto: pegaste la lista de nombres, o la clase de hoy todavía no tiene
-     asistencia pasada. */
-  const PORQUE = {
-    [ERRORES.sinListasTomadas]: es
-      ? 'Ese curso todavía no tiene ninguna lista pasada.'
-      : 'That course has no attendance recorded yet.',
-    [ERRORES.sinAlumnos]: es
-      ? 'El histórico llegó sin alumnos: revisa que hayas copiado también las filas.'
-      : 'The export came with no students: check that you copied the rows too.',
-    [ERRORES.sinFechas]: es
-      ? 'Faltan las filas de fechas: copia también la cabecera del histórico.'
-      : 'The date rows are missing: copy the export header too.',
-  };
-
-  const usarLista = () => {
-    /* Dos cosas se pegan en el mismo sitio a propósito: el profesor pega lo que
-       tiene a mano y la herramienta reconoce qué es. Preguntarle antes qué va a
-       pegar es un paso que no aporta nada. */
-    if (pareceHistorico(texto)) {
-      const h = leerHistorico(texto);
-      if (h.error) {
-        setAviso(PORQUE[h.error] || (es
-          ? 'Eso no parece el histórico de asistencia. Pega también la cabecera, o escribe los nombres uno por línea.'
-          : 'That does not look like the attendance export. Paste the header too, or type one name per line.'));
-        return;
-      }
-      setNombres(h.alumnos.map(a => a.corto));
-      /* La ganancia de todo esto: los que faltaron llegan apagados. Antes eran
-         tres toques por ausencia y a ojo. */
-      setAusentes(new Set(h.ausentes.map(a => a.corto)));
-      setOrigen({ curso: h.curso, fecha: h.fecha, clase: h.clase, ausentes: h.ausentes.length });
-      setAviso(null);
-      setGrupos(null);
-      return;
-    }
-    const lista = parsearNombres(texto);
-    setNombres(lista);
-    setAusentes(new Set());
-    setOrigen(null);
-    setAviso(null);
-    setGrupos(null);
-  };
-
-  const alternar = (nombre) => setAusentes(a => {
-    const s = new Set(a);
-    if (s.has(nombre)) s.delete(nombre); else s.add(nombre);
-    return s;
-  });
 
   const generar = () => setGrupos(repartir(presentes, { modo, n }));
 
@@ -112,39 +53,10 @@ const Grupos = ({ lang = 'es', grande = false, onCurso }) => {
       </p>
 
       {!nombres.length ? (
-        <>
-          <textarea
-            value={texto}
-            onChange={(e) => setTexto(e.target.value)}
-            rows={6}
-            placeholder={es ? 'Un nombre por línea, o pega el histórico de asistencia' : 'One name per line, or paste the attendance export'}
-            className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 outline-none"
-          />
-          {/* Se dice ANTES de tocar el botón: reconocido el histórico, el botón
-              cambia de rótulo. Así no hay que apretar para descubrir si lo que
-              pegaste sirve. */}
-          {pareceHistorico(texto) && !aviso && (
-            <p className="mt-2 text-xs font-semibold text-indigo-700">
-              {es ? 'Histórico de asistencia reconocido.' : 'Attendance export recognised.'}
-            </p>
-          )}
-          {aviso && (
-            <p role="alert" className="mt-2 text-xs text-rose-700 bg-rose-50 border border-rose-200 rounded-lg px-2.5 py-2">
-              {aviso}
-            </p>
-          )}
-          <button
-            onClick={usarLista}
-            disabled={!texto.trim() || (!pareceHistorico(texto) && !parsearNombres(texto).length)}
-            className={`mt-2 ${ACCION}`}
-          >
-            {pareceHistorico(texto)
-              ? (es ? 'Cargar el curso de ese día' : 'Load that day’s class')
-              : (es ? 'Usar esta lista' : 'Use this list')}
-          </button>
-        </>
+        <CargarCurso lang={lang} onCargar={(c) => { setGrupos(null); onCargar?.(c); }} />
       ) : (
         <>
+          {/* — */}
           {/* Las fichas. Apagar a alguien no lo borra: `aria-pressed` dice el
               estado en voz alta, y el tachado lo dice a la vista. */}
           <div className="flex flex-wrap gap-1.5 mb-3">
@@ -153,7 +65,7 @@ const Grupos = ({ lang = 'es', grande = false, onCurso }) => {
               return (
                 <button
                   key={nombre}
-                  onClick={() => alternar(nombre)}
+                  onClick={() => onAlternar?.(nombre)}
                   aria-pressed={!falta}
                   className={`px-2.5 py-1 rounded-lg text-sm border transition-colors ${
                     falta
@@ -188,7 +100,7 @@ const Grupos = ({ lang = 'es', grande = false, onCurso }) => {
               {presentes.length} {es ? 'de' : 'of'} {nombres.length} {es ? 'presentes' : 'present'}
             </span>
             <button
-              onClick={() => { setNombres([]); setGrupos(null); setOrigen(null); }}
+              onClick={() => { setGrupos(null); onCambiarLista?.(); }}
               className={ENLACE}
             >
               {es ? 'cambiar lista' : 'change list'}

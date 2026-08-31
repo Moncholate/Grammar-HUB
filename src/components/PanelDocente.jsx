@@ -52,11 +52,37 @@ const PanelDocente = ({ lang = 'es', nivel = null, onVolver }) => {
   const es = lang === 'es';
   const t = translations[lang];
   const [vista, setVista] = useState('dado');
-  /* LA LISTA DEL CURSO, DE PASO POR AQUÍ. La pega Grupos y la usa «La duda»,
-     así que el sitio donde vive es el panel: es lo único que las dos ven. Sigue
-     sin guardarse en ninguna parte — vive mientras la pestaña esté abierta,
-     como todo lo demás de esta sección. */
-  const [curso, setCurso] = useState([]);
+  /* LA LISTA DEL CURSO VIVE AQUÍ, y no dentro de la herramienta que la pide.
+     Vivía en Grupos, que es donde se pega y parecía lo lógico, hasta que
+     apareció la segunda que la necesita: «La duda» del cierre. Con un cierre de
+     cinco minutos se hace UNA actividad por clase, así que atarla a Grupos
+     significaba que el sorteo de nombres solo funcionaba los días en que además
+     se hubieran repartido grupos. Lo dijo el profesor y tenía razón: una
+     herramienta no puede depender de que hoy se haya usado otra.
+
+     PERO SIGUE SIENDO UNA SOLA LISTA. Lo fácil habría sido darle una a cada
+     herramienta, y eso cobra el pegado dos veces el día que se usan las dos —
+     y deja dos versiones de la misma clase que pueden decir cosas distintas.
+     Se carga desde cualquiera de las dos puertas y queda disponible en ambas.
+
+     Y «ausentes» es de la lista y no de Grupos: quien faltó, faltó para todas.
+     Nada de esto se guarda: vive mientras la pestaña esté abierta. */
+  const [nombres, setNombres] = useState([]);
+  const [ausentes, setAusentes] = useState(() => new Set());
+  const [origen, setOrigen] = useState(null);
+  const presentes = nombres.filter(x => !ausentes.has(x));
+
+  const cargarCurso = ({ nombres: ns, ausentes: aus, origen: o }) => {
+    setNombres(ns);
+    setAusentes(aus);
+    setOrigen(o);
+  };
+  const alternarAusente = (nombre) => setAusentes(a => {
+    const s = new Set(a);
+    if (s.has(nombre)) s.delete(nombre); else s.add(nombre);
+    return s;
+  });
+  const cambiarLista = () => { setNombres([]); setAusentes(new Set()); setOrigen(null); };
   const [presentando, setPresentando] = useState(false);
   const caja = useRef(null);
 
@@ -181,10 +207,13 @@ const PanelDocente = ({ lang = 'es', nivel = null, onVolver }) => {
       <div className={`flex-1 px-5 py-6 ${presentando ? 'flex flex-col justify-center' : ''}`}>
         <div className={vista === 'dado' ? '' : 'hidden'}><Dado lang={lang} nivel={nivel} grande={presentando} /></div>
         <div className={vista === 'ruleta' ? '' : 'hidden'}><Ruleta lang={lang} grande={presentando} /></div>
-        <div className={vista === 'grupos' ? '' : 'hidden'}><Grupos lang={lang} grande={presentando} onCurso={setCurso} /></div>
+        <div className={vista === 'grupos' ? '' : 'hidden'}><Grupos lang={lang} grande={presentando}
+                    nombres={nombres} ausentes={ausentes} origen={origen}
+                    onCargar={cargarCurso} onAlternar={alternarAusente} onCambiarLista={cambiarLista} /></div>
         <div className={vista === 'tiempo' ? '' : 'hidden'}><Temporizador lang={lang} grande={presentando} /></div>
         <div className={vista === 'semaforo' ? '' : 'hidden'}><Semaforo lang={lang} nivel={nivel} grande={presentando} /></div>
-        <div className={vista === 'duda' ? '' : 'hidden'}><Duda lang={lang} nivel={nivel} curso={curso} grande={presentando} /></div>
+        <div className={vista === 'duda' ? '' : 'hidden'}><Duda lang={lang} nivel={nivel} grande={presentando}
+                    curso={presentes} origen={origen} onCargar={cargarCurso} onCambiarLista={cambiarLista} /></div>
 
       </div>
       </div>

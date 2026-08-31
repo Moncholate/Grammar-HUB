@@ -27,16 +27,22 @@
    queda sin decir nada. Lo que se lee en voz alta es una frase que ya está
    escrita, no una confesión improvisada.
 
-   LOS NOMBRES SALEN DE LA LISTA QUE YA ESTÁ EN GRUPOS, y solo de quien vino
-   hoy: llamar a alguien que no está es el fallo clásico de sortear nombres. Si
-   no hay lista cargada, la herramienta sigue sirviendo — pide tres voluntarios
-   y ya. Nada se guarda, aquí tampoco.
+   LOS NOMBRES SALEN DE LA LISTA DEL CURSO, y solo de quien vino hoy: llamar a
+   alguien que no está es el fallo clásico de sortear nombres. La lista se puede
+   cargar DESDE AQUÍ —no solo desde Grupos— y esa es la corrección importante:
+   con un cierre de cinco minutos se hace una actividad por clase, así que la
+   mayoría de los días Grupos ni se abre. Es la misma lista, no una copia: se
+   pegue donde se pegue, las dos herramientas la ven.
+   Y si nadie la ha cargado, la herramienta sigue sirviendo: se saltan los
+   nombres y se piden tres voluntarios, que es lo que se hacía antes.
+   Nada se guarda, aquí tampoco.
    ========================================================================== */
 import React, { useState, useRef, useEffect } from 'react';
 import { paresDe, parPorDefecto } from '../confusiones';
 import { nombreDeCurso } from '../tiempos';
 import { barajar } from '../lista';
 import { formatoReloj, estadoReloj } from '../temporizador';
+import CargarCurso from './CargarCurso';
 import { ACCION, APAGADO, opcion, ENLACE } from '../ui';
 
 /* Minuto y medio por defecto. Menos no alcanza para releer lo que se hizo y
@@ -44,7 +50,7 @@ import { ACCION, APAGADO, opcion, ENLACE } from '../ui';
 const SEGUNDOS = [60, 90, 120];
 const CUANTOS = 3;
 
-const Duda = ({ lang = 'es', nivel = null, curso = [], grande = false }) => {
+const Duda = ({ lang = 'es', nivel = null, curso = [], origen = null, onCargar, onCambiarLista, grande = false }) => {
   const es = lang === 'es';
   const pares = paresDe(nivel);
 
@@ -202,6 +208,39 @@ const Duda = ({ lang = 'es', nivel = null, curso = [], grande = false }) => {
           </div>
 
           <button onClick={arrancar} className={ACCION}>{es ? 'Proyectar' : 'Project it'}</button>
+
+          {/* LA LISTA DEL CURSO, aquí y no solo en Grupos. Se ofrece en la fase
+              de preparar porque es donde hay tiempo de pegarla — con el reloj
+              corriendo, no. Y es opcional a propósito: sin lista la herramienta
+              funciona igual, solo que pide voluntarios. Por eso va al final y
+              plegada, después de la acción y no antes: quien no la quiera no
+              tropieza con ella. */}
+          <details className="rounded-xl border border-slate-200 bg-white px-4 py-3">
+            <summary className="text-sm font-semibold text-slate-700 cursor-pointer">
+              {curso.length
+                ? (es ? `Lista del curso · ${curso.length} presentes` : `Class list · ${curso.length} present`)
+                : (es ? 'Cargar la lista del curso, para sortear a quién le toca' : 'Load the class list, to draw whose turn it is')}
+            </summary>
+            <div className="mt-3">
+              {curso.length ? (
+                <>
+                  {origen && (
+                    <p className="mb-3 text-xs text-indigo-700 bg-indigo-50 border border-indigo-200 rounded-lg px-2.5 py-2">
+                      {es
+                        ? `${origen.curso || 'Curso'} · clase ${origen.clase} del ${origen.fecha}: ${origen.ausentes} no vinieron y no entran en el sorteo.`
+                        : `${origen.curso || 'Course'} · class ${origen.clase} on ${origen.fecha}: ${origen.ausentes} were absent and are out of the draw.`}
+                    </p>
+                  )}
+                  <p className="text-xs text-muted mb-2">{curso.join(' · ')}</p>
+                  <button onClick={() => onCambiarLista?.()} className={ENLACE}>
+                    {es ? 'cambiar lista' : 'change list'}
+                  </button>
+                </>
+              ) : (
+                <CargarCurso lang={lang} onCargar={onCargar} compacto />
+              )}
+            </div>
+          </details>
         </div>
       )}
 
@@ -269,8 +308,8 @@ const Duda = ({ lang = 'es', nivel = null, curso = [], grande = false }) => {
 
           {!curso.length && (
             <p className="text-xs text-muted text-center">
-              {es ? 'Con la lista del curso cargada en Grupos, aquí salen tres nombres de quienes vinieron hoy.'
-                  : 'With the class list loaded in Groups, three names of whoever came today show up here.'}
+              {es ? 'Con la lista del curso cargada, aquí salen tres nombres de quienes vinieron hoy. Se carga al elegir el molde.'
+                  : 'With the class list loaded, three names of whoever came today show up here. You load it when choosing the frame.'}
             </p>
           )}
         </div>

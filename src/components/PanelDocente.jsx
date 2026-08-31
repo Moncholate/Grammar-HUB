@@ -45,6 +45,7 @@ import Grupos from './Grupos';
 import Temporizador from './Temporizador';
 import Semaforo from './Semaforo';
 import Duda from './Duda';
+import Apuesta from './Apuesta';
 import { CAPSULA, pestana } from '../ui';
 import { translations } from '../i18n';
 
@@ -140,6 +141,7 @@ const PanelDocente = ({ lang = 'es', nivel = null, onVolver }) => {
       rotulo: es ? 'Cierre' : 'Closing',
       items: [
         { id: 'semaforo', rotulo: es ? 'Semáforo' : 'Traffic light' },
+        { id: 'apuesta', rotulo: es ? 'Apuesta' : 'The bet' },
         { id: 'duda', rotulo: es ? 'La duda' : 'The doubt' },
       ],
     },
@@ -212,6 +214,7 @@ const PanelDocente = ({ lang = 'es', nivel = null, onVolver }) => {
                     onCargar={cargarCurso} onAlternar={alternarAusente} onCambiarLista={cambiarLista} /></div>
         <div className={vista === 'tiempo' ? '' : 'hidden'}><Temporizador lang={lang} grande={presentando} /></div>
         <div className={vista === 'semaforo' ? '' : 'hidden'}><Semaforo lang={lang} nivel={nivel} grande={presentando} /></div>
+        <div className={vista === 'apuesta' ? '' : 'hidden'}><Apuesta lang={lang} nivel={nivel} grande={presentando} /></div>
         <div className={vista === 'duda' ? '' : 'hidden'}><Duda lang={lang} nivel={nivel} grande={presentando}
                     curso={presentes} origen={origen} onCargar={cargarCurso} onCambiarLista={cambiarLista} /></div>
 

@@ -356,6 +356,50 @@ correr({
       },
     },
     {
+      /* LA APUESTA, con el set a la vista. Las consignas son el elemento más
+         grande que proyecta la suite después del dado, y van sobre el fondo de
+         la página con el número de cada una en tinta apagada — un par que no
+         sale en ninguna otra pantalla.
+         Se saca el set explícitamente: sin tocar nada la herramienta abre
+         vacía, y medir una pantalla sin consignas no mide las consignas. */
+      nombre: 'Cierre · apuesta, el set',
+      ir: async (page) => {
+        await entrarDocente(page);
+        await pestana(page, 'Apuesta', 'The bet');
+        const cambiar = page.locator('button:visible:has-text("Cambiar"), button:visible:has-text("Change")').first();
+        if (await cambiar.count()) { await cambiar.click(); await page.waitForTimeout(300); }
+        const ver = page.locator('button:visible:has-text("Ver el set"), button:visible:has-text("See the set")').first();
+        if (await ver.count()) { await ver.click(); await page.waitForTimeout(300); }
+      },
+    },
+    {
+      /* EL MOMENTO DE APOSTAR. Es la única pantalla de la suite cuyo elemento
+         principal es un signo de interrogación gigante en tinta apagada, y lo
+         apagado es justo lo que suele caerse bajo AA. Además aquí las
+         consignas DESAPARECEN a propósito, así que es una pantalla distinta y
+         no un estado de la anterior. */
+      nombre: 'Cierre · apuesta, apostando',
+      ir: async (page) => {
+        await entrarDocente(page);
+        await pestana(page, 'Apuesta', 'The bet');
+        const arrancar = page.locator('button:visible:has-text("Proyectar y arrancar"), button:visible:has-text("Project and start")').first();
+        if (await arrancar.count()) { await arrancar.click(); await page.waitForTimeout(400); }
+        const apostar = page.locator('button:visible:has-text("a apostar"), button:visible:has-text("place the bet")').first();
+        if (await apostar.count()) { await apostar.click(); await page.waitForTimeout(350); }
+      },
+    },
+    {
+      /* Y la comparación, que es el pago de todo esto: dos marcos vacíos que
+         cada alumno rellena en su cuaderno, y la pregunta de abajo. */
+      nombre: 'Cierre · apuesta, comparando',
+      ir: async (page) => {
+        await entrarDocente(page);
+        await pestana(page, 'Apuesta', 'The bet');
+        const corregir = page.locator('button:visible:has-text("Ahora corrijan"), button:visible:has-text("Now check")').first();
+        if (await corregir.count()) { await corregir.click(); await page.waitForTimeout(400); }
+      },
+    },
+    {
       /* El temporizador se mide EN ROJO: los últimos diez segundos son un estado
          propio y es el que se ve desde el fondo de la sala. Se pone un minuto y
          se deja correr no: se ajusta a mano bajando el preset más corto y

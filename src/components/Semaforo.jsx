@@ -62,12 +62,22 @@ const TINTA = {
 const CARCASA = '#12172a';
 const CARCASA_INT = '#080b16';
 
-/* Los tres niveles, en español y por orden de dominio. Son CRITERIOS: cada uno
-   se puede comprobar solo, que es lo que los separa de «lo entendí». */
+/* Los tres niveles, en español y por orden de dominio.
+
+   SON CRITERIOS, y esa es la regla que no se puede aflojar al reescribirlos:
+   cada uno se comprueba solo. «Lo entendí» no vale —no hay forma de saber si
+   es verdad hasta que lo intentas—, y «me gustó» tampoco. Los tres hablan de
+   HACER, que es lo único observable desde dentro.
+
+   Y ESTÁN EN CHILENO, no en español de manual. Decían «me sale» y «no me sale
+   solo», que es de España: el profesor lo cazó a la primera. Un criterio que
+   suena a traducción se lee dos veces, y estos se leen proyectados y de lejos.
+   Verbo «poder hacer» en los tres, con el clítico delante —«lo puedo hacer» y
+   no «puedo hacerlo»—, que es como se dice acá. */
 const NIVELES = [
   { id: 'verde', texto: 'Se lo puedo explicar a alguien' },
-  { id: 'ambar', texto: 'Me sale, pero mirando el ejemplo' },
-  { id: 'rojo',  texto: 'Todavía no me sale solo' },
+  { id: 'ambar', texto: 'Lo puedo hacer, pero mirando el ejemplo' },
+  { id: 'rojo',  texto: 'Todavía no lo puedo hacer solo' },
 ];
 
 /* Las tres habilidades son las tres formas de la suite. Se dicen en inglés

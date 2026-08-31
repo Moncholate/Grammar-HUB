@@ -400,6 +400,37 @@ correr({
       },
     },
     {
+      /* ANTES / AHORA. Estrena el par más delicado del cierre: una frase
+         TACHADA en tinta apagada sobre un tinte gris —lo que ya no se piensa—
+         al lado de la misma frase en tinta plena. Lo apagado con tachado es la
+         combinación que más se cae bajo AA, y aquí no puede: es una oración
+         modelo que la clase tiene que poder leer entera para reconocerla como
+         suya. Se abre además la puerta plegada de la lista, por lo mismo que
+         en «La duda»: plegada no se mide. */
+      nombre: 'Cierre · antes y ahora',
+      ir: async (page) => {
+        await entrarDocente(page);
+        await pestana(page, 'Antes / Ahora', 'Then / Now');
+        const otro = page.locator('button:visible:has-text("Otro error"), button:visible:has-text("Another mistake"), button:visible:has-text("Cambiar el error"), button:visible:has-text("Change the mistake")').first();
+        if (await otro.count()) { await otro.click(); await page.waitForTimeout(300); }
+        const det = page.locator('details:visible').first();
+        if (await det.count()) { await det.evaluate(d => { d.open = true; }); await page.waitForTimeout(250); }
+      },
+    },
+    {
+      /* Y el marco EN BLANCO, que es otro estado: los dos lados con la línea
+         de puntos en vez de las oraciones. Es el que se usa el día que la
+         clase no fue de gramática, y el hueco vacío en tinta apagada es justo
+         lo que nadie se acuerda de medir. */
+      nombre: 'Cierre · antes y ahora, en blanco',
+      ir: async (page) => {
+        await entrarDocente(page);
+        await pestana(page, 'Antes / Ahora', 'Then / Now');
+        const blanco = page.locator('button:visible:has-text("En blanco"), button:visible:has-text("Blank")').first();
+        if (await blanco.count()) { await blanco.click(); await page.waitForTimeout(300); }
+      },
+    },
+    {
       /* El temporizador se mide EN ROJO: los últimos diez segundos son un estado
          propio y es el que se ve desde el fondo de la sala. Se pone un minuto y
          se deja correr no: se ajusta a mano bajando el preset más corto y

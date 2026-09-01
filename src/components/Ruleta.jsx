@@ -8,17 +8,20 @@
    Eso decide el dibujo. Una pregunta no cabe en un sector, y con veinte
    tarjetas cada sector mide 18°, así que:
 
-     · dentro de la rueda solo hay etiqueta cuando de verdad cabe (hasta doce
-       tarjetas, y recortada). Con más, la rueda son colores girando.
-     · el resultado se lee ABAJO, en grande. La rueda es la expectativa; el
-       cartel es la información.
+     · dentro de la rueda hay siempre un NÚMERO, y además la palabra cuando de
+       verdad cabe (hasta doce tarjetas, y recortada). Con más, antes la rueda
+       era solo colores girando: sin una sola marca, no parecía una decisión
+       sino una avería, y así lo reportó el profesor. El número cabe siempre y
+       dice en cuál cayó.
+     · el resultado se lee ABAJO, en grande, con su número delante. La rueda es
+       la expectativa; el cartel es la información.
 
    La geometría y el sorteo están en `../ruleta.js`, con pruebas
    (`tools/check-ruleta.mjs`): el ángulo es lo que se rompe en silencio.
    ========================================================================== */
 import React, { useState, useRef, useEffect } from 'react';
 import { parsearLista } from '../lista';
-import { siguienteIndice, deltaHasta, ordenInicial, centroDelSector } from '../ruleta';
+import { siguienteIndice, deltaHasta, ordenInicial, centroDelSector, queRotular } from '../ruleta';
 import { ACCION, ENLACE } from '../ui';
 
 const TINTES = ['#e0e7ff', '#c7d2fe'];   // indigo-100 / indigo-200: la rueda no compite con el resultado
@@ -89,6 +92,7 @@ const Ruleta = ({ lang = 'es', grande = false }) => {
   };
 
   const quedan = items.length - usados.length;
+  const rotular = queRotular(items.length);
 
   return (
     <section className={grande ? 'w-full max-w-3xl mx-auto' : 'w-full max-w-xl mx-auto'}>
@@ -138,8 +142,24 @@ const Ruleta = ({ lang = 'es', grande = false }) => {
                 {items.map((item, i) => (
                   <path key={i} d={sector(i, items.length)} fill={TINTES[i % 2]} stroke="#fff" strokeWidth="0.8" />
                 ))}
-                {/* Etiquetas solo si caben: con más de doce, la rueda son colores. */}
-                {items.length <= 12 && items.map((item, i) => (
+                {/* El número, SIEMPRE: cabe en cualquier sector y es lo que hace
+                    que la rueda nunca se quede muda. Va pegado al borde, que es
+                    donde el sector es ancho. */}
+                {rotular.numero && items.map((item, i) => (
+                  <text
+                    key={'n' + i}
+                    x="100" y="100"
+                    transform={`rotate(${centroDelSector(i, items.length)} 100 100) translate(0 -80)`}
+                    textAnchor="middle"
+                    className="fill-slate-700"
+                    style={{ fontSize: '9px', fontWeight: 700 }}
+                  >
+                    {i + 1}
+                  </text>
+                ))}
+                {/* Y la palabra, solo cuando de verdad cabe: apretada hasta
+                    entrar en un sector de 18° queda ilegible, que es peor. */}
+                {rotular.palabra && items.map((item, i) => (
                   <text
                     key={i}
                     x="100" y="100"
@@ -172,7 +192,12 @@ const Ruleta = ({ lang = 'es', grande = false }) => {
             {elegido == null ? (
               <p className="text-muted text-sm">{es ? 'Toca Girar' : 'Tap Spin'}</p>
             ) : (
-              <p className={`font-bold text-slate-900 ${grande ? 'text-[5vw] leading-tight' : 'text-2xl sm:text-3xl'}`}>{items[elegido]}</p>
+              <p className={`font-bold text-slate-900 ${grande ? 'text-[5vw] leading-tight' : 'text-2xl sm:text-3xl'}`}>
+                {/* El número delante para poder casar el cartel con el sector en
+                    el que se paró la rueda, que es lo que la clase mira. */}
+                <span className="text-muted tabular-nums mr-2">{elegido + 1}</span>
+                {items[elegido]}
+              </p>
             )}
           </div>
 

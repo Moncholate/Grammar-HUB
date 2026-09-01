@@ -62,6 +62,27 @@ export const deltaHasta = ({ indice, total, rotacionActual = 0, vueltas = 4 }) =
   return vueltas * 360 + avance;
 };
 
+/**
+ * QUÉ SE ROTULA EN CADA SECTOR, que es lo que decide si la rueda dice algo.
+ *
+ * El NÚMERO va siempre. Antes, con más de doce tarjetas la rueda se quedaba sin
+ * una sola etiqueta —el texto no cabe en un sector de 18°— y una rueda de
+ * colores girando sin nada escrito no parece una decisión de diseño: parece que
+ * se rompió. Lo reportó el profesor con una lista de warm-up normal. Un número
+ * de una o dos cifras cabe en cualquier sector, y con él la rueda siempre dice
+ * en cuál cayó; el texto entero se lee en el cartel de abajo, que es donde
+ * siempre estuvo la información.
+ *
+ * La PALABRA solo cuando de verdad cabe. Ese sigue siendo el motivo original y
+ * no ha cambiado: una pregunta de warm-up no entra en un sector estrecho, y
+ * apretarla hasta que quepa la deja ilegible, que es peor que no ponerla.
+ */
+export const ROTULO_HASTA = 12;
+export const queRotular = (total) => ({
+  numero: true,
+  palabra: total > 0 && total <= ROTULO_HASTA,
+});
+
 /** El orden en que se dibujan las tarjetas. Se baraja una vez, no en cada giro:
     si la rueda se reordenara sola, el alumno no vería girar nada. */
 export const ordenInicial = (items, azar = Math.random) => barajar(items, azar);

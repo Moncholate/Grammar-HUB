@@ -12,7 +12,7 @@
    la clase lo está mirando.
 
    Correr:  node tools/check-ruleta.mjs        (desde Grammar HUB/) */
-import { siguienteIndice, centroDelSector, deltaHasta, ordenInicial } from '../src/ruleta.js';
+import { siguienteIndice, centroDelSector, deltaHasta, ordenInicial, queRotular, ROTULO_HASTA } from '../src/ruleta.js';
 import { formatoReloj, estadoReloj, PRESETS } from '../src/temporizador.js';
 
 let problemas = 0;
@@ -113,5 +113,26 @@ console.log('\nel reloj se lee bien');
   else ok(`presets: ${PRESETS.join(', ')} min`);
 }
 
+
+console.log('\nla rueda nunca se queda muda');
+{
+  /* EL FALLO QUE ESTO IMPIDE: con trece tarjetas o más, la rueda dejaba de
+     rotular POR COMPLETO. La regla de fondo era buena —una pregunta de warm-up
+     no cabe en un sector de 18°— pero el resultado era una rueda de colores
+     girando sin una sola marca, y eso no se lee como una decisión de diseño:
+     se lee como que la herramienta se rompió, y así lo reportó el profesor con
+     una lista de warm-up normal. Un número de una o dos cifras cabe en
+     cualquier sector y arregla justo eso. */
+  const mudas = [1, 5, 12, 13, 20, 40].filter(n => !queRotular(n).numero);
+  if (mudas.length) fallo(`sin ninguna marca con ${mudas.join(", ")} tarjetas: la rueda se ve rota`);
+  else ok('de 1 a 40 tarjetas, todos los sectores llevan su número');
+
+  if (queRotular(ROTULO_HASTA).palabra && !queRotular(ROTULO_HASTA + 1).palabra) {
+    ok(`la palabra se rotula hasta ${ROTULO_HASTA} y no más: apretada en un sector estrecho queda ilegible`);
+  } else fallo('el corte de la palabra no está donde dice');
+
+  if (!queRotular(0).palabra) ok('sin tarjetas no se rotula nada');
+  else fallo('con cero tarjetas intentó rotular');
+}
 console.log(problemas ? `\n✗ ${problemas} problema(s)` : '\nRULETA Y RELOJ OK');
 process.exit(problemas ? 1 : 0);

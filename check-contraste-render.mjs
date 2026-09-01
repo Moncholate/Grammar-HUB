@@ -283,6 +283,34 @@ correr({
       },
     },
     {
+      /* EL CRUCIGRAMA, con la cuadrícula y las respuestas a la vista. Estrena
+         tres pares que no salen en ninguna otra pantalla: el número de casilla
+         —minúsculo, en la esquina, sobre la casilla blanca—, la letra de la
+         solución, y el aviso ámbar de las palabras que no entraron.
+         El número es el que más riesgo tiene: es el texto más pequeño de toda
+         la suite, y encima de un fondo que en oscuro deja de ser blanco.
+         Se piden las respuestas A PROPÓSITO: la cuadrícula vacía no tiene nada
+         que medir dentro, y lo que hay que comprobar es que la letra se lea.
+         Las palabras llevan pista escrita y sin escribir: la línea de puntos de
+         la pista que falta es otro elemento apagado que nadie mediría. */
+      nombre: 'Herramientas · crucigrama',
+      ir: async (page) => {
+        await entrarDocente(page);
+        await pestana(page, 'Crucigrama', 'Crossword');
+        const cambiar = page.locator('button:visible:has-text("cambiar las palabras"), button:visible:has-text("change the words")').first();
+        if (await cambiar.count()) { await cambiar.click(); await page.waitForTimeout(300); }
+        const caja = page.locator('textarea:visible').first();
+        if (await caja.count()) {
+          await caja.fill('apple = a red fruit\nbanana = yellow and long\ncherry\norange = it is also a colour\nlemon\ngrape\nmelon\npeach = it has fuzzy skin');
+          await page.waitForTimeout(250);
+        }
+        const armar = page.locator('button:visible:has-text("Armar el crucigrama"), button:visible:has-text("Build the crossword")').first();
+        if (await armar.count()) { await armar.click(); await page.waitForTimeout(450); }
+        const ver = page.locator('button:visible:has-text("Ver las respuestas"), button:visible:has-text("Show answers")').first();
+        if (await ver.count()) { await ver.click(); await page.waitForTimeout(350); }
+      },
+    },
+    {
       /* LAS CINCO DEL CIERRE ABREN VACÍAS y sin nada sugerido, así que entrar en
          la pestaña no deja nada que medir: hay que ESCRIBIR primero. Se escribe
          con `fill`, que es idempotente —`ir` corre una vez por tema y volver a

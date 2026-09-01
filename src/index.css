@@ -15,6 +15,39 @@
    leyéndose como pista y no como contenido. */
 :root input::placeholder, :root textarea::placeholder { color: #64748b; opacity: 1; }
 
+/* ── LA HOJA IMPRESA ─────────────────────────────────────────────────────
+   Solo la usa el crucigrama, que es lo único de la suite que se reparte en
+   papel. Se esconde TODO y se deja ver solo `.gh-hoja`, en vez de ir
+   ocultando cabeceras una por una: así, cuando mañana haya otra herramienta
+   imprimible, no hay que acordarse de tapar nada nuevo.
+
+   Y LA HOJA NUNCA LLEVA RESPUESTAS. En pantalla se pueden encender para
+   corregir entre todos; en el papel se apagan aquí, porque un botón que se
+   olvida encendido reparte veinticinco crucigramas resueltos.
+
+   Fondo blanco y tinta negra pase lo que pase: en modo oscuro, imprimir la
+   capa oscura gasta un cartucho y sale gris sobre gris. */
+@media print {
+  body * { visibility: hidden !important; }
+  .gh-hoja, .gh-hoja * { visibility: visible !important; }
+  .gh-hoja {
+    position: absolute !important; left: 0; top: 0; width: 100%;
+    background: #fff !important; color: #000 !important;
+  }
+  .gh-hoja * { background: #fff !important; color: #000 !important; }
+  /* Las letras de la solución se pintan con `color`, así que blanco sobre
+     blanco las borra sin tener que saber qué elemento son. */
+  /* LA SOLUCIÓN NO SE IMPRIME. Se marca en el componente con `gh-solucion` —la
+     letra de cada casilla y la respuesta escrita al lado de la pista— y aquí se
+     esconde por VISIBILIDAD y no por color: las dos se pintan con estilos en
+     línea, y una regla de color que blanquea una acaba ennegreciendo la otra.
+     Ocultar por visibilidad además deja el hueco, así que la casilla mantiene su
+     tamaño y la línea de la pista no se descoloca. */
+  .gh-hoja .gh-solucion { visibility: hidden !important; }
+  .gh-no-print { display: none !important; }
+  @page { margin: 12mm; }
+}
+
 /* Modo oscuro (disparado por data-theme; el resolver del <head> lo fija) */
 :root[data-theme="dark"], :root[data-theme="dark"] body { background-color: #0c0e15; color: #eceff8; }
 :root[data-theme="dark"] .bg-white { background-color: #141826 !important; }

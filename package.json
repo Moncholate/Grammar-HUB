@@ -11,7 +11,7 @@
     "sync-curriculum": "node scripts/sync-curriculum.mjs",
     "sync-gamification": "node scripts/sync-gamification.mjs",
     "sync-phrasal": "node scripts/sync-phrasal.mjs",
-    "check": "node tools/check-install.mjs && node tools/check-analogia.mjs && node tools/check-grupos.mjs && node tools/check-ruleta.mjs && node tools/check-lista-curso.mjs && node tools/check-semaforo.mjs && node tools/check-molde.mjs && node tools/check-muro.mjs",
+    "check": "node tools/check-install.mjs && node tools/check-analogia.mjs && node tools/check-grupos.mjs && node tools/check-ruleta.mjs && node tools/check-lista-curso.mjs && node tools/check-semaforo.mjs && node tools/check-molde.mjs && node tools/check-muro.mjs && node tools/check-crucigrama.mjs",
     "sync": "npm run sync-curriculum && npm run sync-gamification && npm run sync-phrasal && npm run sync-vocabulary && npm run sync-spelling && npm run sync-capitals",
     "sync-vocabulary": "node scripts/sync-vocabulary.mjs",
     "sync-spelling": "node scripts/sync-spelling.mjs",

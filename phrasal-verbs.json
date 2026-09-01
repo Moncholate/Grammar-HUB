@@ -7,6 +7,8 @@
 
   "$fuente": "American English File 3rd ed. Se agrupan por el libro donde aparecen para que se vea qué maneja el alumno y cuándo.",
 
+  "$porQueGetDressed": "Entró por una medición (1-sep-2026): de los verbos de varias palabras del vocabulario del curso era el único que Grammaster trataba como error, diciendo que no era un verbo. No es un frasal en sentido estricto —es get + un participio usado como adjetivo— pero para lo único que hace esta lista, que es saber que esas dos palabras son UN verbo, se comporta igual, y conjuga bien: gets dressed, got dressed, getting dressed. El criterio de esta lista es el trabajo que hace, no la etiqueta gramatical: «look at» y «listen to» tampoco son frasales de partícula.",
+  "$porQueWaitForNO": "En la misma medición se agregó «wait for» y hubo que devolverlo, y conviene que quede escrito para que nadie lo reintente. Esta lista la usan DOS apps para trabajos distintos: Grammaster, para saber que dos palabras son un verbo y no avisar; Desgramatizador, para decidir si la partícula se pinta con el verbo. Con «wait for» dentro, Desgramatizador pasaba a pintar «wait for» como verbo en «They wait for the bus», y eso contradice una decisión de clase que tiene prueba propia (basico.test.js, «el verbo no se traga la preposición»): ahí el verbo es «wait» y «for the bus» es complemento. Así que el aviso de Grammaster ante «wait for» NO es un falso positivo: dice exactamente lo que enseña la otra app, que «for» va en el complemento. Antes de meter una entrada aquí, mirar qué le hace al analizador.",
   "$limite": "Solo se reconoce la partícula PEGADA al verbo. «pick the kids up», con el objeto en medio, no se detecta en ninguna de las dos apps. Es un límite conocido y compartido, no un descuido: separarlo bien exige saber dónde acaba el objeto, y eso es otro problema.",
 
   "verbs": [
@@ -16,6 +18,7 @@
     ["come", "back"], ["go", "back"], ["look", "at"], ["listen", "to"],
 
     ["find", "out"], ["give", "up"], ["look", "for"], ["look", "after"],
+    ["get", "dressed"],
     ["carry", "on"], ["set", "up"], ["turn", "up"], ["turn", "down"],
     ["go", "on"], ["come", "on"], ["take", "up"], ["take", "out"],
     ["take", "back"], ["bring", "up"], ["bring", "back"],

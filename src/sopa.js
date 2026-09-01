@@ -22,6 +22,23 @@
                  reconoce la palabra, se reconstruye.
 
    ────────────────────────────────────────────────────────────────────────────
+   DOS PALABRAS EN LÍNEA NO PUEDEN TOCARSE
+   ────────────────────────────────────────────────────────────────────────────
+   Si MELON acaba en una casilla y APPLE empieza en la siguiente, en la misma
+   fila y en la misma dirección, la cuadrícula contiene MELONAPPLE. Las dos
+   palabras están bien puestas y la sopa se puede resolver, pero al marcarlas se
+   ven como una sola cosa larga y el alumno lee algo que nadie escribió.
+
+   Se prohíbe SOLO en línea. Que se crucen o que corran en paralelo pegadas no
+   molesta —eso es lo normal en una sopa y es lo que la hace densa—; lo que
+   confunde es la continuación, porque es la única que el ojo lee de corrido.
+
+   Para saberlo hay que recordar POR DÓNDE PASA CADA DIRECCIÓN, no solo qué
+   letra hay: una casilla ocupada por una palabra perpendicular es un cruce
+   —bienvenido— y una ocupada por otra en la misma dirección es una
+   continuación. Con la cuadrícula sola no se distinguen.
+
+   ────────────────────────────────────────────────────────────────────────────
    EL RELLENO NO ES AZAR PURO, Y ESO IMPORTA
    ────────────────────────────────────────────────────────────────────────────
    Rellenar los huecos con letras uniformes del alfabeto delata las palabras: en
@@ -97,13 +114,31 @@ export const ladoPara = (palabras) => {
   return Math.min(MAX_LADO, Math.max(masLarga, Math.ceil(Math.sqrt(letras * 2.6)) + 1));
 };
 
-/** ¿Cabe `palabra` desde (f,c) hacia (df,dc)? Cruzarse vale si la letra coincide. */
-const cabe = (rejilla, lado, palabra, f, c, df, dc) => {
+/** La dirección de un eje, sin sentido: → y ← son el mismo eje, y una palabra
+    puesta al revés continúa a otra igual de bien. */
+const eje = (df, dc) => `${Math.abs(df)}${Math.abs(dc)}${df * dc > 0 ? '+' : '-'}`;
+
+/**
+ * ¿Cabe `palabra` desde (f,c) hacia (df,dc)?
+ *
+ * Cruzarse vale si la letra coincide. Lo que NO vale es quedar pegada en línea a
+ * otra palabra del mismo eje: ahí las dos se leen de corrido como una sola.
+ * `ejes` dice qué ejes ya pasan por cada casilla.
+ */
+const cabe = (rejilla, ejes, lado, palabra, f, c, df, dc) => {
+  const mio = eje(df, dc);
   for (let i = 0; i < palabra.length; i++) {
     const ff = f + df * i, cc = c + dc * i;
     if (ff < 0 || ff >= lado || cc < 0 || cc >= lado) return false;
     const hay = rejilla[ff][cc];
     if (hay && hay !== palabra[i]) return false;
+  }
+  /* Las puntas: la casilla anterior al principio y la siguiente al final no
+     pueden estar ocupadas por una palabra del MISMO eje. Que haya una
+     perpendicular cruzando ahí es normal y no se lee de corrido. */
+  for (const [ff, cc] of [[f - df, c - dc], [f + df * palabra.length, c + dc * palabra.length]]) {
+    if (ff < 0 || ff >= lado || cc < 0 || cc >= lado) continue;
+    if (ejes.get(`${ff},${cc}`)?.has(mio)) return false;
   }
   return true;
 };
@@ -121,6 +156,9 @@ export const generar = ({ palabras = [], dificultad = 'media', azar = Math.rando
   if (!lado) return { lado: 0, celdas: [], colocadas: [], fuera: [], dificultad };
 
   const rejilla = Array.from({ length: lado }, () => Array(lado).fill(null));
+  /* Qué ejes pasan por cada casilla, para poder distinguir un cruce de una
+     continuación. La rejilla sola no lo dice: solo guarda letras. */
+  const ejes = new Map();
   const colocadas = [];
   const fuera = [];
 
@@ -141,7 +179,7 @@ export const generar = ({ palabras = [], dificultad = 'media', azar = Math.rando
       const { df, dc } = DIRECCIONES[dir];
       const f = Math.floor(azar() * lado);
       const c = Math.floor(azar() * lado);
-      if (cabe(rejilla, lado, palabra, f, c, df, dc)) puesta = { dir, df, dc, fila: f, col: c };
+      if (cabe(rejilla, ejes, lado, palabra, f, c, df, dc)) puesta = { dir, df, dc, fila: f, col: c };
     }
 
     /* Y si el azar no dio con ninguno, se recorre todo antes de rendirse: una
@@ -152,7 +190,7 @@ export const generar = ({ palabras = [], dificultad = 'media', azar = Math.rando
         const { df, dc } = DIRECCIONES[dir];
         for (let f = 0; f < lado && !puesta; f++) {
           for (let c = 0; c < lado && !puesta; c++) {
-            if (cabe(rejilla, lado, palabra, f, c, df, dc)) puesta = { dir, df, dc, fila: f, col: c };
+            if (cabe(rejilla, ejes, lado, palabra, f, c, df, dc)) puesta = { dir, df, dc, fila: f, col: c };
           }
         }
         if (puesta) break;
@@ -161,8 +199,13 @@ export const generar = ({ palabras = [], dificultad = 'media', azar = Math.rando
 
     if (!puesta) { fuera.push({ ...entrada, motivo: 'sinsitio' }); continue; }
 
+    const mio = eje(puesta.df, puesta.dc);
     for (let i = 0; i < palabra.length; i++) {
-      rejilla[puesta.fila + puesta.df * i][puesta.col + puesta.dc * i] = palabra[i];
+      const ff = puesta.fila + puesta.df * i, cc = puesta.col + puesta.dc * i;
+      rejilla[ff][cc] = palabra[i];
+      const clave = `${ff},${cc}`;
+      if (!ejes.has(clave)) ejes.set(clave, new Set());
+      ejes.get(clave).add(mio);
     }
     colocadas.push({ ...entrada, ...puesta });
   }

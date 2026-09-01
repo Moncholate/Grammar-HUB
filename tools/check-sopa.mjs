@@ -312,5 +312,61 @@ console.log('\nsolo se aceptan selecciones que un lápiz podría trazar');
   if (d.every((c, i) => c.fila === i && c.col === i)) ok("la diagonal pasa por las casillas enteras, una a una");
   else fallo("la diagonal se salta casillas");
 }
+console.log('\nDOS PALABRAS EN LÍNEA NO SE TOCAN');
+{
+  /* EL FALLO QUE ESTO IMPIDE: MELON acabando donde APPLE empieza, en la misma
+     fila y en el mismo eje. Las dos están bien puestas y la sopa se resuelve,
+     pero al marcarlas se ven como una sola cosa larga y el alumno lee
+     MELONAPPLE. Lo reportó el profesor usándola.
+     Se prohíbe SOLO en línea: cruzarse o correr en paralelo pegadas es lo
+     normal en una sopa y es lo que la hace densa. */
+  const ejeDe = (p) => `${Math.abs(p.df)}${Math.abs(p.dc)}${p.df * p.dc > 0 ? "+" : "-"}`;
+  let pegadas = 0, revisadas = 0;
+  for (const [nombre, lista] of Object.entries(LISTAS)) {
+    for (const dif of Object.keys(NIVELES)) {
+      for (const sopa of sopas(lista, dif, 25)) {
+        for (const a of sopa.colocadas) {
+          const ca = casillasDe(a);
+          const antes = { fila: a.fila - a.df, col: a.col - a.dc };
+          const ultima = ca[ca.length - 1];
+          const despues = { fila: ultima.fila + a.df, col: ultima.col + a.dc };
+          for (const b of sopa.colocadas) {
+            if (a === b || ejeDe(a) !== ejeDe(b)) continue;
+            revisadas++;
+            const toca = casillasDe(b).some(x =>
+              (x.fila === antes.fila && x.col === antes.col) ||
+              (x.fila === despues.fila && x.col === despues.col));
+            if (toca) {
+              fallo(`«${nombre}»/${dif}: ${a.palabra} y ${b.palabra} quedan pegadas en línea — se leen de corrido`);
+              pegadas++; break;
+            }
+          }
+          if (pegadas) break;
+        }
+        if (pegadas) break;
+      }
+      if (pegadas) break;
+    }
+    if (pegadas) break;
+  }
+  if (!pegadas) ok(`${revisadas} pares del mismo eje en 300 sopas, ninguno pegado de punta`);
+
+  /* Y que la regla PROHÍBA SOLO LO SUYO. Prohibir de más sería fácil y saldría
+     verde en la prueba de arriba: bastaría con rechazar cualquier casilla
+     ocupada en las puntas, y de paso se irían los cruces.
+     Los cruces NO son un requisito en una sopa —a diferencia del crucigrama,
+     aquí la densidad la da el tamaño de la cuadrícula— pero tienen que seguir
+     siendo POSIBLES, o la regla estaría haciendo más de lo que dice. */
+  const conCruces = sopas(LISTAS.verbos, "media", 40).filter(sopa => {
+    const usadas = new Map();
+    for (const p of sopa.colocadas) for (const c of casillasDe(p)) {
+      const k = `${c.fila},${c.col}`;
+      usadas.set(k, (usadas.get(k) || 0) + 1);
+    }
+    return [...usadas.values()].some(n => n > 1);
+  }).length;
+  if (conCruces > 0) ok(`${conCruces} de 40 sopas traen palabras cruzadas: la regla no se llevó los cruces por delante`);
+  else fallo("ninguna sopa tiene cruces: la regla prohíbe más de lo que dice");
+}
 console.log(problemas ? `\n✗ ${problemas} problema(s)` : '\nSOPA DE LETRAS OK');
 process.exit(problemas ? 1 : 0);

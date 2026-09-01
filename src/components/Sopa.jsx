@@ -19,6 +19,19 @@
    distintas —lo que el curso ya sacó y lo que falta por sacar— y verlas del
    mismo color al corregir no diría nada.
 
+   CADA PALABRA SE MARCA CON SU PROPIO TRAZO, no pintando casillas. Pintadas, dos
+   palabras que se tocan o se cruzan forman un solo bloque de color y el ojo lee
+   una palabra larga que nadie escribió — lo reportó el profesor usándola. Un
+   trazo redondeado alrededor de cada una es lo que se hace en el papel con un
+   lápiz, y dos trazos que se cruzan siguen siendo dos: cada uno conserva su
+   principio y su final.
+
+   El trazo va en un SVG DEBAJO de las letras y en unidades de casilla —el
+   `viewBox` mide lo que la cuadrícula, así que cada casilla es 1— y así no hay
+   que saber cuántos píxeles mide nada. Debajo y no encima porque encima teñiría
+   las letras y les bajaría el contraste; debajo, la letra se lee igual que
+   siempre y el trazo la rodea.
+
    DOS SALIDAS, LAS MISMAS QUE EL CRUCIGRAMA:
 
      · PROYECTADA se busca entre todos y se van cantando; «ver las respuestas»
@@ -45,8 +58,8 @@ import { ACCION, APAGADO, opcion, ENLACE } from '../ui';
 const PAPEL = '#ffffff';
 const TRAZO = '#334155';
 const LETRA = '#1e293b';
-const MARCA = '#c7d2fe';   /* la solución del profesor, índigo claro */
-const HALLADA = '#bbf7d0';  /* lo que el curso ya encontró, verde claro */
+const MARCA = '#818cf8';    /* la solución del profesor, índigo */
+const HALLADA = '#10b981';  /* lo que el curso ya encontró, verde */
 const ANCLA = '#fde68a';    /* la primera letra elegida, esperando la segunda */
 
 const Sopa = ({ lang = 'es', grande = false }) => {
@@ -96,16 +109,21 @@ const Sopa = ({ lang = 'es', grande = false }) => {
     ? `min(${grande ? '6.5vh' : '1.9rem'}, calc(88vw / ${sopa.lado}))`
     : '1.9rem';
 
-  /* Las casillas de la solución, en un conjunto para pintarlas de un vistazo. */
-  const marcadas = new Set(
-    sopa ? sopa.colocadas.flatMap(p => casillasDe(p).map(({ fila, col }) => `${fila},${col}`)) : []
-  );
-  /* Las casillas de lo que el curso YA encontró, aparte de la solución del
-     profesor: son dos cosas distintas y se pintan distinto. */
-  const halladas_celdas = new Set(
-    sopa ? sopa.colocadas.filter(p => halladas.has(p.palabra))
-             .flatMap(p => casillasDe(p).map(({ fila, col }) => `${fila},${col}`)) : []
-  );
+  /* UN TRAZO POR PALABRA, del centro de la primera casilla al de la última. Lo
+     que el curso encontró va siempre; la solución del profesor, solo si la pidió
+     y esa palabra no está ya encontrada — marcarla dos veces no diría nada. */
+  const trazos = !sopa ? [] : sopa.colocadas.flatMap(p => {
+    const encontrada = halladas.has(p.palabra);
+    if (!encontrada && !respuestas) return [];
+    const cs = casillasDe(p);
+    const a = cs[0], z = cs[cs.length - 1];
+    return [{
+      palabra: p.palabra,
+      color: encontrada ? HALLADA : MARCA,
+      x1: a.col + 0.5, y1: a.fila + 0.5,
+      x2: z.col + 0.5, y2: z.fila + 0.5,
+    }];
+  });
 
   return (
     <section className={grande ? 'w-full' : 'w-full max-w-xl mx-auto'}>
@@ -166,25 +184,42 @@ const Sopa = ({ lang = 'es', grande = false }) => {
           {/* LA HOJA. Es lo único que se imprime. */}
           <div className="gh-hoja">
             <div className="overflow-x-auto">
-              <div className="mx-auto grid w-max" style={{ gridTemplateColumns: `repeat(${sopa.lado}, ${lado})` }}>
+              <div className="relative mx-auto w-max" style={{ background: PAPEL }}>
+                {/* Los trazos, DEBAJO de las letras. El viewBox mide lo que la
+                    cuadrícula en casillas, así que las coordenadas son las de la
+                    sopa y no hay que traducir píxeles. `pointer-events: none`
+                    para que los clics sigan llegando a las casillas. */}
+                <svg
+                  viewBox={`0 0 ${sopa.lado} ${sopa.lado}`}
+                  aria-hidden="true"
+                  className="absolute inset-0 w-full h-full"
+                  style={{ pointerEvents: 'none', zIndex: 0 }}
+                >
+                  {trazos.map(t => (
+                    <line
+                      key={t.palabra}
+                      x1={t.x1} y1={t.y1} x2={t.x2} y2={t.y2}
+                      stroke={t.color} strokeWidth="0.82" strokeLinecap="round"
+                      fill="none" opacity="0.32"
+                    />
+                  ))}
+                </svg>
+              <div className="relative grid w-max" style={{ gridTemplateColumns: `repeat(${sopa.lado}, ${lado})`, zIndex: 1 }}>
                 {sopa.celdas.map((fila, f) => fila.map((letra, c) => {
-                  const enSolucion = respuestas && marcadas.has(`${f},${c}`);
-                  const encontrada = halladas_celdas.has(`${f},${c}`);
                   const esAncla = ancla && ancla.fila === f && ancla.col === c;
-                  /* El orden importa: el ancla manda sobre lo encontrado y lo
-                     encontrado sobre la solución, porque es lo que se acaba de
-                     tocar y lo que el curso consiguió. */
-                  const fondo = esAncla ? ANCLA : encontrada ? HALLADA : enSolucion ? MARCA : PAPEL;
+                  /* La casilla ya no se pinta: de eso se encargan los trazos de
+                     debajo. Solo el ancla lleva fondo, y es una casilla suelta
+                     esperando la segunda: no hay nada con lo que pueda fundirse. */
                   return (
                     <button
                       key={`${f},${c}`}
                       onClick={() => tocar(f, c)}
                       aria-label={`${letra}, ${es ? 'fila' : 'row'} ${f + 1}, ${es ? 'columna' : 'column'} ${c + 1}`}
-                      aria-pressed={esAncla || encontrada}
-                      className={`gh-celda flex items-center justify-center font-bold ${(encontrada || enSolucion) ? 'gh-solucion-fondo' : ''}`}
+                      aria-pressed={!!esAncla}
+                      className="gh-celda flex items-center justify-center font-bold"
                       style={{
                         width: lado, height: lado,
-                        background: fondo,
+                        background: esAncla ? ANCLA : 'transparent',
                         border: `1px solid ${TRAZO}`,
                         color: LETRA,
                         fontSize: `calc(${lado} * 0.55)`,
@@ -194,6 +229,7 @@ const Sopa = ({ lang = 'es', grande = false }) => {
                     </button>
                   );
                 }))}
+              </div>
               </div>
             </div>
 

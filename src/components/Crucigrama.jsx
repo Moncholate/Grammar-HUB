@@ -23,7 +23,34 @@
    LAS CASILLAS SE MIDEN SOLAS. Una cuadrícula de 8 columnas y una de 25 no
    pueden usar la misma casilla: la segunda se sale de la pantalla y del papel.
    El lado sale del ancho disponible dividido por las columnas, con un tope para
-   que un crucigrama de tres palabras no salga con casillas de diez centímetros.
+   que un crucigrama de tres palabras no salga con casillas de diez centímetros,
+   y con un SUELO para que una de veinte columnas no salga con casillas de
+   dieciséis píxeles en un teléfono. Lo que no quepa se desplaza, que es
+   preferible a una cuadrícula que se ve entera y no se puede leer.
+
+   ────────────────────────────────────────────────────────────────────────────
+   DUA: LO QUE AQUÍ NO ES OPCIONAL
+   ────────────────────────────────────────────────────────────────────────────
+   1. LA CUADRÍCULA NO SE LE LEE A NADIE, y es una decisión, no un olvido. Son
+      cientos de casillas sueltas; un lector de pantalla las recorrería en orden
+      de documento y diría «C, H, A, vacío, vacío, I…», que no es el crucigrama
+      sino su ruido. Va silenciada con una frase que dice su tamaño, y todo lo
+      que se puede usar de verdad está debajo: las dos listas de pistas, que son
+      listas numeradas de verdad, con el largo de cada palabra y su respuesta.
+
+   2. EL LARGO DE CADA PALABRA, ESCRITO. Es lo que hace cualquier crucigrama de
+      periódico, y aquí evita además tener que contar casillas en una proyección
+      desde el fondo de la sala, o con poca visión.
+
+   3. LA RESPUESTA NO SE DISTINGUE SOLO POR EL COLOR. Lleva negrita y una flecha
+      delante: proyectado, el acento se lava hasta casi el gris del texto.
+
+   4. EL NÚMERO TIENE SUELO PROPIO. Es el texto más pequeño de toda la suite y
+      estaba atado al 30% de la casilla; sin el suyo, con el suelo de la casilla
+      todavía se quedaba en ocho píxeles.
+
+   5. LO QUE CAMBIA SIN AVISAR, SE DICE. «Ver las respuestas» rellena la
+      cuadrícula silenciada: al oído no pasaba nada. Hay un aviso que lo cuenta.
 
    LO QUE NO ENTRA SE DICE Y NO SE ESCONDE. Una palabra sin letras en común con
    las demás no se puede colocar; el docente pidió diez y tiene que saber que
@@ -72,8 +99,16 @@ const Crucigrama = ({ lang = 'es', grande = false }) => {
      quepa lo resuelve el scroll horizontal del contenedor, que es de la
      cuadrícula y no de la página. */
   const lado = cruci
-    ? `min(${grande ? '6.5vh' : '2rem'}, calc(88vw / ${cruci.ancho}))`
+    ? `clamp(28px, calc(88vw / ${cruci.ancho}), ${grande ? '6.5vh' : '2rem'})`
     : '2rem';
+
+  /* EL NÚMERO NECESITA SU PROPIO SUELO. Es el texto más pequeño de toda la suite
+     y estaba atado a la casilla al 30%: en una cuadrícula de veinte columnas, en
+     un teléfono, salía a menos de cinco píxeles. Con el suelo de la casilla en
+     28 sigue quedándose en ocho, que tampoco se lee. Se le pone el suyo, y si en
+     una casilla apretada el número ocupa más de la cuenta, que ocupe: un número
+     que no se lee no sirve de nada, y sin él no se sabe qué pista va dónde. */
+  const numeroTam = `max(10px, calc(${lado} * 0.3))`;
 
   const { horizontales, verticales } = cruci ? pistas(cruci) : { horizontales: [], verticales: [] };
 
@@ -91,11 +126,32 @@ const Crucigrama = ({ lang = 'es', grande = false }) => {
                 {/* Sin pista escrita se deja el sitio marcado: el docente la dicta,
                     y una línea vacía dice «aquí va algo» mejor que la nada. */}
                 {p.pista || <span className="text-muted">{'_'.repeat(10)}</span>}
-                {/* Esta sí va sobre el fondo de la PÁGINA, no sobre el papel: el
+                {/* EL LARGO, ESCRITO. Es lo que hace cualquier crucigrama de
+                    periódico, y aquí además evita tener que contar casillas en
+                    una proyección desde el fondo de la sala o con poca visión.
+                    Va entre paréntesis, que es como se lee en el papel. */}
+                <span className="ml-1.5 tabular-nums text-muted">
+                  {/* Los paréntesis son para el ojo; al oído sobran y se leen
+                      como signos sueltos. Dos versiones de lo mismo. */}
+                  <span aria-hidden="true">({p.palabra.length})</span>
+                  <span className="sr-only">{p.palabra.length} {es ? 'letras' : 'letters'}</span>
+                </span>
+                {/* LA RESPUESTA NO SE DISTINGUE SOLO POR EL COLOR. Va en negrita
+                    y con una flecha delante: el color es la lectura rápida, pero
+                    proyectado se lava, y quien no lo distinga tiene el peso y la
+                    forma. Para quien la escucha, la flecha no dice nada, así que
+                    ahí va la palabra «Respuesta».
+                    El color va sobre el fondo de la PÁGINA, no sobre el papel: el
                     indigo-700 daba 2,44:1 en oscuro y lo cazó la sonda. `--marca`
                     es lo que los tokens ofrecen para el acento de interfaz, con un
                     valor por tema. */}
-                {respuestas && <b className="gh-solucion ml-2" style={{ color: 'var(--marca)' }}>{p.original}</b>}
+                {respuestas && (
+                  <b className="gh-solucion ml-2" style={{ color: 'var(--marca)' }}>
+                    <span aria-hidden="true">→ </span>
+                    <span className="sr-only">{es ? 'Respuesta: ' : 'Answer: '}</span>
+                    {p.original}
+                  </b>
+                )}
               </span>
             </li>
           ))}
@@ -150,8 +206,20 @@ const Crucigrama = ({ lang = 'es', grande = false }) => {
           {/* LA HOJA. Es lo único que se imprime: todo lo demás lleva
               `gh-no-print`. */}
           <div className="gh-hoja">
+            {/* LA CUADRÍCULA NO SE LE LEE A NADIE, y esto es deliberado. Son
+                cientos de casillas sueltas: un lector de pantalla las recorrería
+                en el orden del documento y diría «C, H, A, vacío, vacío, I…»,
+                que no es el crucigrama sino su ruido. Lo que ESTÁ dicho es lo
+                que se puede usar: cuántas casillas hay, y debajo las dos listas
+                de pistas, que sí son listas de verdad, numeradas, con el largo
+                de cada palabra y con la respuesta cuando se piden. */}
+            <p className="sr-only">
+              {es ? `Cuadrícula de ${cruci.alto} filas por ${cruci.ancho} columnas con ${cruci.colocadas.length} palabras cruzadas. Las palabras, su número y su largo están en las listas de pistas que siguen.`
+                  : `Grid of ${cruci.alto} rows by ${cruci.ancho} columns with ${cruci.colocadas.length} interlocking words. The words, their numbers and their lengths are in the clue lists below.`}
+            </p>
             <div className="overflow-x-auto">
               <div
+                aria-hidden="true"
                 className="mx-auto grid w-max"
                 style={{ gridTemplateColumns: `repeat(${cruci.ancho}, ${lado})` }}
               >
@@ -168,7 +236,7 @@ const Crucigrama = ({ lang = 'es', grande = false }) => {
                     >
                       {num && (
                         <span className="absolute top-0 left-0.5 font-bold leading-none tabular-nums"
-                              style={{ color: NUMERO, fontSize: `calc(${lado} * 0.3)` }}>
+                              style={{ color: NUMERO, fontSize: numeroTam }}>
                           {num}
                         </span>
                       )}
@@ -189,6 +257,15 @@ const Crucigrama = ({ lang = 'es', grande = false }) => {
               <Lista titulo={es ? 'Verticales' : 'Down'} items={verticales} />
             </div>
           </div>
+
+          {/* «VER LAS RESPUESTAS» CAMBIA LA PANTALLA ENTERA y no dice nada al
+              oído: las letras aparecen dentro de una cuadrícula que está
+              silenciada a propósito. Aquí se cuenta lo que pasó. */}
+          <p role="status" aria-live="polite" className="sr-only">
+            {respuestas
+              ? (es ? 'Respuestas a la vista, en la cuadrícula y en cada pista.' : 'Answers shown, in the grid and next to each clue.')
+              : (es ? 'Respuestas ocultas.' : 'Answers hidden.')}
+          </p>
 
           {/* LAS QUE NO ENTRARON. Va debajo de la hoja y fuera de ella: es
               información para el docente, no para el alumno. */}

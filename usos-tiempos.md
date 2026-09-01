@@ -71,7 +71,7 @@ tienen que filtrarse igual.
 ## Pasado Simple · Bás. II, 11A
 
 - [ ] **Acción terminada en un momento pasado concreto** — *She worked here last year.* (generable) — `yesterday`, `last week`, `two days ago`
-- [ ] **Serie de acciones pasadas (relato)** — *I woke up, had breakfast and left.* — then, after that **(nuevo)**
+- [ ] **Serie de acciones pasadas (relato)** — *I woke up, had breakfast and left.* — then, after that **(nuevo, uso de Inter. I: el tiempo es de Bás. II pero sus conectores llegan en Inter. I)**
 - [ ] **Estados o situaciones pasadas ya cerradas** — *He lived in Peru for two years.* (generable) — `in the past`, `back then`
 
 ## Futuro con *going to* · Elem. II, 10B
@@ -140,7 +140,7 @@ tienen que filtrarse igual.
 | when, while | Inter. I |
 | for, since | Inter. II |
 | ~~just~~ | **no está en el temario** — no se agrega |
-| then, after that | por confirmar |
+| then, after that | Inter. I — los conectores en general se ven en ese nivel, y estos dos en profundidad (dato del profesor, 1-sep-2026) |
 
 ## Notas para después de la revisión
 

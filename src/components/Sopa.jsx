@@ -94,17 +94,34 @@ const FILO = 0.09;          /* el grueso del contorno de la cápsula hueca */
 /* EL CONTORNO DE LA CÁPSULA, dibujado a mano. Es la forma que se hace en el
    papel al rodear una palabra: dos rectas paralelas al trazo y un semicírculo
    en cada punta. Se dibuja como camino y no como línea gruesa porque una línea
-   gruesa solo sabe salir RELLENA, y aquí hace falta poder vaciarla. */
+   gruesa solo sabe salir RELLENA, y aquí hace falta poder vaciarla.
+
+   DOS COSAS QUE HAY QUE MIRAR, PORQUE NINGUNA DA ERROR SI SE EQUIVOCAN:
+
+   · LA BANDERA DE BARRIDO DEL ARCO. En svg el eje Y va HACIA ABAJO, así que el
+     sentido «positivo» del arco se ve en pantalla como las agujas del reloj, al
+     revés de lo que dice la intuición. Con la bandera a 1 los dos semicírculos
+     se curvaban HACIA DENTRO: la cápsula se cerraba antes de llegar a la primera
+     y a la última letra y las puntas parecían dos paréntesis sueltos. Va a 0.
+
+   · CUÁNTO SE ALARGA. El trazo va de CENTRO a CENTRO de casilla, y el
+     semicírculo solo sobresale el radio —0.41 de casilla—, así que se quedaba
+     corto de las medias casillas de los extremos: la primera y la última letra
+     quedaban pisadas por el borde en vez de dentro. Se alarga lo que falta para
+     llegar al borde de la casilla. */
 const capsula = (x1, y1, x2, y2, r) => {
   const largo = Math.hypot(x2 - x1, y2 - y1) || 1;
   const dx = (x2 - x1) / largo, dy = (y2 - y1) / largo;
-  const px = -dy * r, py = dx * r;   /* perpendicular, de largo r */
+  const sobra = Math.max(0, 0.5 - r);          /* hasta el borde de la casilla */
+  const ax = x1 - dx * sobra, ay = y1 - dy * sobra;
+  const zx = x2 + dx * sobra, zy = y2 + dy * sobra;
+  const px = -dy * r, py = dx * r;             /* perpendicular, de largo r */
   return [
-    `M ${x1 + px} ${y1 + py}`,
-    `L ${x2 + px} ${y2 + py}`,
-    `A ${r} ${r} 0 0 1 ${x2 - px} ${y2 - py}`,
-    `L ${x1 - px} ${y1 - py}`,
-    `A ${r} ${r} 0 0 1 ${x1 + px} ${y1 + py}`,
+    `M ${ax + px} ${ay + py}`,
+    `L ${zx + px} ${zy + py}`,
+    `A ${r} ${r} 0 0 0 ${zx - px} ${zy - py}`,
+    `L ${ax - px} ${ay - py}`,
+    `A ${r} ${r} 0 0 0 ${ax + px} ${ay + py}`,
     'Z',
   ].join(' ');
 };

@@ -17,7 +17,8 @@
    cuadrícula contiene también «CD», «AO» y «TG» leídos en vertical, y el alumno
    que los ve no sabe que no cuentan: ve un crucigrama mal hecho.
 
-   Por eso toda colocación tiene que cumplir tres cosas, y las tres se prueban:
+   Por eso toda colocación tiene que cumplir cuatro cosas, y las cuatro se
+   prueban:
 
      1. CRUZA. Cada palabra nueva comparte al menos una letra con una ya puesta,
         en la posición exacta. Sin cruces esto es una sopa de letras.
@@ -27,6 +28,25 @@
      3. NO ROZA DE LADO. En cada celda NUEVA que ocupa, las dos celdas laterales
         tienen que estar vacías. En la celda del cruce no: ahí la lateral es,
         justamente, la palabra que cruza.
+     4. EL CRUCE ES PERPENDICULAR. No se puede pasar por una casilla que ya
+        lleva una palabra en la MISMA dirección: eso no es cruzar, es montarse
+        encima. Con «CAT» ya puesta, «CATS» cumple 1, 2 y 3 —las puntas libres,
+        los lados libres, las tres primeras letras coincidiendo— y se coloca; a
+        partir de ahí la pista dice CAT y la cuadrícula dice CATS.
+
+   ────────────────────────────────────────────────────────────────────────────
+   CUÁNTAS ENTRAN: DOS COSAS BARATAS QUE VALEN MUCHO
+   ────────────────────────────────────────────────────────────────────────────
+   Con vocabulario de verdad se quedaba fuera el 11% de las palabras. Con estas
+   dos, el 1,6%, y no cambió ninguna regla de calidad:
+
+     · VARIAS PASADAS. Una palabra que no encuentra sitio puede encontrarlo tres
+       colocaciones después, cuando la cuadrícula tenga letras que aún no tiene.
+       La cuadrícula solo crece, así que reintentar nunca empeora. Antes se
+       descartaba en el primer intento.
+     · VARIOS ÓRDENES, Y SE QUEDA EL MEJOR. Cuánto entra depende mucho de por
+       dónde se empiece: la primera palabra se pone sola y de ella cuelga todo.
+       Se prueban doce órdenes y gana el que más coloca.
 
    EL AZAR ES DEL ORDEN, NO DE LA CUADRÍCULA. Se baraja la lista y después se
    ordena por largo: las palabras largas primero, porque son las que dan cruces
@@ -53,7 +73,7 @@ import { parsearPalabras, barajar } from './palabras.js';
 const k = (f, c) => `${f},${c}`;
 
 /** ¿Cabe `palabra` empezando en (f,c) hacia `dir`, en la cuadrícula `celdas`? */
-const cabe = (celdas, palabra, f, c, dir) => {
+const cabe = (celdas, ejes, palabra, f, c, dir) => {
   const df = dir === 'v' ? 1 : 0;
   const dc = dir === 'h' ? 1 : 0;
   let cruces = 0;
@@ -67,6 +87,14 @@ const cabe = (celdas, palabra, f, c, dir) => {
     const hay = celdas.get(k(ff, cc));
     if (hay) {
       if (hay !== palabra[i]) return null;   // choca con otra letra
+      /* UN CRUCE ES PERPENDICULAR, POR DEFINICIÓN. Si la casilla ya lleva una
+         palabra en ESTA misma dirección, no la estaríamos cruzando: la
+         estaríamos montando encima. Con «CAT» ya puesta, «CATS» cumple todo lo
+         demás —las puntas libres, los lados libres— y se coloca encima; a
+         partir de ahí la pista dice CAT y la cuadrícula dice CATS, con una sola
+         numeración para las dos. Salió al reintentar las que no entraban: la
+         cuadrícula llega más llena y estos solapes aparecen. */
+      if (ejes.get(k(ff, cc))?.has(dir)) return null;
       cruces++;
       continue;                              // en el cruce, los lados son legítimos
     }
@@ -79,30 +107,49 @@ const cabe = (celdas, palabra, f, c, dir) => {
   return cruces > 0 ? cruces : null;
 };
 
-/**
- * Arma el crucigrama.
- *
- * Devuelve la cuadrícula ya recortada a su caja mínima, las palabras colocadas
- * con su número y coordenadas, y las que no entraron.
- */
-export const generar = ({ palabras = [], azar = Math.random } = {}) => {
-  /* Barajar y DESPUÉS ordenar por largo: las largas primero porque son las que
-     dan cruces, y el barajado decide entre las del mismo largo. */
-  const orden = barajar(palabras, azar)
-    .map((p, i) => ({ ...p, i }))
-    .sort((a, b) => (b.palabra.length - a.palabra.length) || (a.i - b.i));
+/** Deja anotado que por esta casilla pasa una palabra en esta dirección. */
+const marcar = (ejes, f, c, dir) => {
+  const clave = k(f, c);
+  if (!ejes.has(clave)) ejes.set(clave, new Set());
+  ejes.get(clave).add(dir);
+};
 
+/* Un intento completo con UN orden dado. Se separó de `generar` para poder
+   probar varios órdenes y quedarse con el mejor: ver más abajo. */
+const armarUna = (orden) => {
   const celdas = new Map();
+  /* Qué direcciones pasan ya por cada casilla. Con la letra sola no basta: hay
+     que saber si la que hay es de una horizontal o de una vertical. */
+  const ejes = new Map();
   const puestas = [];
-  const sinSitio = [];
+  let pendientes = orden;
 
-  for (const entrada of orden) {
+  /* VARIAS PASADAS, no una. Una palabra que no encuentra sitio hoy puede
+     encontrarlo dentro de tres colocaciones, cuando la cuadrícula tenga letras
+     que todavía no tiene: la cuadrícula solo crece, así que reintentar nunca
+     empeora. Antes se descartaba en el primer intento y se perdía sin más.
+     Se repite mientras la pasada anterior haya colocado algo; cuando una pasada
+     entera no coloca nada, lo que queda no entra de ninguna manera. */
+  for (;;) {
+    const quedan = [];
+    for (const entrada of pendientes) {
+      if (!colocar(celdas, ejes, puestas, entrada)) quedan.push(entrada);
+    }
+    if (quedan.length === pendientes.length) return { celdas, puestas, sinSitio: quedan };
+    if (!quedan.length) return { celdas, puestas, sinSitio: [] };
+    pendientes = quedan;
+  }
+};
+
+/** Coloca una entrada si puede. Devuelve si lo consiguió. */
+const colocar = (celdas, ejes, puestas, entrada) => {
+  {
     const { palabra } = entrada;
 
     if (!puestas.length) {
-      for (let i = 0; i < palabra.length; i++) celdas.set(k(0, i), palabra[i]);
+      for (let i = 0; i < palabra.length; i++) { celdas.set(k(0, i), palabra[i]); marcar(ejes, 0, i, 'h'); }
       puestas.push({ ...entrada, fila: 0, col: 0, dir: 'h' });
-      continue;
+      return true;
     }
 
     /* Todas las colocaciones válidas: por cada letra de la palabra nueva, se
@@ -115,13 +162,13 @@ export const generar = ({ palabras = [], azar = Math.random } = {}) => {
         for (const dir of ['h', 'v']) {
           const inicioF = dir === 'v' ? f - i : f;
           const inicioC = dir === 'h' ? c - i : c;
-          const cruces = cabe(celdas, palabra, inicioF, inicioC, dir);
+          const cruces = cabe(celdas, ejes, palabra, inicioF, inicioC, dir);
           if (cruces) opciones.push({ fila: inicioF, col: inicioC, dir, cruces });
         }
       }
     }
 
-    if (!opciones.length) { sinSitio.push(entrada); continue; }
+    if (!opciones.length) return false;
 
     /* Se prefiere la que MÁS CRUZA —un crucigrama trabado se resuelve mejor que
        uno que es un árbol— y, a igualdad, la que deja la cuadrícula más
@@ -148,9 +195,53 @@ export const generar = ({ palabras = [], azar = Math.random } = {}) => {
     const dc = elegida.dir === 'h' ? 1 : 0;
     for (let i = 0; i < palabra.length; i++) {
       celdas.set(k(elegida.fila + df * i, elegida.col + dc * i), palabra[i]);
+      marcar(ejes, elegida.fila + df * i, elegida.col + dc * i, elegida.dir);
     }
     puestas.push({ ...entrada, fila: elegida.fila, col: elegida.col, dir: elegida.dir });
+    return true;
   }
+};
+
+/**
+ * Arma el crucigrama.
+ *
+ * Devuelve la cuadrícula ya recortada a su caja mínima, las palabras colocadas
+ * con su número y coordenadas, y las que no entraron.
+ */
+export const generar = ({ palabras = [], azar = Math.random } = {}) => {
+  /* VARIOS INTENTOS, Y SE QUEDA EL MEJOR. Cuántas palabras entran depende mucho
+     del orden: la primera se pone sola y de ella cuelga todo lo demás, así que
+     un mal arranque cuesta dos o tres palabras. Probar unos cuantos órdenes y
+     quedarse con el que más coloca es barato —son listas de diez o veinte
+     palabras— y es lo que más reduce las que se quedan fuera.
+     A igualdad de colocadas gana la cuadrícula más compacta: proyectada, una
+     tira larga se lee peor que un bloque.
+     Sigue siendo determinista: todo el azar sale del `azar` que se inyecta, así
+     que la sonda puede reproducir cualquier crucigrama. */
+  let mejor = null;
+  for (let intento = 0; intento < 12; intento++) {
+    /* Barajar y DESPUÉS ordenar por largo: las largas primero porque son las que
+       dan cruces, y el barajado decide entre las del mismo largo. */
+    const orden = barajar(palabras, azar)
+      .map((p, i) => ({ ...p, i }))
+      .sort((a, b) => (b.palabra.length - a.palabra.length) || (a.i - b.i));
+
+    const intentada = armarUna(orden);
+    const fs = [...intentada.celdas.keys()].map(x => Number(x.split(',')[0]));
+    const cs = [...intentada.celdas.keys()].map(x => Number(x.split(',')[1]));
+    const lado = fs.length
+      ? Math.max(Math.max(...fs) - Math.min(...fs), Math.max(...cs) - Math.min(...cs))
+      : 0;
+
+    if (!mejor
+        || intentada.puestas.length > mejor.puestas.length
+        || (intentada.puestas.length === mejor.puestas.length && lado < mejor.lado)) {
+      mejor = { ...intentada, lado };
+    }
+    if (!mejor.sinSitio.length) break;   // no se puede hacer mejor que todas
+  }
+
+  const { celdas, puestas, sinSitio } = mejor;
 
   if (!puestas.length) return { ancho: 0, alto: 0, celdas: [], colocadas: [], fuera: sinSitio };
 

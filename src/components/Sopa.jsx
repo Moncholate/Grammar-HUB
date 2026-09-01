@@ -241,7 +241,9 @@ const Sopa = ({ lang = 'es', grande = false }) => {
           <label className="block">
             <span className="text-xs font-semibold text-slate-600">
               {es ? 'Las palabras' : 'The words'}{' '}
-              <span className="font-normal text-muted">{es ? '· una por línea' : '· one per line'}</span>
+              <span className="font-normal text-muted">
+                {es ? '· una por línea, o varias separadas por comas' : '· one per line, or several separated by commas'}
+              </span>
             </span>
             <textarea
               value={texto} rows={8}
@@ -383,12 +385,29 @@ const Sopa = ({ lang = 'es', grande = false }) => {
           </p>
 
           {(sopa.fuera.length > 0 || descartes.length > 0) && (
-            <p className="gh-no-print text-xs text-amber-900 bg-amber-50 border border-amber-200 rounded-lg px-2.5 py-2">
-              {es ? 'No entraron: ' : 'Left out: '}
-              {[...sopa.fuera.map(p => p.original), ...descartes.map(d => d.original)].join(', ')}
-              {'. '}
-              {es ? 'Prueba «otra vez», o quita alguna palabra larga.' : 'Try “again”, or drop one of the long words.'}
-            </p>
+            /* Igual que en el crucigrama: lo que no cupo y lo que no se entendió
+               son dos cosas, y la segunda no se arregla insistiendo. */
+            <div className="gh-no-print text-xs text-amber-900 bg-amber-50 border border-amber-200 rounded-lg px-2.5 py-2 space-y-1">
+              {sopa.fuera.length > 0 && (
+                <p>
+                  {es ? 'No entraron: ' : 'Left out: '}
+                  <strong>{sopa.fuera.map(p => p.original).join(', ')}</strong>
+                  {'. '}
+                  {es ? 'Prueba «otra sopa», o quita alguna palabra larga.' : 'Try “new grid”, or drop one of the long words.'}
+                </p>
+              )}
+              {descartes.length > 0 && (
+                <p>
+                  {es ? 'No se usaron: ' : 'Not used: '}
+                  <strong>{descartes.map(d => d.original).join(', ')}</strong>
+                  {'. '}
+                  {descartes.some(d => d.motivo === 'larga')
+                    ? (es ? 'Alguna quedó demasiado larga: suele pasar cuando un renglón trae varias palabras y el separador no se reconoce. Sepáralas con coma, o pon la pista detrás de «=», «:» o entre paréntesis.'
+                          : 'One is too long: that usually means a line held several words. Separate them with commas, or put the clue after “=”, “:” or in brackets.')
+                    : (es ? 'Estaban repetidas o eran demasiado cortas.' : 'They were duplicates or too short.')}
+                </p>
+              )}
+            </div>
           )}
 
           <div className="gh-no-print flex flex-wrap gap-2">

@@ -15,6 +15,7 @@
    colocación que aparece con una lista de cada veinte no se caza mirando uno.
 
    Correr:  node tools/check-crucigrama.mjs        (desde Grammar HUB/) */
+import { readFileSync } from 'node:fs';
 import { parsearPalabras, generar, pistas, MIN_LARGO, MAX_PALABRAS } from '../src/crucigrama.js';
 
 let problemas = 0;
@@ -268,6 +269,83 @@ console.log('\nlos bordes no revientan');
   }
   if (generar().colocadas.length === 0) ok('sin argumentos tampoco revienta');
   else fallo('generar() sin nada devolvió algo');
+}
+
+console.log('\nCADA PALABRA SE LEE ENTERA Y SOLA DONDE DICE QUE ESTÁ');
+{
+  /* La otra mitad de «ninguna palabra fantasma», y hacía falta las dos. Aquella
+     mira la cuadrícula y pregunta si lo que se lee está en la lista; esta mira
+     la lista y pregunta si cada palabra se lee tal cual donde la pista promete.
+     Se puede pasar la primera y fallar esta: con «CAT» ya puesta, «CATS» encima
+     deja una cuadrícula donde todo lo que se lee es de la lista, pero la pista
+     número 3 dice CAT y ahí pone CATS. Salió al reintentar las que no entraban:
+     la cuadrícula llega más llena y aparecen los solapes. */
+  let malas = 0, miradas = 0;
+  for (const [nombre, lista] of Object.entries(LISTAS)) {
+    for (let s = 1; s <= 40; s++) {
+      const c = generar({ palabras: entradas(lista), azar: azarFijo(s) });
+      for (const p of c.colocadas) {
+        miradas++;
+        const df = p.dir === 'v' ? 1 : 0, dc = p.dir === 'h' ? 1 : 0;
+        const antes = c.celdas[p.fila - df]?.[p.col - dc];
+        const luego = c.celdas[p.fila + df * p.palabra.length]?.[p.col + dc * p.palabra.length];
+        if (antes || luego) {
+          fallo(`«${nombre}» semilla ${s}: la pista dice «${p.palabra}» pero la cuadrícula sigue con «${antes || ''}…${luego || ''}» pegado`);
+          malas++;
+          break;
+        }
+      }
+      if (malas) break;
+    }
+    if (malas) break;
+  }
+  if (!malas) ok(`${miradas} palabras colocadas, y cada una se lee entera y sola donde su pista dice`);
+}
+
+console.log('\nCON VOCABULARIO DE VERDAD, Y CUÁNTAS SE QUEDAN FUERA');
+{
+  /* Las cuatro listas de arriba están escritas a mano y comparten muchas
+     letras: son un examen fácil. El vocabulario del curso no lo es, y es lo que
+     el docente va a pegar. De aquí salieron las dos mejoras de colocación —
+     varias pasadas y varios órdenes— que bajaron lo que se queda fuera del 11%
+     al 1,6%. Si alguien las toca, este número lo dirá. */
+  const v = JSON.parse(readFileSync(new URL('../vocabulary.json', import.meta.url), 'utf8'));
+  const aplanar = (x, acc) => {
+    if (Array.isArray(x)) x.forEach(y => aplanar(y, acc));
+    else if (x && typeof x === 'object') Object.values(x).forEach(y => aplanar(y, acc));
+    else if (typeof x === 'string') acc.push(x);
+    return acc;
+  };
+  const pozo = [...new Set(aplanar(v, []).filter(s => /^[a-zA-Z]{3,12}$/.test(s)).map(s => s.toLowerCase()))];
+
+  let fantasmas = 0, tiras = 0, fuera = 0, total = 0, casos = 0;
+  let ejemplo = null;
+  for (let s = 1; s <= 400; s++) {
+    const az = azarFijo(s);
+    const cuantas = 6 + Math.floor(az() * 12);
+    const palabras = [];
+    while (palabras.length < cuantas) {
+      const w = pozo[Math.floor(az() * pozo.length)];
+      if (!palabras.includes(w)) palabras.push(w);
+    }
+    const c = generar({ palabras: entradas(palabras), azar: az });
+    if (!c.colocadas.length) continue;
+    casos++; total += cuantas; fuera += c.fuera.length;
+    const puestas = new Set(c.colocadas.map(p => `${p.palabra}@${p.fila},${p.col},${p.dir}`));
+    for (const t of tirasDe(c)) {
+      tiras++;
+      if (!puestas.has(`${t.palabra}@${t.fila},${t.col},${t.dir}`) && !ejemplo) {
+        ejemplo = `semilla ${s}: «${t.palabra}» (${t.dir} en ${t.fila},${t.col}) con ${palabras.join(' ')}`;
+        fantasmas++;
+      }
+    }
+  }
+  if (!fantasmas) ok(`${tiras} tiras leídas en ${casos} crucigramas de vocabulario del curso, y todas son palabras de la lista`);
+  else fallo(`fantasma con vocabulario real — ${ejemplo}`);
+
+  const pct = fuera / total * 100;
+  if (pct <= 4) ok(`se quedan fuera el ${pct.toFixed(1)}% de las palabras (eran el 11% antes de reintentar y probar varios órdenes)`);
+  else fallo(`se queda fuera el ${pct.toFixed(1)}%: la colocación empeoró`);
 }
 
 console.log(problemas ? `\n✗ ${problemas} problema(s)` : '\nCRUCIGRAMA OK');

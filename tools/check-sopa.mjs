@@ -174,8 +174,20 @@ console.log('\nse coloca lo que se puede, y lo que no se dice');
   else fallo(`alguna lista pierde palabras: tasas ${tasas.map(t => Math.round(t * 100) + '%').join(', ')}`);
 
   /* Una palabra más larga que la cuadrícula no cabe por definición, y tiene que
-     salir nombrada en vez de desaparecer. */
-  const larga = generar({ palabras: entradas(['sun', 'moon', 'x'.repeat(30)]), azar: azarFijo(2) });
+     salir nombrada en vez de desaparecer.
+
+     ESTE CASO SE PLANTEA A MANO, Y NO ES PEREZA. Antes usaba una palabra de 30
+     letras leída con `entradas`, y desde que el lector de listas corta en 15
+     —por encima de eso casi siempre es un renglón entero que se pegó junto— esa
+     palabra ya no llega hasta aquí: la sonda estaba midiendo el vacío y salía
+     verde. Por la puerta de la interfaz el caso ya no puede darse, porque el
+     lado máximo de la cuadrícula (20) es mayor que la palabra más larga que el
+     lector deja pasar (15).
+     La guardia se queda igualmente, y por eso se prueba: `generar` es una
+     función pública y no puede confiar en que quien la llame ya haya filtrado.
+     Se le entrega la entrada directamente, que es la única forma honesta de
+     llegar a ella. */
+  const larga = generar({ palabras: [{ palabra: 'X'.repeat(30), original: 'x'.repeat(30), pista: '' }, ...entradas(['sun', 'moon'])], azar: azarFijo(2) });
   if (larga.fuera.some(p => p.motivo === 'larga')) ok('una palabra más larga que la cuadrícula se descarta CON MOTIVO');
   else fallo('una palabra de 30 letras no se reportó como demasiado larga');
 }

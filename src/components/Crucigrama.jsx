@@ -122,8 +122,8 @@ const Crucigrama = ({ lang = 'es', grande = false }) => {
             <span className="text-xs font-semibold text-slate-600">
               {es ? 'Las palabras' : 'The words'}{' '}
               <span className="font-normal text-muted">
-                {es ? '· una por línea; la pista, opcional, después de un «=»'
-                    : '· one per line; the clue, optional, after an “=”'}
+                {es ? '· una por línea, o varias separadas por comas; la pista, opcional, detrás de «=», «:» o entre paréntesis'
+                    : '· one per line, or several separated by commas; the clue, optional, after “=”, “:” or in brackets'}
               </span>
             </span>
             <textarea
@@ -193,13 +193,33 @@ const Crucigrama = ({ lang = 'es', grande = false }) => {
           {/* LAS QUE NO ENTRARON. Va debajo de la hoja y fuera de ella: es
               información para el docente, no para el alumno. */}
           {(cruci.fuera.length > 0 || descartes.length > 0) && (
-            <p className="gh-no-print text-xs text-amber-900 bg-amber-50 border border-amber-200 rounded-lg px-2.5 py-2">
-              {es ? 'No entraron: ' : 'Left out: '}
-              {[...cruci.fuera.map(p => p.original), ...descartes.map(d => d.original)].join(', ')}
-              {'. '}
-              {es ? 'Una palabra sin letras en común con las demás no se puede cruzar. Prueba «otra vez».'
-                  : 'A word with no letters in common cannot cross anything. Try “again”.'}
-            </p>
+            /* DOS MOTIVOS DISTINTOS, Y NO DAN EL MISMO CONSEJO. Una palabra que
+               no cruza puede entrar con «otra vez»; un renglón que se leyó mal
+               no va a entrar nunca por insistir, hay que separarlo. Decirle al
+               docente «prueba otra vez» ante lo segundo es mandarlo a repetir
+               algo que no puede funcionar. */
+            <div className="gh-no-print text-xs text-amber-900 bg-amber-50 border border-amber-200 rounded-lg px-2.5 py-2 space-y-1">
+              {cruci.fuera.length > 0 && (
+                <p>
+                  {es ? 'No entraron: ' : 'Left out: '}
+                  <strong>{cruci.fuera.map(p => p.original).join(', ')}</strong>
+                  {'. '}
+                  {es ? 'Una palabra sin letras en común con las demás no se puede cruzar. Prueba «otra vez».'
+                      : 'A word with no letters in common cannot cross anything. Try “again”.'}
+                </p>
+              )}
+              {descartes.length > 0 && (
+                <p>
+                  {es ? 'No se usaron: ' : 'Not used: '}
+                  <strong>{descartes.map(d => d.original).join(', ')}</strong>
+                  {'. '}
+                  {descartes.some(d => d.motivo === 'larga')
+                    ? (es ? 'Alguna quedó demasiado larga: suele pasar cuando un renglón trae varias palabras y el separador no se reconoce. Sepáralas con coma, o pon la pista detrás de «=», «:» o entre paréntesis.'
+                          : 'One is too long: that usually means a line held several words. Separate them with commas, or put the clue after “=”, “:” or in brackets.')
+                    : (es ? 'Estaban repetidas o eran demasiado cortas.' : 'They were duplicates or too short.')}
+                </p>
+              )}
+            </div>
           )}
 
           <div className="gh-no-print flex flex-wrap gap-2">

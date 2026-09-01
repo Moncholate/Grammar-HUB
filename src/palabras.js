@@ -23,13 +23,63 @@
 
 /** Lo mínimo que vale la pena buscar o cruzar. */
 export const MIN_LARGO = 2;
+/* Lo máximo que es creíble. «refrigerator» son 12 letras y «responsibility» 14;
+   por encima de 15 casi siempre es un renglón que se pegó entero porque no
+   reconocimos su separador, y una palabra así no cabe proyectada ni en una hoja.
+   Se dice y no se coloca: es preferible que falte a que el curso se ponga a
+   resolver un engendro. */
+export const MAX_LARGO = 15;
 /** Tope: más no cabe en una hoja ni en una pizarra. */
 export const MAX_PALABRAS = 40;
 
-/* Separadores admitidos entre palabra y pista. La tabulación va primero porque
-   es lo que llega al pegar desde una planilla; «=» es lo que se escribe a mano;
-   « - » con espacios a los lados para no partir «e-mail». */
-const SEPARADOR = /\t|\s+=\s*|\s+[–—-]\s+/;
+/* ────────────────────────────────────────────────────────────────────────────
+   LO QUE SE PEGA NO VIENE COMO UNO SE LO IMAGINA
+   ────────────────────────────────────────────────────────────────────────────
+   Este lector daba por hecho una palabra por renglón y solo tres separadores.
+   Todo lo demás lo tomaba como UNA palabra y lo pegaba entero: «apple, orange,
+   lemon» acababa siendo APPLEORANGELEMON dentro de la cuadrícula, y «apple:
+   manzana» acababa siendo APPLEMANZANA. El docente veía palabras que nadie
+   escribió y no tenía de dónde agarrarse para entender por qué. Lo reportó
+   usándolo en clase.
+
+   NI EL CRUCIGRAMA NI LA SOPA PODÍAN CAZARLO, y conviene entender por qué antes
+   de tocar nada: para ellos APPLEMANZANA es una palabra tan legítima como
+   cualquier otra, y sus sondas comprueban que la cuadrícula solo contenga
+   palabras DE LA LISTA. Esa lo era. El fallo estaba un paso antes, aquí, y
+   ninguna prueba de más abajo podía verlo.
+
+   Ahora se admite lo que la gente escribe de verdad:
+     · La pista detrás de tabulación, «=», «:», «/», « - » o entre paréntesis.
+     · VARIAS palabras en un renglón, separadas por coma o punto y coma.
+
+   DOS DETALLES QUE PARECEN NIMIOS Y NO LO SON:
+
+   · La coma NO siempre separa. «apple = fruta roja, redonda» es UNA palabra con
+     una pista que lleva coma dentro. La regla: si el renglón trae UN separador,
+     la coma es parte de la pista; si no trae ninguno, o trae dos o más, la coma
+     está separando palabras. Y nunca se parte dentro de un paréntesis.
+   · El guion sigue exigiendo espacios a los lados. Sin ellos no hay manera de
+     distinguir «apple-manzana» de «e-mail» o «twenty-one», y partir esas dos
+     sería peor que no partir la primera.
+   ──────────────────────────────────────────────────────────────────────────── */
+const SEPARADOR = /\t|\s*[=:]\s*|\s*\/\s*|\s+[–—-]\s+/;
+const SEPARADOR_G = new RegExp(SEPARADOR.source, 'g');
+/** «apple (manzana)»: el paréntesis del final es la pista. */
+const PARENTESIS = /^(.*?)[([]([^)\]]*)[)\]]\s*$/;
+
+/** Parte por coma o punto y coma, pero NUNCA dentro de un paréntesis. */
+const partirFuera = (linea) => {
+  const trozos = [];
+  let actual = '', hondo = 0;
+  for (const ch of linea) {
+    if (ch === '(' || ch === '[') hondo++;
+    else if (ch === ')' || ch === ']') hondo = Math.max(0, hondo - 1);
+    if ((ch === ',' || ch === ';') && hondo === 0) { trozos.push(actual); actual = ''; continue; }
+    actual += ch;
+  }
+  trozos.push(actual);
+  return trozos;
+};
 
 /** Solo letras, y en mayúsculas: una casilla es una letra. */
 export const soloLetras = (s) => String(s == null ? '' : s)
@@ -45,18 +95,39 @@ export const parsearPalabras = (texto) => {
   const vistas = new Set();
   const fuera = [];
   const lista = [];
-  for (const linea of String(texto == null ? '' : texto).split(/\r?\n/)) {
-    const limpia = linea.replace(/^\s*\d+\s*[.)\-]\s*/, '').trim();
-    if (!limpia) continue;
-    const corte = limpia.split(SEPARADOR);
-    const original = corte[0].trim();
-    const pista = corte.slice(1).join(' ').trim();
-    const palabra = soloLetras(original);
-    if (palabra.length < MIN_LARGO) { fuera.push({ original: limpia, motivo: 'corta' }); continue; }
-    if (vistas.has(palabra)) { fuera.push({ original: limpia, motivo: 'repetida' }); continue; }
-    vistas.add(palabra);
-    if (lista.length >= MAX_PALABRAS) { fuera.push({ original: limpia, motivo: 'sobran' }); continue; }
-    lista.push({ palabra, original, pista });
+  for (const renglon of String(texto == null ? '' : texto).split(/\r?\n/)) {
+    const base = renglon.trim();
+    if (!base) continue;
+
+    /* ¿Este renglón trae una palabra o varias? Se cuentan los separadores
+       IGNORANDO lo que va entre paréntesis, que ahí dentro es pista y no
+       estructura. */
+    const cuantos = (base.replace(/[([][^)\]]*[)\]]/g, '').match(SEPARADOR_G) || []).length;
+    const trozos = cuantos === 1 ? [base] : partirFuera(base);
+
+    for (const trozo of trozos) {
+      const limpia = trozo.replace(/^\s*\d+\s*[.)\-]\s*/, '').trim();
+      if (!limpia) continue;
+
+      const corte = limpia.split(SEPARADOR);
+      let original, pista;
+      if (corte.length > 1) {
+        original = corte[0].trim();
+        pista = corte.slice(1).join(' ').trim();
+      } else {
+        const entre = limpia.match(PARENTESIS);
+        if (entre && entre[1].trim()) { original = entre[1].trim(); pista = entre[2].trim(); }
+        else { original = limpia; pista = ''; }
+      }
+
+      const palabra = soloLetras(original);
+      if (palabra.length < MIN_LARGO) { fuera.push({ original: limpia, motivo: 'corta' }); continue; }
+      if (palabra.length > MAX_LARGO) { fuera.push({ original: limpia, motivo: 'larga' }); continue; }
+      if (vistas.has(palabra)) { fuera.push({ original: limpia, motivo: 'repetida' }); continue; }
+      vistas.add(palabra);
+      if (lista.length >= MAX_PALABRAS) { fuera.push({ original: limpia, motivo: 'sobran' }); continue; }
+      lista.push({ palabra, original, pista });
+    }
   }
   return { lista, fuera };
 };

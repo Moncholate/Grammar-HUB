@@ -41,12 +41,38 @@
        puede olvidar apagado — y es la misma maquinaria (`gh-hoja`,
        `gh-no-print`, `gh-solucion`) que ya estrenó el crucigrama.
 
+   ────────────────────────────────────────────────────────────────────────────
+   DUA: TRES COSAS QUE NO SON OPCIONALES
+   ────────────────────────────────────────────────────────────────────────────
+   1. EL COLOR NO PUEDE SER LA ÚNICA SEÑAL. Verde para lo encontrado e índigo
+      para la solución es exactamente el par que no distingue una persona con
+      daltonismo rojo-verde, que es la forma más común. Los dos trazos se
+      diferencian TAMBIÉN por su forma: continuo lo que el curso encontró,
+      discontinuo lo que le queda por encontrar. Sin color, se siguen leyendo.
+
+   2. SE PUEDE RESOLVER SIN RATÓN. Las casillas son botones, pero doscientos
+      botones seguidos en el tabulador no son navegables: son una trampa. La
+      cuadrícula es UNA parada de tabulación y dentro se mueve con las flechas,
+      que es como se navega cualquier tabla. Enter o espacio elige. Sirve para
+      quien no usa ratón y también para el profesor que proyecta con el teclado
+      a mano.
+
+   3. LA CASILLA SE PUEDE TOCAR. La suite fija «--tap-min: 46px» para sus
+      controles; una cuadrícula densa no puede llegar ahí sin volverse ilegible,
+      pero sí tiene un suelo: por debajo de 26px, en un teléfono con quince
+      columnas, la casilla se vuelve imposible de acertar con el dedo. Antes
+      quedaba en 21px. Ahora hay suelo y lo que no quepa se desplaza, que es
+      preferible a una cuadrícula que se ve entera y no se puede usar.
+
+   Y LO QUE PASA SE DICE EN VOZ ALTA: al encontrar una palabra se anuncia cuál,
+   no solo que el contador subió. Un lector de pantalla no ve el trazo.
+
    LAS CASILLAS SE MIDEN SOLAS, en unidades del viewport y nunca en porcentaje:
    un % se mide contra el ancho en `width` y contra el alto en `height`, y con la
    misma cadena para las dos las casillas salen aplastadas. Lo aprendió el
    crucigrama.
    ========================================================================== */
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { parsearPalabras, MAX_PALABRAS } from '../palabras';
 import { generar, casillasDe, palabraEntre, NIVELES } from '../sopa';
 import { ACCION, APAGADO, opcion, ENLACE } from '../ui';
@@ -74,11 +100,22 @@ const Sopa = ({ lang = 'es', grande = false }) => {
   const [halladas, setHalladas] = useState(() => new Set());
   const [ancla, setAncla] = useState(null);
   const [fallo, setFallo] = useState(false);
+  /* La casilla con el foco del teclado. Una sola parada de tabulación para toda
+     la cuadrícula: dentro se mueve con las flechas. */
+  const [foco, setFoco] = useState({ fila: 0, col: 0 });
+  const [ultima, setUltima] = useState(null);   // la última encontrada, para anunciarla
 
   const { lista, fuera } = parsearPalabras(texto);
+  /* Solo se mueve el foco del navegador cuando lo movieron las flechas, no en
+     cada render: robárselo al usuario mientras escribe es de las cosas que más
+     molestan de una tabla navegable. */
+  const haceFoco = useRef(false);
+  useEffect(() => { haceFoco.current = true; }, [foco]);
 
   const armar = (dif = dificultad) => {
     setSopa(generar({ palabras: lista, dificultad: dif }));
+    setFoco({ fila: 0, col: 0 });
+    setUltima(null);
     setDescartes(fuera);
     setRespuestas(false);
     setHalladas(new Set());
@@ -95,8 +132,25 @@ const Sopa = ({ lang = 'es', grande = false }) => {
     if (ancla.fila === fila && ancla.col === col) { setAncla(null); return; }
     const p = palabraEntre(sopa, ancla, { fila, col });
     setAncla(null);
-    if (p) setHalladas(h => new Set([...h, p.palabra]));
+    if (p) { setHalladas(h => new Set([...h, p.palabra])); setUltima(p.original); }
     else setFallo(true);   // no había palabra ahí, y se dice sin castigar a nadie
+  };
+
+  /* Las flechas mueven el foco; Inicio y Fin van a las esquinas de la fila. Se
+     corta la propagación para que la página no haga scroll bajo los pies. */
+  const teclas = (e) => {
+    const salto = { ArrowUp: [-1, 0], ArrowDown: [1, 0], ArrowLeft: [0, -1], ArrowRight: [0, 1] }[e.key];
+    if (salto) {
+      e.preventDefault();
+      setFoco(({ fila, col }) => ({
+        fila: Math.max(0, Math.min(sopa.lado - 1, fila + salto[0])),
+        col: Math.max(0, Math.min(sopa.lado - 1, col + salto[1])),
+      }));
+      return;
+    }
+    if (e.key === 'Home') { e.preventDefault(); setFoco(f => ({ ...f, col: 0 })); }
+    if (e.key === 'End') { e.preventDefault(); setFoco(f => ({ ...f, col: sopa.lado - 1 })); }
+    if (e.key === 'Escape' && ancla) { e.preventDefault(); setAncla(null); }
   };
 
   const NIVEL = [
@@ -105,8 +159,12 @@ const Sopa = ({ lang = 'es', grande = false }) => {
     { id: 'dificil', rotulo: es ? 'Difícil' : 'Hard', nota: es ? 'y al revés' : 'plus backwards' },
   ];
 
+  /* Con SUELO: por debajo de 26px la casilla no se acierta con el dedo, y con
+     quince columnas en un teléfono salían 21. Lo que no quepa se desplaza — el
+     contenedor ya tiene scroll horizontal— que es preferible a una cuadrícula
+     que se ve entera y no se puede usar. */
   const lado = sopa && sopa.lado
-    ? `min(${grande ? '6.5vh' : '1.9rem'}, calc(88vw / ${sopa.lado}))`
+    ? `clamp(26px, calc(88vw / ${sopa.lado}), ${grande ? '6.5vh' : '2rem'})`
     : '1.9rem';
 
   /* UN TRAZO POR PALABRA, del centro de la primera casilla al de la última. Lo
@@ -119,6 +177,7 @@ const Sopa = ({ lang = 'es', grande = false }) => {
     const a = cs[0], z = cs[cs.length - 1];
     return [{
       palabra: p.palabra,
+      encontrada,
       color: encontrada ? HALLADA : MARCA,
       x1: a.col + 0.5, y1: a.fila + 0.5,
       x2: z.col + 0.5, y2: z.fila + 0.5,
@@ -200,11 +259,22 @@ const Sopa = ({ lang = 'es', grande = false }) => {
                       key={t.palabra}
                       x1={t.x1} y1={t.y1} x2={t.x2} y2={t.y2}
                       stroke={t.color} strokeWidth="0.82" strokeLinecap="round"
+                      /* CONTINUO lo encontrado, DISCONTINUO lo que falta: sin
+                         esto, verde e índigo son el par que no distingue el
+                         daltonismo rojo-verde y la marca diría dos cosas con
+                         una sola señal. */
+                      strokeDasharray={t.encontrada ? undefined : '1.5 0.6'}
                       fill="none" opacity="0.32"
                     />
                   ))}
                 </svg>
-              <div className="relative grid w-max" style={{ gridTemplateColumns: `repeat(${sopa.lado}, ${lado})`, zIndex: 1 }}>
+              <div
+                role="grid"
+                aria-label={es ? 'Sopa de letras' : 'Word search'}
+                onKeyDown={teclas}
+                className="relative grid w-max"
+                style={{ gridTemplateColumns: `repeat(${sopa.lado}, ${lado})`, zIndex: 1 }}
+              >
                 {sopa.celdas.map((fila, f) => fila.map((letra, c) => {
                   const esAncla = ancla && ancla.fila === f && ancla.col === c;
                   /* La casilla ya no se pinta: de eso se encargan los trazos de
@@ -213,7 +283,13 @@ const Sopa = ({ lang = 'es', grande = false }) => {
                   return (
                     <button
                       key={`${f},${c}`}
-                      onClick={() => tocar(f, c)}
+                      onClick={() => { setFoco({ fila: f, col: c }); tocar(f, c); }}
+                      /* UNA sola parada de tabulación para toda la cuadrícula:
+                         doscientos botones seguidos en el tabulador no son
+                         navegables, son una trampa. Dentro se mueve con flechas. */
+                      tabIndex={foco.fila === f && foco.col === c ? 0 : -1}
+                      ref={(el) => { if (el && foco.fila === f && foco.col === c && haceFoco.current) { el.focus(); haceFoco.current = false; } }}
+                      role="gridcell"
                       aria-label={`${letra}, ${es ? 'fila' : 'row'} ${f + 1}, ${es ? 'columna' : 'column'} ${c + 1}`}
                       aria-pressed={!!esAncla}
                       className="gh-celda flex items-center justify-center font-bold"
@@ -254,6 +330,7 @@ const Sopa = ({ lang = 'es', grande = false }) => {
               ? (es ? '¡Están todas!' : 'All of them!')
               : (es ? `${halladas.size} de ${sopa.colocadas.length} encontradas`
                     : `${halladas.size} of ${sopa.colocadas.length} found`)}
+            {ultima && <span className="ml-2 font-normal text-emerald-700">{es ? `· ${ultima}` : `· ${ultima}`}</span>}
             {ancla && <span className="ml-2 font-normal text-muted">{es ? '· ahora la última letra' : '· now the last letter'}</span>}
             {fallo && <span className="ml-2 font-normal text-amber-800">{es ? '· ahí no hay ninguna, prueba otra vez' : '· nothing there, try again'}</span>}
           </p>
@@ -292,6 +369,11 @@ const Sopa = ({ lang = 'es', grande = false }) => {
               </button>
             ))}
           </div>
+
+          <p className="gh-no-print text-xs text-muted">
+            {es ? 'Con el teclado: tabula hasta la sopa, muévete con las flechas y elige con Enter. Escape cancela la letra empezada.'
+                : 'With the keyboard: tab to the grid, move with the arrows and pick with Enter. Escape cancels a started word.'}
+          </p>
 
           <p className="gh-no-print text-xs text-muted">
             {es ? 'Lo impreso es siempre la hoja del alumno: la sopa y la lista, sin la solución aunque esté a la vista aquí.'

@@ -154,8 +154,8 @@ const Duda = ({ lang = 'es', curso = [], origen = null, onCargar, onCambiarLista
         <>
           <h2 className="text-lg font-bold text-slate-900 mb-1">{es ? 'La duda' : 'The doubt'}</h2>
           <p className="text-sm text-muted mb-4">
-            {es ? 'Para cerrar: cada uno nombra lo que le quedó a medias, con un molde que escribes tú. No guarda nada.'
-                : 'To close the lesson: everyone names what is still unclear, with a frame you write. Nothing is stored.'}
+            {es ? 'Para cerrar: cada uno nombra lo que le quedó a medias, con un molde que escribes tú.'
+                : 'To close the lesson: everyone names what is still unclear, with a frame you write.'}
           </p>
         </>
       )}

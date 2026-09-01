@@ -205,8 +205,8 @@ const Semaforo = ({ lang = 'es', grande = false }) => {
         <>
           <h2 className="text-lg font-bold text-slate-900 mb-1">{es ? 'Semáforo' : 'Traffic light'}</h2>
           <p className="text-sm text-muted mb-4">
-            {es ? 'Para cerrar: el curso se autoevalúa contra un criterio y se ve dónde está. No guarda nada.'
-                : 'To close the lesson: the class self-assesses against a criterion and sees where it stands. Nothing is stored.'}
+            {es ? 'Para cerrar: el curso se autoevalúa contra un criterio y se ve dónde está.'
+                : 'To close the lesson: the class self-assesses against a criterion and sees where it stands.'}
           </p>
         </>
       )}

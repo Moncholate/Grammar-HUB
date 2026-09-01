@@ -124,8 +124,8 @@ const Muro = ({ lang = 'es', grande = false }) => {
         <>
           <h2 className="text-lg font-bold text-slate-900 mb-1">{es ? 'El muro' : 'The wall'}</h2>
           <p className="text-sm text-muted mb-4">
-            {es ? 'Para cerrar: cada uno nombra algo que hoy pudo y el muro se llena a la vista de todos. No guarda nada.'
-                : 'To close the lesson: everyone names something they managed today and the wall fills up for all to see. Nothing is stored.'}
+            {es ? 'Para cerrar: cada uno nombra algo que hoy pudo y el muro se llena a la vista de todos.'
+                : 'To close the lesson: everyone names something they managed today and the wall fills up for all to see.'}
           </p>
         </>
       )}

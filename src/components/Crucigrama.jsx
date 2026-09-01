@@ -216,8 +216,8 @@ const Crucigrama = ({ lang = 'es', grande = false }) => {
         <>
           <h2 className="text-lg font-bold text-slate-900 mb-1 gh-no-print">{es ? 'Crucigrama' : 'Crossword'}</h2>
           <p className="text-sm text-muted mb-4 gh-no-print">
-            {es ? 'Pega las palabras de la clase, una por línea, y sale un crucigrama. Se proyecta o se imprime. No guarda nada.'
-                : 'Paste the words from today’s lesson, one per line, and out comes a crossword. Project it or print it. Nothing is stored.'}
+            {es ? 'Pega las palabras de la clase, una por línea, y sale un crucigrama. Se proyecta o se imprime.'
+                : 'Paste the words from today’s lesson, one per line, and out comes a crossword. Project it or print it.'}
           </p>
         </>
       )}

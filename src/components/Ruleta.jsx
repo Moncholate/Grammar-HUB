@@ -121,8 +121,8 @@ const Ruleta = ({ lang = 'es', grande = false }) => {
     <section className={grande ? 'w-full max-w-3xl mx-auto' : 'w-full max-w-xl mx-auto'}>
       <h2 className="text-lg font-bold text-slate-900 mb-1">{es ? 'Ruleta' : 'Wheel'}</h2>
       <p className="text-sm text-muted mb-4">
-        {es ? 'Para el warm-up: pon los verbos o las preguntas, una por línea, y gira. No guarda nada.'
-            : 'For warm-ups: add the verbs or questions, one per line, and spin. Nothing is stored.'}
+        {es ? 'Para el warm-up: pon los verbos o las preguntas, una por línea, y gira.'
+            : 'For warm-ups: add the verbs or questions, one per line, and spin.'}
       </p>
 
       {!items.length ? (

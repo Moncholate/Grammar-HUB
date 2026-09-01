@@ -230,8 +230,8 @@ const Sopa = ({ lang = 'es', grande = false }) => {
         <>
           <h2 className="text-lg font-bold text-slate-900 mb-1 gh-no-print">{es ? 'Sopa de letras' : 'Word search'}</h2>
           <p className="text-sm text-muted mb-4 gh-no-print">
-            {es ? 'Pega las palabras de la clase, una por línea. Proyectada se resuelve a clics —primera letra y última—, o se imprime para repartir. No guarda nada.'
-                : 'Paste the words from today’s lesson, one per line. Projected, it is solved by clicking — first letter, then last — or printed to hand out. Nothing is stored.'}
+            {es ? 'Pega las palabras de la clase, una por línea. Proyectada se resuelve a clics —primera letra y última—, o se imprime para repartir.'
+                : 'Paste the words from today’s lesson, one per line. Projected, it is solved by clicking — first letter, then last — or printed to hand out.'}
           </p>
         </>
       )}

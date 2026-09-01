@@ -115,8 +115,8 @@ const Apuesta = ({ lang = 'es', grande = false }) => {
         <>
           <h2 className="text-lg font-bold text-slate-900 mb-1">{es ? 'Apuesta' : 'The bet'}</h2>
           <p className="text-sm text-muted mb-4">
-            {es ? 'Para cerrar: escriben, apuestan cuántas creen tener bien, y recién entonces corrigen. No guarda nada.'
-                : 'To close the lesson: they write, bet how many they think are right, and only then check. Nothing is stored.'}
+            {es ? 'Para cerrar: escriben, apuestan cuántas creen tener bien, y recién entonces corrigen.'
+                : 'To close the lesson: they write, bet how many they think are right, and only then check.'}
           </p>
         </>
       )}

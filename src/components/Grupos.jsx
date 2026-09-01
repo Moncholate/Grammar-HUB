@@ -48,8 +48,8 @@ const Grupos = ({
     <section className={grande ? 'w-full' : 'w-full max-w-xl mx-auto'}>
       <h2 className="text-lg font-bold text-slate-900 mb-1">{es ? 'Grupos' : 'Groups'}</h2>
       <p className="text-sm text-muted mb-4">
-        {es ? 'Pega la lista del curso —o el histórico de asistencia en Excel, y los que faltaron vienen apagados— y reparte. No guarda nada.'
-            : 'Paste the class list —or the attendance export from Excel, and whoever was absent comes switched off— and split. Nothing is stored.'}
+        {es ? 'Pega la lista del curso —o el histórico de asistencia en Excel, y los que faltaron vienen apagados— y reparte.'
+            : 'Paste the class list —or the attendance export from Excel, and whoever was absent comes switched off— and split.'}
       </p>
 
       {!nombres.length ? (

@@ -148,8 +148,8 @@ const AntesAhora = ({ lang = 'es', curso = [], origen = null, onCargar, onCambia
         <>
           <h2 className="text-lg font-bold text-slate-900 mb-1">{es ? 'Antes / Ahora' : 'Then / Now'}</h2>
           <p className="text-sm text-muted mb-4">
-            {es ? 'Para cerrar: qué creía al empezar la clase que ya no creo, y por qué. Los dos lados los escribes tú, o se dejan en blanco. No guarda nada.'
-                : 'To close the lesson: what I believed when the class started that I no longer believe, and why. You write both sides, or leave them blank. Nothing is stored.'}
+            {es ? 'Para cerrar: qué creía al empezar la clase que ya no creo, y por qué. Los dos lados los escribes tú, o se dejan en blanco.'
+                : 'To close the lesson: what I believed when the class started that I no longer believe, and why. You write both sides, or leave them blank.'}
           </p>
         </>
       )}

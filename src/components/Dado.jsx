@@ -107,8 +107,8 @@ const Dado = ({ lang = 'es', nivel = null, grande = false }) => {
     <section className="w-full max-w-xl mx-auto">
       <h2 className="text-lg font-bold text-slate-900 mb-1">{es ? 'Dado' : 'Dice'}</h2>
       <p className="text-sm text-muted mb-4">
-        {es ? 'Para sortear en clase. No guarda nada: al cerrar, se va.'
-            : 'For classroom draws. Nothing is stored: it is gone when you close.'}
+        {es ? 'Para sortear en clase.'
+            : 'For classroom draws.'}
         {activos.tiempo && (
           <>
             {' '}

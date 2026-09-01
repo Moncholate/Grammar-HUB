@@ -16,11 +16,16 @@
    perder la cuenta— y no CÓMO van repartidas. El semáforo aparece de golpe al
    final, que además le da su momento.
 
-   EL OBJETIVO SE COMPONE, no se escribe. Un tiempo del curso —solo los que ese
-   curso ya vio, como el dado— más una de las tres habilidades, que son las tres
-   formas que la suite entera enseña (afirmativa, interrogativa, negativa). Dos
-   toques y está. El campo libre existe para el día que el objetivo no sea de
-   gramática, que también hay clases así.
+   EL OBJETIVO LO ESCRIBE EL DOCENTE, y no hay nada puesto. Se componía de un
+   tiempo del curso más una de las tres formas, y eso presuponía que la clase
+   había sido de gramática: en una unidad de vocabulario no había nada que
+   editar, había que salirse de la herramienta.
+
+   Y NO HAY SUGERENCIAS TAMPOCO. Hubo, plegadas y opcionales, con la idea de no
+   perder los cinco segundos los días de gramática. El profesor las probó y no
+   funcionó: lo que ofrece una herramienta orienta lo que se hace con ella
+   —aunque esté plegado— y una lista de tiempos verbales insinúa que el cierre
+   va de tiempos verbales. Confunde más de lo que ahorra. Fuera, 1-sep-2026.
 
    EL IDIOMA VA PARTIDO A PROPÓSITO: el objetivo en inglés y los tres niveles en
    español. No es un descuido ni una traducción a medias. El objetivo es
@@ -36,7 +41,6 @@
    ========================================================================== */
 import React, { useState } from 'react';
 import { lectura, sumar, VACIO } from '../semaforo';
-import { tiemposHasta, nombreDeCurso } from '../tiempos';
 import { ACCION, APAGADO, opcion, ENLACE } from '../ui';
 
 /* Colores de LÁMPARA, no de interfaz: verde, ámbar y rojo de semáforo de calle.
@@ -80,29 +84,20 @@ const NIVELES = [
   { id: 'rojo',  texto: 'Todavía no lo puedo hacer solo' },
 ];
 
-/* Las tres habilidades son las tres formas de la suite. Se dicen en inglés
-   porque son el objetivo, no la reflexión. */
-const HABILIDADES = [
-  { id: 'usar',      es: 'Usarlo',    en: 'Use it',    frase: 'I can use it without looking at an example.' },
-  { id: 'preguntar', es: 'Preguntar', en: 'Ask',       frase: 'I can ask questions with it.' },
-  { id: 'negar',     es: 'Negar',     en: 'Make it negative', frase: 'I can make it negative.' },
-];
-
-const Semaforo = ({ lang = 'es', nivel = null, grande = false }) => {
+const Semaforo = ({ lang = 'es', grande = false }) => {
   const es = lang === 'es';
-  const tiempos = tiemposHasta(nivel);
 
   const [fase, setFase] = useState('preparar');
-  /* El último tiempo del curso por defecto: es el que se acaba de enseñar, así
-     que el camino normal son cero toques aquí. */
-  const [tiempo, setTiempo] = useState(() => tiempos[tiempos.length - 1] || null);
-  const [habilidad, setHabilidad] = useState('usar');
-  const [propio, setPropio] = useState('');
+  /* EL OBJETIVO ES UN TEXTO, y empieza vacío. Antes era la composición de un
+     tiempo y una forma, y eso decidía por el docente de qué había sido la clase. */
+  const [objetivo, setObjetivo] = useState('');
+  const [rotulo, setRotulo] = useState('');     // el nombre del tiempo, si vino de una sugerencia
   const [conteo, setConteo] = useState(VACIO);
 
   const r = lectura(conteo);
-  const frase = propio.trim() || (HABILIDADES.find(h => h.id === habilidad) || HABILIDADES[0]).frase;
-  const titulo = propio.trim() ? null : (tiempo ? tiempo.en : null);
+  const frase = objetivo.trim();
+  const titulo = rotulo || null;
+
 
   const empezar = () => { setConteo(VACIO); setFase('contar'); };
 
@@ -219,59 +214,46 @@ const Semaforo = ({ lang = 'es', nivel = null, grande = false }) => {
       {/* ── PREPARAR ──────────────────────────────────────────────────────── */}
       {fase === 'preparar' && (
         <div className="space-y-4">
-          <div>
-            <p className="text-xs font-semibold text-slate-600 mb-1.5">
-              {es ? 'Tiempo' : 'Tense'}
-              {' '}
-              <span className="font-normal text-muted">
-                {nivel ? (es ? `· los de ${nombreDeCurso(nivel, lang)}` : `· from ${nombreDeCurso(nivel, lang)}`)
-                       : (es ? '· sin curso elegido, salen todos' : '· no course selected, all of them')}
-              </span>
-            </p>
-            <div className="flex flex-wrap gap-1.5">
-              {tiempos.map(t => (
-                <button key={t.id} onClick={() => setTiempo(t)} aria-pressed={tiempo?.id === t.id}
-                        disabled={!!propio.trim()}
-                        className={`${opcion(tiempo?.id === t.id)} ${propio.trim() ? 'opacity-40' : ''}`}>
-                  {es ? t.es : t.en}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div>
-            <p className="text-xs font-semibold text-slate-600 mb-1.5">{es ? 'Puedo…' : 'I can…'}</p>
-            <div className="flex flex-wrap gap-1.5">
-              {HABILIDADES.map(h => (
-                <button key={h.id} onClick={() => setHabilidad(h.id)} aria-pressed={habilidad === h.id}
-                        disabled={!!propio.trim()}
-                        className={`${opcion(habilidad === h.id)} ${propio.trim() ? 'opacity-40' : ''}`}>
-                  {es ? h.es : h.en}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* El campo libre GANA a lo compuesto en cuanto tiene algo escrito: si
-              los dos valieran a la vez habría que explicar cuál manda. */}
           <label className="block">
             <span className="text-xs font-semibold text-slate-600">
-              {es ? 'O escribe otro objetivo' : 'Or write another objective'}
+              {es ? 'El objetivo de hoy' : 'Today’s objective'}{' '}
+              <span className="font-normal text-muted">
+                {es ? '· en inglés, como se lo dirías al curso' : '· in English, as you would say it to the class'}
+              </span>
             </span>
             <input
-              type="text" value={propio} onChange={(e) => setPropio(e.target.value)}
+              type="text" value={objetivo}
+              onChange={(e) => { setObjetivo(e.target.value); }}
               placeholder={es ? 'I can order food in a restaurant.' : 'I can order food in a restaurant.'}
               className="mt-1 w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 outline-none"
             />
           </label>
 
-          <div className="rounded-xl border border-slate-200 bg-white px-4 py-4">
-            <Objetivo />
-          </div>
+          {/* Un rótulo opcional encima del objetivo: el tema de la clase. Lo
+              rellenan las sugerencias con el nombre del tiempo, y a mano sirve
+              para poner «Food», «Unit 4» o lo que sea que se trabajó. */}
+          <label className="block">
+            <span className="text-xs font-semibold text-slate-600">
+              {es ? 'Tema' : 'Topic'}{' '}
+              <span className="font-normal text-muted">{es ? '· opcional, va encima' : '· optional, sits above'}</span>
+            </span>
+            <input
+              type="text" value={rotulo} onChange={(e) => setRotulo(e.target.value)}
+              placeholder={es ? 'Food · Unit 4 · Present Perfect' : 'Food · Unit 4 · Present Perfect'}
+              className="mt-1 w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 outline-none"
+            />
+          </label>
 
-          <button onClick={empezar} disabled={!titulo && !propio.trim()} className={ACCION}>
+          {frase && (
+            <div className="rounded-xl border border-slate-200 bg-white px-4 py-4">
+              <Objetivo />
+            </div>
+          )}
+
+          <button onClick={empezar} disabled={!frase} className={ACCION}>
             {es ? 'Proyectar' : 'Project it'}
           </button>
+
         </div>
       )}
 

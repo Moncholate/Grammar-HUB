@@ -24,10 +24,16 @@
    ========================================================================== */
 
 /** La acción principal de una herramienta. Una por pantalla. */
+/* `disabled:text-slate-600` y no el blanco heredado: apagado, el botón queda
+   blanco sobre slate-300 y eso da 1,9:1 — el rótulo desaparece y el botón no
+   parece deshabilitado, parece roto. Y ahora se ve mucho: las cinco
+   herramientas del cierre abren con su acción apagada, esperando que el docente
+   escriba. Lo cazó la sonda de contraste renderizado el día que hubo por fin una
+   pantalla que medir con el botón apagado. */
 export const ACCION =
   'w-full py-3.5 rounded-xl font-bold text-base bg-indigo-600 hover:bg-indigo-700 ' +
-  'active:bg-indigo-800 disabled:bg-slate-300 text-white shadow-sm hover:shadow ' +
-  'transition-all touch-manipulation';
+  'active:bg-indigo-800 disabled:bg-slate-300 disabled:text-slate-600 text-white ' +
+  'shadow-sm hover:shadow transition-all touch-manipulation';
 
 /** La cápsula que envuelve a las pestañas. */
 /* `flex-wrap`: la cápsula nunca puede empujar la página a lo ancho. Lo que

@@ -24,15 +24,25 @@
    mismo proyector. Lo que esta herramienta aporta es el momento del compromiso,
    que es lo que ninguna de las otras tiene.
 
-   EL SET SE REPARTE, no se sortea cinco veces. Un dado tirado cinco veces puede
-   dar cinco veces el mismo tiempo o las cinco en afirmativa, y entonces se
-   acierta o se falla en bloque y la distancia no dice nada. Las reglas y sus
-   pruebas están en `../apuesta.js`.
+   LAS CONSIGNAS LAS ESCRIBE EL DOCENTE, una por línea, como la lista de la
+   ruleta. Venían generadas de tiempo + sujeto + forma, y eso presuponía que la
+   clase había sido de gramática: para una unidad de vocabulario —«usa estas
+   cinco palabras en una oración»— no había nada que editar. Lo dijo el profesor,
+   1-sep-2026.
+
+   Y NO HAY GENERADOR. Lo hubo, plegado y opcional. El profesor lo probó y no
+   funcionó: lo que una herramienta ofrece orienta lo que se hace con ella aunque
+   esté plegado, y un botón que escribe cinco consignas de tiempos verbales
+   insinúa que el cierre va de tiempos verbales. Confunde más de lo que ahorra.
+   Fuera, 1-sep-2026.
+
+   LO QUE SÍ SE CONSERVA es la advertencia, porque vale para las consignas que
+   escriba el docente: un set sirve si REPARTE. Cinco consignas del mismo tipo o
+   las cinco en afirmativa hacen que se acierte o se falle en bloque, y entonces
+   la distancia entre lo que se apostó y lo que se tuvo no dice nada.
    ========================================================================== */
 import React, { useState, useRef, useEffect } from 'react';
-import { sacarConsignas, CUANTAS } from '../apuesta';
-import { tiemposHasta, nombreDeCurso } from '../tiempos';
-import { FORM_SIGNS, FORM_ORDER } from '../forms.generated.jsx';
+import { parsearLista } from '../lista';
 import { formatoReloj, estadoReloj } from '../temporizador';
 import { ACCION, APAGADO, opcion } from '../ui';
 
@@ -40,25 +50,23 @@ import { ACCION, APAGADO, opcion } from '../ui';
    y una apuesta sobre algo que no se terminó no mide calibración: mide prisa. */
 const MINUTOS = [3, 4, 5];
 
-const Apuesta = ({ lang = 'es', nivel = null, grande = false }) => {
+const Apuesta = ({ lang = 'es', grande = false }) => {
   const es = lang === 'es';
-  const tiempos = tiemposHasta(nivel);
 
   const [fase, setFase] = useState('preparar');
-  const [cuantas, setCuantas] = useState(5);
   const [minutos, setMinutos] = useState(4);
-  const [consignas, setConsignas] = useState([]);
+  /* UNA POR LÍNEA, como la lista de la ruleta: es el gesto que el docente ya
+     conoce de esta sección y no hay que explicarlo. */
+  const [texto, setTexto] = useState('');
   const [restante, setRestante] = useState(4 * 60);
   const finRef = useRef(0);
   const tick = useRef(null);
 
   useEffect(() => () => clearInterval(tick.current), []);
 
-  const sacar = () => setConsignas(sacarConsignas({ tiempos, formas: FORM_ORDER, cuantas }));
+  const consignas = parsearLista(texto);
 
   const arrancar = () => {
-    const set = sacarConsignas({ tiempos, formas: FORM_ORDER, cuantas });
-    setConsignas(set);
     clearInterval(tick.current);
     setRestante(minutos * 60);
     finRef.current = Date.now() + minutos * 60 * 1000;
@@ -81,11 +89,6 @@ const Apuesta = ({ lang = 'es', nivel = null, grande = false }) => {
     hueco:    'min(7vw, 13vh)',
   };
 
-  const etiqueta = (c) => {
-    const f = FORM_SIGNS[c.forma];
-    return `${es ? c.tiempo.es : c.tiempo.en} · ${c.sujeto} · ${f ? f.label[es ? 'es' : 'en'] : c.forma}`;
-  };
-
   /* Las consignas, numeradas. Lo que se lee de lejos y lo que se copia en el
      cuaderno, así que el número tiene que ser inequívoco: se apuesta sobre
      «cuántas de estas cinco» y hay que poder señalar cuál falló. */
@@ -97,7 +100,7 @@ const Apuesta = ({ lang = 'es', nivel = null, grande = false }) => {
                 style={{ fontSize: grande ? M.numero : undefined }}>{i + 1}</span>
           <span className={`font-semibold text-slate-900 ${grande ? '' : 'text-base'}`}
                 style={{ fontSize: grande ? M.consigna : undefined }}>
-            {etiqueta(c)}
+            {c}
           </span>
         </li>
       ))}
@@ -121,22 +124,25 @@ const Apuesta = ({ lang = 'es', nivel = null, grande = false }) => {
       {/* ── PREPARAR ──────────────────────────────────────────────────────── */}
       {fase === 'preparar' && (
         <div className="space-y-4">
-          <div>
-            <p className="text-xs font-semibold text-slate-600 mb-1.5">
-              {es ? 'Cuántas' : 'How many'}{' '}
-              <span className="font-normal text-muted">
-                {nivel ? (es ? `· de los tiempos de ${nombreDeCurso(nivel, lang)}` : `· from ${nombreDeCurso(nivel, lang)}’s tenses`)
-                       : (es ? '· sin curso elegido, de todos los tiempos' : '· no course selected, all tenses')}
-              </span>
-            </p>
-            <div className="flex flex-wrap gap-1.5">
-              {CUANTAS.map(c => (
-                <button key={c} onClick={() => setCuantas(c)} aria-pressed={cuantas === c} className={opcion(cuantas === c)}>
-                  {c}
-                </button>
-              ))}
-            </div>
-          </div>
+          <label className="block">
+            <span className="text-xs font-semibold text-slate-600">
+              {es ? 'Las consignas' : 'The prompts'}{' '}
+              <span className="font-normal text-muted">{es ? '· una por línea' : '· one per line'}</span>
+            </span>
+            <textarea
+              value={texto} rows={6}
+              onChange={(e) => { setTexto(e.target.value); }}
+              placeholder={es
+                ? 'Usa «although» en una oración\nDescribe tu fin de semana\nUna pregunta con «how often»'
+                : 'Use “although” in a sentence\nDescribe your weekend\nA question with “how often”'}
+              className="mt-1 w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 outline-none"
+            />
+          </label>
+
+          <p className="text-xs text-muted">
+            {es ? 'Que repartan: si las cinco son del mismo tipo, se acierta o se falla en bloque y la apuesta no mide nada.'
+                : 'Spread them out: if all five are the same kind, you get them all right or all wrong and the bet measures nothing.'}
+          </p>
 
           <div>
             <p className="text-xs font-semibold text-slate-600 mb-1.5">{es ? 'Para escribirlas' : 'To write them'}</p>
@@ -149,25 +155,19 @@ const Apuesta = ({ lang = 'es', nivel = null, grande = false }) => {
             </div>
           </div>
 
-          {/* Una vista previa que se puede volver a barajar antes de proyectar:
-              a veces el set sale con un tiempo que hoy no se tocó. */}
           {consignas.length > 0 && (
             <div className="rounded-xl border border-slate-200 bg-white px-4 py-4">
               <Consignas />
             </div>
           )}
 
-          <div className="flex flex-wrap gap-2">
-            <button onClick={sacar} className={`flex-1 ${APAGADO}`}>
-              {consignas.length ? (es ? 'Otras' : 'Others') : (es ? 'Ver el set' : 'See the set')}
-            </button>
-          </div>
-
-          <button onClick={arrancar} disabled={!tiempos.length} className={ACCION}>
+          <button onClick={arrancar} disabled={!consignas.length} className={ACCION}>
             {es ? 'Proyectar y arrancar' : 'Project and start'}
           </button>
+
         </div>
       )}
+
 
       {/* ── ESCRIBIR ──────────────────────────────────────────────────────── */}
       {fase === 'escribir' && (

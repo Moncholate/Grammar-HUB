@@ -47,6 +47,7 @@ import Semaforo from './Semaforo';
 import Duda from './Duda';
 import Apuesta from './Apuesta';
 import AntesAhora from './AntesAhora';
+import Muro from './Muro';
 import { CAPSULA, pestana } from '../ui';
 import { translations } from '../i18n';
 
@@ -141,6 +142,7 @@ const PanelDocente = ({ lang = 'es', nivel = null, onVolver }) => {
       id: 'cierre',
       rotulo: es ? 'Cierre' : 'Closing',
       items: [
+        { id: 'muro', rotulo: es ? 'El muro' : 'The wall' },
         { id: 'semaforo', rotulo: es ? 'Semáforo' : 'Traffic light' },
         { id: 'apuesta', rotulo: es ? 'Apuesta' : 'The bet' },
         { id: 'duda', rotulo: es ? 'La duda' : 'The doubt' },
@@ -215,11 +217,12 @@ const PanelDocente = ({ lang = 'es', nivel = null, onVolver }) => {
                     nombres={nombres} ausentes={ausentes} origen={origen}
                     onCargar={cargarCurso} onAlternar={alternarAusente} onCambiarLista={cambiarLista} /></div>
         <div className={vista === 'tiempo' ? '' : 'hidden'}><Temporizador lang={lang} grande={presentando} /></div>
-        <div className={vista === 'semaforo' ? '' : 'hidden'}><Semaforo lang={lang} nivel={nivel} grande={presentando} /></div>
-        <div className={vista === 'apuesta' ? '' : 'hidden'}><Apuesta lang={lang} nivel={nivel} grande={presentando} /></div>
-        <div className={vista === 'duda' ? '' : 'hidden'}><Duda lang={lang} nivel={nivel} grande={presentando}
+        <div className={vista === 'muro' ? '' : 'hidden'}><Muro lang={lang} grande={presentando} /></div>
+        <div className={vista === 'semaforo' ? '' : 'hidden'}><Semaforo lang={lang} grande={presentando} /></div>
+        <div className={vista === 'apuesta' ? '' : 'hidden'}><Apuesta lang={lang} grande={presentando} /></div>
+        <div className={vista === 'duda' ? '' : 'hidden'}><Duda lang={lang} grande={presentando}
                     curso={presentes} origen={origen} onCargar={cargarCurso} onCambiarLista={cambiarLista} /></div>
-        <div className={vista === 'antes' ? '' : 'hidden'}><AntesAhora lang={lang} nivel={nivel} grande={presentando}
+        <div className={vista === 'antes' ? '' : 'hidden'}><AntesAhora lang={lang} grande={presentando}
                     curso={presentes} origen={origen} onCargar={cargarCurso} onCambiarLista={cambiarLista} /></div>
 
       </div>

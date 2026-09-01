@@ -8,6 +8,13 @@
 @font-face{font-family:'Atkinson Hyperlegible';font-style:normal;font-weight:700;font-display:swap;src:url('./fonts/AtkinsonHyperlegible-Bold.woff2') format('woff2');}
 
 /* ── Modo oscuro (1ª pasada · override de superficies sobre los neutros del sistema) ── */
+/* EL TEXTO DE PISTA de los campos, en claro. El navegador lo pinta gris-400 y
+   da 2,54:1 sobre blanco — es texto y cuenta. Aquí además carga trabajo: en las
+   herramientas del cierre la pista dice qué se espera que escribas, así que no
+   puede ser lo menos legible de la pantalla. slate-500 da 4,85:1 y sigue
+   leyéndose como pista y no como contenido. */
+:root input::placeholder, :root textarea::placeholder { color: #64748b; opacity: 1; }
+
 /* Modo oscuro (disparado por data-theme; el resolver del <head> lo fija) */
 :root[data-theme="dark"], :root[data-theme="dark"] body { background-color: #0c0e15; color: #eceff8; }
 :root[data-theme="dark"] .bg-white { background-color: #141826 !important; }

@@ -6,11 +6,20 @@
    bastante para poder decir QUÉ es lo que no sabes. Un molde a medio hacer se
    completa; una pregunta en blanco, no.
 
-       «No me queda claro cuándo se usa ____ en vez de ____.»
+   EL MOLDE LO ESCRIBE EL DOCENTE, y la herramienta abre en blanco. Venía
+   compuesto de dos tiempos verbales, y eso presuponía que la clase había sido de
+   gramática: en una unidad de vocabulario no había nada que editar, había que
+   salirse de la herramienta. Lo dijo el profesor, 1-sep-2026.
 
-   Y el molde llega con los dos huecos puestos: el par que ESE curso confunde,
-   filtrado por lo que ya vio (`../confusiones.js`). Dos huecos vacíos serían
-   otra vez una pregunta en blanco.
+   Los huecos se escriben como se escriben en el pizarrón —una fila de guiones
+   bajos— y se pintan apagados para que no compitan con las palabras. Qué es
+   hueco y qué no lo decide `../molde.js`, con sus pruebas.
+
+   Y NO HAY MOLDES SUGERIDOS. Los hubo, plegados y opcionales. El profesor los
+   probó y no funcionó: lo que una herramienta ofrece orienta lo que se hace con
+   ella aunque esté plegado, y una lista de pares de tiempos verbales insinúa que
+   el cierre va de gramática. Confunde más de lo que ahorra. Fuera, 1-sep-2026.
+   El molde se escribe entero, y el hueco es lo único que la herramienta pone.
 
    TRES FASES, UNA ACCIÓN CADA UNA:
      PREPARAR  qué molde y cuánto tiempo   → «Proyectar»
@@ -29,18 +38,16 @@
 
    LOS NOMBRES SALEN DE LA LISTA DEL CURSO, y solo de quien vino hoy: llamar a
    alguien que no está es el fallo clásico de sortear nombres. La lista se puede
-   cargar DESDE AQUÍ —no solo desde Grupos— y esa es la corrección importante:
-   con un cierre de cinco minutos se hace una actividad por clase, así que la
-   mayoría de los días Grupos ni se abre. Es la misma lista, no una copia: se
-   pegue donde se pegue, las dos herramientas la ven.
-   Y si nadie la ha cargado, la herramienta sigue sirviendo: se saltan los
-   nombres y se piden tres voluntarios, que es lo que se hacía antes.
-   Nada se guarda, aquí tampoco.
+   cargar DESDE AQUÍ —no solo desde Grupos—: con un cierre de cinco minutos se
+   hace una actividad por clase, así que la mayoría de los días Grupos ni se
+   abre. Es la misma lista, no una copia. Y si nadie la ha cargado, la
+   herramienta sigue sirviendo: se piden tres voluntarios.
+
+   Nada se guarda, aquí tampoco: ni el molde escrito ni la lista.
    ========================================================================== */
 import React, { useState, useRef, useEffect } from 'react';
-import { paresDe, parPorDefecto } from '../confusiones';
-import { nombreDeCurso } from '../tiempos';
 import { barajar } from '../lista';
+import { partirEnHuecos, tieneTexto, HUECO } from '../molde';
 import { formatoReloj, estadoReloj } from '../temporizador';
 import CargarCurso from './CargarCurso';
 import { ACCION, APAGADO, opcion, ENLACE } from '../ui';
@@ -50,13 +57,11 @@ import { ACCION, APAGADO, opcion, ENLACE } from '../ui';
 const SEGUNDOS = [60, 90, 120];
 const CUANTOS = 3;
 
-const Duda = ({ lang = 'es', nivel = null, curso = [], origen = null, onCargar, onCambiarLista, grande = false }) => {
+const Duda = ({ lang = 'es', curso = [], origen = null, onCargar, onCambiarLista, grande = false }) => {
   const es = lang === 'es';
-  const pares = paresDe(nivel);
 
   const [fase, setFase] = useState('preparar');
-  const [par, setPar] = useState(() => parPorDefecto(nivel));
-  const [molde, setMolde] = useState('par');
+  const [texto, setTexto] = useState('');
   const [total, setTotal] = useState(90);
   const [restante, setRestante] = useState(90);
   const [elegidos, setElegidos] = useState([]);
@@ -64,27 +69,6 @@ const Duda = ({ lang = 'es', nivel = null, curso = [], origen = null, onCargar, 
   const tick = useRef(null);
 
   useEffect(() => () => clearInterval(tick.current), []);
-
-  /* Los tres moldes. El del par es el que el currículo puede rellenar; los otros
-     dos existen para el día que la clase no fue de gramática, que también los
-     hay. Se escriben partidos porque el hueco se pinta distinto que el texto. */
-  const MOLDES = [
-    { id: 'par',    rotulo: es ? 'Dos que se parecen' : 'Two that look alike' },
-    { id: 'costo',  rotulo: es ? 'Lo que costó' : 'What was hard' },
-    { id: 'porque', rotulo: es ? 'El porqué' : 'The why' },
-  ];
-
-  const frase = () => {
-    if (molde === 'costo') return { partes: [es ? 'Lo que más me costó hoy fue' : 'The hardest thing today was'], huecos: 1 };
-    if (molde === 'porque') return { partes: [es ? 'Todavía no entiendo por qué' : 'I still do not understand why'], huecos: 1 };
-    return {
-      partes: es
-        ? ['No me queda claro cuándo se usa', 'en vez de']
-        : ['I am not sure when to use', 'instead of'],
-      rellenos: par ? [es ? par.a.es : par.a.en, es ? par.b.es : par.b.en] : ['', ''],
-      huecos: 0,
-    };
-  };
 
   const arrancar = () => {
     clearInterval(tick.current);
@@ -108,36 +92,60 @@ const Duda = ({ lang = 'es', nivel = null, curso = [], origen = null, onCargar, 
      una frase larga y el reloj es alto, y con `vw` solo, en 1280×720 el
      conjunto se salía. Mismo criterio que el semáforo. */
   const M = {
-    molde:   'min(4vw, 8vh)',
-    hueco:   'min(4vw, 8vh)',
-    reloj:   'min(9vw, 16vh)',
-    nombre:  'min(3.4vw, 6vh)',
-    rotulo:  'min(2vw, 3.6vh)',
+    molde:  'min(4vw, 8vh)',
+    reloj:  'min(9vw, 16vh)',
+    nombre: 'min(3.4vw, 6vh)',
+    rotulo: 'min(2vw, 3.6vh)',
   };
 
-  const f = frase();
   const estado = estadoReloj(restante);
 
-  /* El molde, que es lo que se lee de lejos. Los huecos se pintan como huecos
-     —línea de puntos— cuando hay que rellenarlos, y como el nombre del tiempo
-     cuando el currículo ya lo puso: son dos cosas distintas y tienen que
-     verse distintas. */
+  /* El molde, que es lo que se lee de lejos. Los huecos van apagados: en la
+     misma tinta que las palabras compiten con ellas, y lo que hay que leer es
+     la frase. */
   const Molde = () => (
     <p
       className={`text-center font-bold text-slate-900 ${grande ? 'leading-tight' : 'text-xl sm:text-2xl'}`}
       style={{ fontSize: grande ? M.molde : undefined }}
     >
-      {f.partes.map((p, i) => (
-        <React.Fragment key={i}>
-          {p}{' '}
-          {f.rellenos
-            ? <span style={{ color: 'var(--marca)' }}>{f.rellenos[i]}</span>
-            : <span className="text-muted">______</span>}
-          {i < f.partes.length - 1 ? ' ' : ''}
-        </React.Fragment>
-      ))}
-      {f.rellenos ? '.' : '…'}
+      {partirEnHuecos(texto).map((t, i) =>
+        t.tipo === 'hueco'
+          ? <span key={i} className="text-muted">{t.valor}</span>
+          : <React.Fragment key={i}>{t.valor}</React.Fragment>
+      )}
     </p>
+  );
+
+  /* La puerta a la lista del curso. Va plegada y DESPUÉS de la acción: sin
+     lista la herramienta funciona igual, así que quien no la quiera no
+     tropieza con ella. */
+  const PuertaLista = () => (
+    <details className="rounded-xl border border-slate-200 bg-white px-4 py-3">
+      <summary className="text-sm font-semibold text-slate-700 cursor-pointer">
+        {curso.length
+          ? (es ? `Lista del curso · ${curso.length} presentes` : `Class list · ${curso.length} present`)
+          : (es ? 'Cargar la lista del curso, para sortear a quién le toca' : 'Load the class list, to draw whose turn it is')}
+      </summary>
+      <div className="mt-3">
+        {curso.length ? (
+          <>
+            {origen && (
+              <p className="mb-3 text-xs text-indigo-700 bg-indigo-50 border border-indigo-200 rounded-lg px-2.5 py-2">
+                {es
+                  ? `${origen.curso || 'Curso'} · clase ${origen.clase} del ${origen.fecha}: ${origen.ausentes} no vinieron y no entran en el sorteo.`
+                  : `${origen.curso || 'Course'} · class ${origen.clase} on ${origen.fecha}: ${origen.ausentes} were absent and are out of the draw.`}
+              </p>
+            )}
+            <p className="text-xs text-muted mb-2">{curso.join(' · ')}</p>
+            <button onClick={() => onCambiarLista?.()} className={ENLACE}>
+              {es ? 'cambiar lista' : 'change list'}
+            </button>
+          </>
+        ) : (
+          <CargarCurso lang={lang} onCargar={onCargar} compacto />
+        )}
+      </div>
+    </details>
   );
 
   return (
@@ -146,8 +154,8 @@ const Duda = ({ lang = 'es', nivel = null, curso = [], origen = null, onCargar, 
         <>
           <h2 className="text-lg font-bold text-slate-900 mb-1">{es ? 'La duda' : 'The doubt'}</h2>
           <p className="text-sm text-muted mb-4">
-            {es ? 'Para cerrar: cada uno nombra lo que le quedó a medias, con un molde. No guarda nada.'
-                : 'To close the lesson: everyone names what is still unclear, with a sentence frame. Nothing is stored.'}
+            {es ? 'Para cerrar: cada uno nombra lo que le quedó a medias, con un molde que escribes tú. No guarda nada.'
+                : 'To close the lesson: everyone names what is still unclear, with a frame you write. Nothing is stored.'}
           </p>
         </>
       )}
@@ -155,92 +163,45 @@ const Duda = ({ lang = 'es', nivel = null, curso = [], origen = null, onCargar, 
       {/* ── PREPARAR ──────────────────────────────────────────────────────── */}
       {fase === 'preparar' && (
         <div className="space-y-4">
-          <div>
-            <p className="text-xs font-semibold text-slate-600 mb-1.5">{es ? 'Molde' : 'Frame'}</p>
-            <div className="flex flex-wrap gap-1.5">
-              {MOLDES.map(m => (
-                <button key={m.id} onClick={() => setMolde(m.id)} aria-pressed={molde === m.id}
-                        disabled={m.id === 'par' && !pares.length}
-                        className={`${opcion(molde === m.id)} ${m.id === 'par' && !pares.length ? 'opacity-40' : ''}`}>
-                  {m.rotulo}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {molde === 'par' && pares.length > 0 && (
-            <div>
-              <p className="text-xs font-semibold text-slate-600 mb-1.5">
-                {es ? 'El par' : 'The pair'}{' '}
-                <span className="font-normal text-muted">
-                  {nivel ? (es ? `· los que ${nombreDeCurso(nivel, lang)} puede confundir` : `· the ones ${nombreDeCurso(nivel, lang)} can mix up`)
-                         : (es ? '· sin curso elegido, salen todos' : '· no course selected, all of them')}
-                </span>
-              </p>
-              <div className="flex flex-wrap gap-1.5">
-                {pares.map(p => (
-                  <button key={p.id} onClick={() => setPar(p)} aria-pressed={par?.id === p.id}
-                          title={p.porque} className={opcion(par?.id === p.id)}>
-                    {es ? `${p.a.es} / ${p.b.es}` : `${p.a.en} / ${p.b.en}`}
-                  </button>
-                ))}
-              </div>
-              {/* El porqué del par elegido, para el profesor y no para proyectar:
-                  a veces hace falta acordarse de por qué ese y no otro. */}
-              {par && <p className="mt-2 text-xs text-muted">{par.porque}</p>}
-            </div>
-          )}
+          <label className="block">
+            <span className="text-xs font-semibold text-slate-600">
+              {es ? 'El molde' : 'The frame'}{' '}
+              <span className="font-normal text-muted">
+                {es ? '· los huecos se escriben con guiones bajos: ______'
+                    : '· write the blanks with underscores: ______'}
+              </span>
+            </span>
+            <textarea
+              value={texto} rows={2}
+              onChange={(e) => { setTexto(e.target.value); }}
+              placeholder={es ? `De lo de hoy, todavía no me sale ${HUECO}.` : `From today, I still cannot ${HUECO}.`}
+              className="mt-1 w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 outline-none"
+            />
+          </label>
 
           <div>
             <p className="text-xs font-semibold text-slate-600 mb-1.5">{es ? 'Para escribirla' : 'To write it'}</p>
             <div className="flex flex-wrap gap-1.5">
-              {SEGUNDOS.map(s => (
-                <button key={s} onClick={() => { setTotal(s); setRestante(s); }} aria-pressed={total === s}
-                        className={opcion(total === s)}>
-                  {formatoReloj(s)}
+              {SEGUNDOS.map(sg => (
+                <button key={sg} onClick={() => { setTotal(sg); setRestante(sg); }} aria-pressed={total === sg}
+                        className={opcion(total === sg)}>
+                  {formatoReloj(sg)}
                 </button>
               ))}
             </div>
           </div>
 
-          <div className="rounded-xl border border-slate-200 bg-white px-4 py-4">
-            <Molde />
-          </div>
-
-          <button onClick={arrancar} className={ACCION}>{es ? 'Proyectar' : 'Project it'}</button>
-
-          {/* LA LISTA DEL CURSO, aquí y no solo en Grupos. Se ofrece en la fase
-              de preparar porque es donde hay tiempo de pegarla — con el reloj
-              corriendo, no. Y es opcional a propósito: sin lista la herramienta
-              funciona igual, solo que pide voluntarios. Por eso va al final y
-              plegada, después de la acción y no antes: quien no la quiera no
-              tropieza con ella. */}
-          <details className="rounded-xl border border-slate-200 bg-white px-4 py-3">
-            <summary className="text-sm font-semibold text-slate-700 cursor-pointer">
-              {curso.length
-                ? (es ? `Lista del curso · ${curso.length} presentes` : `Class list · ${curso.length} present`)
-                : (es ? 'Cargar la lista del curso, para sortear a quién le toca' : 'Load the class list, to draw whose turn it is')}
-            </summary>
-            <div className="mt-3">
-              {curso.length ? (
-                <>
-                  {origen && (
-                    <p className="mb-3 text-xs text-indigo-700 bg-indigo-50 border border-indigo-200 rounded-lg px-2.5 py-2">
-                      {es
-                        ? `${origen.curso || 'Curso'} · clase ${origen.clase} del ${origen.fecha}: ${origen.ausentes} no vinieron y no entran en el sorteo.`
-                        : `${origen.curso || 'Course'} · class ${origen.clase} on ${origen.fecha}: ${origen.ausentes} were absent and are out of the draw.`}
-                    </p>
-                  )}
-                  <p className="text-xs text-muted mb-2">{curso.join(' · ')}</p>
-                  <button onClick={() => onCambiarLista?.()} className={ENLACE}>
-                    {es ? 'cambiar lista' : 'change list'}
-                  </button>
-                </>
-              ) : (
-                <CargarCurso lang={lang} onCargar={onCargar} compacto />
-              )}
+          {tieneTexto(texto) && (
+            <div className="rounded-xl border border-slate-200 bg-white px-4 py-4">
+              <Molde />
             </div>
-          </details>
+          )}
+
+          <button onClick={arrancar} disabled={!tieneTexto(texto)} className={ACCION}>
+            {es ? 'Proyectar' : 'Project it'}
+          </button>
+
+          <PuertaLista />
         </div>
       )}
 
@@ -252,8 +213,6 @@ const Duda = ({ lang = 'es', nivel = null, curso = [], origen = null, onCargar, 
             {es ? 'En silencio. Vale decir «casi todo»: eso también es un lugar.'
                 : 'In silence. “Almost everything” is a valid answer: that is a place too.'}
           </p>
-          {/* El reloj, con los últimos diez segundos en rojo. `aria-live` off:
-              cantarlo cada segundo sería insoportable. */}
           <p
             className={`text-center font-extrabold tabular-nums leading-none ${
               estado === 'normal' ? 'text-slate-900' : 'text-red-600'
@@ -288,8 +247,6 @@ const Duda = ({ lang = 'es', nivel = null, curso = [], origen = null, onCargar, 
                 {elegidos.map(n => <li key={n}>{n}</li>)}
               </ul>
             ) : (
-              /* Sin lista cargada la herramienta no se cae: pide voluntarios,
-                 que es lo que se hacía antes de que existiera. */
               <p className={`mt-2 font-bold text-slate-900 ${grande ? '' : 'text-2xl'}`}
                  style={{ fontSize: grande ? M.nombre : undefined }}>
                 {es ? 'Tres voluntarios' : 'Three volunteers'}
@@ -308,8 +265,8 @@ const Duda = ({ lang = 'es', nivel = null, curso = [], origen = null, onCargar, 
 
           {!curso.length && (
             <p className="text-xs text-muted text-center">
-              {es ? 'Con la lista del curso cargada, aquí salen tres nombres de quienes vinieron hoy. Se carga al elegir el molde.'
-                  : 'With the class list loaded, three names of whoever came today show up here. You load it when choosing the frame.'}
+              {es ? 'Con la lista del curso cargada, aquí salen tres nombres de quienes vinieron hoy. Se carga al escribir el molde.'
+                  : 'With the class list loaded, three names of whoever came today show up here. You load it while writing the frame.'}
             </p>
           )}
         </div>

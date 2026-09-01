@@ -29,6 +29,23 @@ import { correr } from './contraste-render.generated.mjs';
    completa: mientras está abierto, cualquier clic en la página de debajo lo
    intercepta el velo. Se cierra por su botón y no con Escape para pasar por el
    mismo camino que usa una persona. */
+/* ¿SIGUE VIVA LA APP? Todo lo de aquí abajo tolera que un elemento no esté
+   —tiene que hacerlo, porque el segundo pase llega con el estado que dejó el
+   primero—, y esa misma tolerancia hace que una app CAÍDA no rompa nada: se
+   recorren las pantallas sin encontrar nada, no se mide nada y se canta verde.
+   Pasó dos veces construyendo el cierre: un JSX inválido, y una constante usada
+   sin importarla. La segunda se desmontaba en la CUARTA pantalla, así que un
+   ancla solo al arrancar no la habría visto — y de hecho no la vio.
+   El bucle de pantallas vive en el runner generado, que no se toca a mano, pero
+   `entrarDocente` lo llaman todas las pantallas de herramientas y de cierre:
+   comprobar ahí es comprobar antes de cada una de las que importan.
+   La cabecera es lo único que está en todas las vistas del hub. */
+const viva = async (page, donde) => {
+  if (!(await page.locator('header button').count())) {
+    throw new Error(`la app se cayó (${donde}): la cabecera ya no está. Mira la consola del navegador antes de creerle a esta sonda.`);
+  }
+};
+
 const cerrarFrase = async (page) => {
   const dialogo = page.locator('[role="dialog"]');
   if (!(await dialogo.count()) || !(await dialogo.first().isVisible())) return;
@@ -41,6 +58,7 @@ const cerrarFrase = async (page) => {
    que ir a la pestaña ANTES de medir: lo oculto no se mide, y una sonda que
    mide una pantalla vacía da un verde que no significa nada. */
 const entrarDocente = async (page) => {
+  await viva(page, 'antes de entrar a las herramientas');
   await cerrarFrase(page);
   const puerta = page.locator('button:has-text("Herramientas de clase"), button:has-text("Classroom tools")').first();
   if (await puerta.count()) { await puerta.click(); await page.waitForTimeout(400); }
@@ -72,11 +90,7 @@ correr({
        pantallas sin encontrar nada, no mide nada y canta verde. Pasó de verdad
        construyendo el semáforo, con un JSX inválido. Un ancla que tiene que
        existir sí o sí convierte ese verde en un fallo ruidoso. */
-    const raiz = page.locator('h1');
-    if (!(await raiz.count()) || !(await raiz.first().isVisible())) {
-      throw new Error('la app no montó: no hay <h1> en la página. Mira la consola del navegador antes de creerle a esta sonda.');
-    }
-
+    await viva(page, 'al arrancar');
     await cerrarFrase(page);
     const nivel = page.locator('button[aria-pressed]').first();
     if (await nivel.count()) { await nivel.click(); await page.waitForTimeout(400); }
@@ -269,165 +283,147 @@ correr({
       },
     },
     {
-      /* EL SEMÁFORO DEL CIERRE, en sus dos estados, porque son dos pantallas
-         distintas y no dos momentos de la misma: contando se proyectan los
-         tres niveles APAGADOS —el reparto no puede verse todavía— y solo al
-         final se encienden. Encendido estrena además los números en color de
-         cada nivel sobre la carcasa oscura, que es un par que no existe en
-         ninguna otra pantalla de la suite.
-         La carcasa es un objeto oscuro FIJO en los dos temas, así que aquí no
-         se mide si la capa oscura la invierte —no debe— sino si el texto que
-         va encima se lee. */
-      nombre: 'Cierre · semáforo contando',
+      /* LAS CINCO DEL CIERRE ABREN VACÍAS y sin nada sugerido, así que entrar en
+         la pestaña no deja nada que medir: hay que ESCRIBIR primero. Se escribe
+         con `fill`, que es idempotente —`ir` corre una vez por tema y volver a
+         escribir deja lo mismo— y que además es lo que hace el docente.
+
+         EL MURO, con tarjetas dentro. Estrena el único verde con texto de la
+         suite: emerald-900 sobre emerald-50, un par que no sale en ninguna otra
+         pantalla y que en oscuro no tiene quien lo invierta. */
+      nombre: 'Cierre · el muro',
+      ir: async (page) => {
+        await entrarDocente(page);
+        await pestana(page, 'El muro', 'The wall');
+        const volver = page.locator('button:visible:has-text("empezar de nuevo"), button:visible:has-text("start over"), button:visible:has-text("Cambiar el molde"), button:visible:has-text("Change the frame")').first();
+        if (await volver.count()) { await volver.click(); await page.waitForTimeout(300); }
+        const molde = page.locator('textarea:visible').first();
+        if (await molde.count()) { await molde.fill('Hoy pude ______, y hace un mes no.'); await page.waitForTimeout(250); }
+        const proy = page.locator('button:visible:has-text("Proyectar"), button:visible:has-text("Project it")').first();
+        if (await proy.count()) { await proy.click(); await page.waitForTimeout(350); }
+        const construir = page.locator('button:visible:has-text("A construir el muro"), button:visible:has-text("Build the wall")').first();
+        if (await construir.count()) { await construir.click(); await page.waitForTimeout(300); }
+        for (const logro of ['pedir comida', 'entender el audio', 'escribir cinco frases', 'preguntar la hora']) {
+          const campo = page.locator('input:visible').first();
+          if (!await campo.count()) break;
+          await campo.fill(logro);
+          const anotar = page.locator('button:visible:has-text("Anotar"), button:visible:has-text("Add")').first();
+          if (await anotar.count() && !(await anotar.isDisabled())) { await anotar.click(); await page.waitForTimeout(120); }
+        }
+        /* Se deja algo escrito y sin anotar: así se mide el aviso de repetido y
+           el botón deshabilitado, que es lo que más se cae bajo AA. */
+        const campo = page.locator('input:visible').first();
+        if (await campo.count()) { await campo.fill('pedir comida'); await page.waitForTimeout(250); }
+      },
+    },
+    {
+      /* EL SEMÁFORO ENCENDIDO, que es donde viven los números en color de cada
+         nivel sobre la carcasa oscura. La carcasa es un objeto fijo en los dos
+         temas: aquí no se mide si la capa oscura la invierte —no debe— sino si
+         lo que va encima se lee. */
+      nombre: 'Cierre · semáforo encendido',
       ir: async (page) => {
         await entrarDocente(page);
         await pestana(page, 'Semáforo', 'Traffic light');
-        const proyectar = page.locator('button:visible:has-text("Proyectar"), button:visible:has-text("Project it")').first();
-        if (await proyectar.count()) { await proyectar.click(); await page.waitForTimeout(400); }
+        for (const rot of ['Otro objetivo', 'Another objective', 'Cambiar el objetivo', 'Change the objective']) {
+          const b = page.locator(`button:visible:has-text("${rot}")`).first();
+          if (await b.count()) { await b.click(); await page.waitForTimeout(250); break; }
+        }
+        const campos = page.locator('input[type="text"]:visible');
+        if (await campos.count() >= 2) {
+          await campos.nth(0).fill('I can order food in a restaurant.');
+          await campos.nth(1).fill('Food · Unit 4');
+          await page.waitForTimeout(250);
+        }
+        const proy = page.locator('button:visible:has-text("Proyectar"), button:visible:has-text("Project it")').first();
+        if (await proy.count()) { await proy.click(); await page.waitForTimeout(350); }
         const mas = page.locator('button:visible:has-text("+1")');
         if (await mas.count() === 3) {
           for (let i = 0; i < 4; i++) await mas.nth(0).click();
           for (let i = 0; i < 14; i++) await mas.nth(1).click();
           for (let i = 0; i < 2; i++) await mas.nth(2).click();
         }
-        await page.waitForTimeout(350);
-      },
-    },
-    {
-      /* El mismo semáforo ENCENDIDO. Va aparte porque llega desde el anterior:
-         el conteo sobrevive entre pantallas y aquí solo hay que destapar. */
-      nombre: 'Cierre · semáforo encendido',
-      ir: async (page) => {
-        await entrarDocente(page);
-        await pestana(page, 'Semáforo', 'Traffic light');
         const mostrar = page.locator('button:visible:has-text("Mostrar el semáforo"), button:visible:has-text("Show the traffic light")').first();
-        if (await mostrar.count()) { await mostrar.click(); await page.waitForTimeout(700); }
+        if (await mostrar.count()) { await mostrar.click(); await page.waitForTimeout(600); }
       },
     },
     {
-      /* LA DUDA, en el molde. El nombre de cada tiempo va en `--marca` DENTRO
-         de una frase en tinta normal, que es un par nuevo: acento de marca
-         sobre el fondo de la página, sin tarjeta blanca debajo que lo salve.
-         Se mide antes de arrancar el reloj para que el molde esté quieto. */
-      nombre: 'Cierre · la duda',
-      ir: async (page) => {
-        await entrarDocente(page);
-        await pestana(page, 'La duda', 'The doubt');
-        const otra = page.locator('button:visible:has-text("Otra duda"), button:visible:has-text("Another doubt")').first();
-        if (await otra.count()) { await otra.click(); await page.waitForTimeout(300); }
-        const cambiar = page.locator('button:visible:has-text("Cambiar el molde"), button:visible:has-text("Change the frame")').first();
-        if (await cambiar.count()) { await cambiar.click(); await page.waitForTimeout(300); }
-        /* La puerta a la lista del curso va plegada —quien no la quiera no
-           tropieza con ella— y plegada no se mide. Se abre por propiedad y no
-           con un clic: `ir` se ejecuta una vez por tema y un clic la CERRARÍA
-           en el segundo pase, midiendo una pantalla vacía. */
-        const det = page.locator('details:visible').first();
-        if (await det.count()) { await det.evaluate(d => { d.open = true; }); await page.waitForTimeout(250); }
-        await page.waitForTimeout(200);
-      },
-    },
-    {
-      /* EL RELOJ DE LA DUDA EN ROJO. Los últimos diez segundos son un estado
-         propio y es el que se ve desde el fondo de la sala — el mismo criterio
-         que el temporizador de aquí abajo. Se llega bajando el tiempo al mínimo
-         y esperando: 60 s serían un minuto de sonda, así que en vez de eso se
-         mide arrancado y se acepta que el número esté en su estado normal; el
-         rojo lo cubre `text-red-600`, que ya se mide en el temporizador.
-         Lo que SÍ es exclusivo de aquí y hay que medir es la línea de
-         instrucción bajo el molde y el reloj a tamaño de proyección. */
-      nombre: 'Cierre · la duda, escribiendo',
-      ir: async (page) => {
-        await entrarDocente(page);
-        await pestana(page, 'La duda', 'The doubt');
-        const proyectar = page.locator('button:visible:has-text("Proyectar"), button:visible:has-text("Project it")').first();
-        if (await proyectar.count()) { await proyectar.click(); await page.waitForTimeout(500); }
-      },
-    },
-    {
-      /* Y a quién le toca. Sin lista cargada dice «tres voluntarios», que es
-         el estado que un profesor ve el primer día y el que se olvidaría de
-         medir. */
-      nombre: 'Cierre · la duda, a quién le toca',
-      ir: async (page) => {
-        await entrarDocente(page);
-        await pestana(page, 'La duda', 'The doubt');
-        const toca = page.locator('button:visible:has-text("A quién le toca"), button:visible:has-text("Se acabó"), button:visible:has-text("Whose turn"), button:visible:has-text("Time is up")').first();
-        if (await toca.count()) { await toca.click(); await page.waitForTimeout(400); }
-      },
-    },
-    {
-      /* LA APUESTA, con el set a la vista. Las consignas son el elemento más
-         grande que proyecta la suite después del dado, y van sobre el fondo de
-         la página con el número de cada una en tinta apagada — un par que no
-         sale en ninguna otra pantalla.
-         Se saca el set explícitamente: sin tocar nada la herramienta abre
-         vacía, y medir una pantalla sin consignas no mide las consignas. */
-      nombre: 'Cierre · apuesta, el set',
-      ir: async (page) => {
-        await entrarDocente(page);
-        await pestana(page, 'Apuesta', 'The bet');
-        const cambiar = page.locator('button:visible:has-text("Cambiar"), button:visible:has-text("Change")').first();
-        if (await cambiar.count()) { await cambiar.click(); await page.waitForTimeout(300); }
-        const ver = page.locator('button:visible:has-text("Ver el set"), button:visible:has-text("See the set")').first();
-        if (await ver.count()) { await ver.click(); await page.waitForTimeout(300); }
-      },
-    },
-    {
-      /* EL MOMENTO DE APOSTAR. Es la única pantalla de la suite cuyo elemento
-         principal es un signo de interrogación gigante en tinta apagada, y lo
-         apagado es justo lo que suele caerse bajo AA. Además aquí las
-         consignas DESAPARECEN a propósito, así que es una pantalla distinta y
-         no un estado de la anterior. */
+      /* LA APUESTA en el momento de apostar: la única pantalla de la suite cuyo
+         elemento principal es un signo de interrogación gigante en tinta
+         apagada, y lo apagado es justo lo que se cae bajo AA. */
       nombre: 'Cierre · apuesta, apostando',
       ir: async (page) => {
         await entrarDocente(page);
         await pestana(page, 'Apuesta', 'The bet');
+        for (const rot of ['Cambiar', 'Change', 'Volver', 'Back']) {
+          const b = page.locator(`button:visible:has-text("${rot}")`).first();
+          if (await b.count()) { await b.click(); await page.waitForTimeout(250); break; }
+        }
+        const caja = page.locator('textarea:visible').first();
+        if (await caja.count()) {
+          await caja.fill('Usa «although» en una oración\nDescribe tu fin de semana\nUna pregunta con «how often»\nAlgo que hiciste ayer\nUn plan para el sábado');
+          await page.waitForTimeout(250);
+        }
         const arrancar = page.locator('button:visible:has-text("Proyectar y arrancar"), button:visible:has-text("Project and start")').first();
-        if (await arrancar.count()) { await arrancar.click(); await page.waitForTimeout(400); }
+        if (await arrancar.count()) { await arrancar.click(); await page.waitForTimeout(350); }
         const apostar = page.locator('button:visible:has-text("a apostar"), button:visible:has-text("place the bet")').first();
-        if (await apostar.count()) { await apostar.click(); await page.waitForTimeout(350); }
+        if (await apostar.count()) { await apostar.click(); await page.waitForTimeout(300); }
       },
     },
     {
-      /* Y la comparación, que es el pago de todo esto: dos marcos vacíos que
-         cada alumno rellena en su cuaderno, y la pregunta de abajo. */
+      /* LA APUESTA comparando: los marcos vacíos con la raya sobre la que se
+         escribe, que es un elemento gráfico y pide 3:1 — el guion que había
+         antes daba 1,48:1 y lo cazó esta misma sonda. */
       nombre: 'Cierre · apuesta, comparando',
       ir: async (page) => {
         await entrarDocente(page);
         await pestana(page, 'Apuesta', 'The bet');
         const corregir = page.locator('button:visible:has-text("Ahora corrijan"), button:visible:has-text("Now check")').first();
-        if (await corregir.count()) { await corregir.click(); await page.waitForTimeout(400); }
+        if (await corregir.count()) { await corregir.click(); await page.waitForTimeout(350); }
       },
     },
     {
-      /* ANTES / AHORA. Estrena el par más delicado del cierre: una frase
-         TACHADA en tinta apagada sobre un tinte gris —lo que ya no se piensa—
-         al lado de la misma frase en tinta plena. Lo apagado con tachado es la
-         combinación que más se cae bajo AA, y aquí no puede: es una oración
-         modelo que la clase tiene que poder leer entera para reconocerla como
-         suya. Se abre además la puerta plegada de la lista, por lo mismo que
-         en «La duda»: plegada no se mide. */
+      /* LA DUDA con el molde escrito: los huecos van en tinta apagada dentro de
+         una frase en tinta plena, y apagado sobre el fondo de la página no tiene
+         tarjeta blanca que lo salve. Se abre además la puerta plegada de la
+         lista, porque plegada no se mide. */
+      nombre: 'Cierre · la duda',
+      ir: async (page) => {
+        await entrarDocente(page);
+        await pestana(page, 'La duda', 'The doubt');
+        for (const rot of ['Otra duda', 'Another doubt', 'Cambiar el molde', 'Change the frame']) {
+          const b = page.locator(`button:visible:has-text("${rot}")`).first();
+          if (await b.count()) { await b.click(); await page.waitForTimeout(250); break; }
+        }
+        const caja = page.locator('textarea:visible').first();
+        if (await caja.count()) { await caja.fill('De lo de hoy, todavía no me sale ______.'); await page.waitForTimeout(250); }
+        const dets = page.locator('details:visible');
+        for (let i = 0; i < await dets.count(); i++) await dets.nth(i).evaluate(d => { d.open = true; });
+        await page.waitForTimeout(250);
+      },
+    },
+    {
+      /* ANTES / AHORA. El par más delicado del cierre: una frase TACHADA en tinta
+         apagada sobre un tinte gris, al lado de la misma frase en tinta plena.
+         Lo apagado con tachado es lo que más se cae bajo AA, y aquí no puede: es
+         una oración modelo que la clase tiene que poder leer entera. */
       nombre: 'Cierre · antes y ahora',
       ir: async (page) => {
         await entrarDocente(page);
         await pestana(page, 'Antes / Ahora', 'Then / Now');
-        const otro = page.locator('button:visible:has-text("Otro error"), button:visible:has-text("Another mistake"), button:visible:has-text("Cambiar el error"), button:visible:has-text("Change the mistake")').first();
-        if (await otro.count()) { await otro.click(); await page.waitForTimeout(300); }
-        const det = page.locator('details:visible').first();
-        if (await det.count()) { await det.evaluate(d => { d.open = true; }); await page.waitForTimeout(250); }
-      },
-    },
-    {
-      /* Y el marco EN BLANCO, que es otro estado: los dos lados con la línea
-         de puntos en vez de las oraciones. Es el que se usa el día que la
-         clase no fue de gramática, y el hueco vacío en tinta apagada es justo
-         lo que nadie se acuerda de medir. */
-      nombre: 'Cierre · antes y ahora, en blanco',
-      ir: async (page) => {
-        await entrarDocente(page);
-        await pestana(page, 'Antes / Ahora', 'Then / Now');
-        const blanco = page.locator('button:visible:has-text("En blanco"), button:visible:has-text("Blank")').first();
-        if (await blanco.count()) { await blanco.click(); await page.waitForTimeout(300); }
+        for (const rot of ['Otro', 'Another one', 'Cambiar', 'Change']) {
+          const b = page.locator(`button:visible:has-text("${rot}")`).first();
+          if (await b.count()) { await b.click(); await page.waitForTimeout(250); break; }
+        }
+        const campos = page.locator('input[type="text"]:visible');
+        if (await campos.count() >= 2) {
+          await campos.nth(0).fill('I have seen him yesterday.');
+          await campos.nth(1).fill('I saw him yesterday.');
+          await page.waitForTimeout(250);
+        }
+        const dets = page.locator('details:visible');
+        for (let i = 0; i < await dets.count(); i++) await dets.nth(i).evaluate(d => { d.open = true; });
+        await page.waitForTimeout(250);
       },
     },
     {
@@ -444,9 +440,21 @@ correr({
     },
   ],
 
+  /* SE BUSCA POR `aria-label`, NO POR EL RÓTULO. El botón muestra el modo AL QUE
+     PUEDES IR, así que dice «Oscuro» en claro y «Claro» en oscuro: buscar el
+     texto «Oscuro» funciona por casualidad, y el día que algo deje la página en
+     oscuro antes de tiempo, la sonda se queda treinta segundos esperando un
+     botón que existe y se llama de otra manera. El `aria-label` no cambia de
+     forma: «Cambiar a modo …».
+     Y se COMPRUEBA el resultado. Si el segundo pase no está de verdad en oscuro,
+     mediría la capa clara dos veces y cantaría verde sobre la mitad de la app. */
   cambiarTema: async (page) => {
-    await page.locator('button:has-text("Oscuro")').first().click();
+    const boton = page.locator('header button[aria-label^="Cambiar a modo"], header button[aria-label^="Switch to"]').first();
+    if (!(await boton.count())) throw new Error('no se encontró el conmutador de tema en la cabecera');
+    await boton.click();
     await page.waitForTimeout(600);
+    const tema = await page.evaluate(() => document.documentElement.getAttribute('data-theme'));
+    if (tema !== 'dark') throw new Error(`el segundo pase no quedó en oscuro (data-theme=${tema}): se estaría midiendo la capa clara dos veces`);
   },
 
   /* Un fallo que se decide no arreglar se anota aquí con su motivo, y entonces

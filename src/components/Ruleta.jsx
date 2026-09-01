@@ -94,6 +94,29 @@ const Ruleta = ({ lang = 'es', grande = false }) => {
   const quedan = items.length - usados.length;
   const rotular = queRotular(items.length);
 
+  /* ── CÓMO SE ORIENTA EL TEXTO DENTRO DE UN SECTOR ────────────────────────
+     A LO LARGO DEL RADIO, no cruzándolo. Iba tangencial —perpendicular al
+     radio— y ahí el sector es estrechísimo: el ancho disponible es la cuerda,
+     que con doce tarjetas mide una uña. Por eso había que recortar a catorce
+     caracteres y aun así se veía apretado.
+
+     Un sector es un triángulo isósceles y sus dos lados iguales son los radios.
+     Puesto paralelo a ellos, el texto dispone de TODO el radio —96 unidades en
+     vez de la cuerda— y cabe entero sin encoger nada.
+
+     LA VUELTA ES UN CUARTO, no 45°: tangencial y radial son perpendiculares.
+     El giro exacto depende de dónde caiga el sector, y por eso se calcula.
+
+     Y SE VOLTEA LA MITAD IZQUIERDA. Con el mismo giro para todos, los sectores
+     de la izquierda quedan cabeza abajo. Se les da la vuelta para que todos se
+     lean de izquierda a derecha; es lo que hace cualquier rueda de papel. */
+  const giro = (i) => {
+    const centro = centroDelSector(i, items.length);
+    /* Entre 0 y 180 el sector mira a la derecha y el texto sale bien con un
+       cuarto de vuelta en un sentido; en la otra mitad, en el contrario. */
+    return centro < 180 ? centro - 90 : centro + 90;
+  };
+
   return (
     <section className={grande ? 'w-full max-w-3xl mx-auto' : 'w-full max-w-xl mx-auto'}>
       <h2 className="text-lg font-bold text-slate-900 mb-1">{es ? 'Ruleta' : 'Wheel'}</h2>
@@ -142,35 +165,42 @@ const Ruleta = ({ lang = 'es', grande = false }) => {
                 {items.map((item, i) => (
                   <path key={i} d={sector(i, items.length)} fill={TINTES[i % 2]} stroke="#fff" strokeWidth="0.8" />
                 ))}
-                {/* El número, SIEMPRE: cabe en cualquier sector y es lo que hace
-                    que la rueda nunca se quede muda. Va pegado al borde, que es
-                    donde el sector es ancho. */}
-                {rotular.numero && items.map((item, i) => (
-                  <text
-                    key={'n' + i}
-                    x="100" y="100"
-                    transform={`rotate(${centroDelSector(i, items.length)} 100 100) translate(0 -80)`}
-                    textAnchor="middle"
-                    className="fill-slate-700"
-                    style={{ fontSize: '9px', fontWeight: 700 }}
-                  >
-                    {i + 1}
-                  </text>
-                ))}
-                {/* Y la palabra, solo cuando de verdad cabe: apretada hasta
-                    entrar en un sector de 18° queda ilegible, que es peor. */}
-                {rotular.palabra && items.map((item, i) => (
-                  <text
-                    key={i}
-                    x="100" y="100"
-                    transform={`rotate(${centroDelSector(i, items.length)} 100 100) translate(0 -58)`}
-                    textAnchor="middle"
-                    className="fill-slate-700"
-                    style={{ fontSize: '8px', fontWeight: 600 }}
-                  >
-                    {item.length > 14 ? item.slice(0, 13) + '…' : item}
-                  </text>
-                ))}
+                {/* UNA SOLA ETIQUETA POR SECTOR: el número y la palabra en el
+                    mismo texto, con el número en un tspan para poder darle más
+                    peso. Separados no se podía: el número iba anclado al borde y
+                    la palabra un poco más adentro, y en la mitad izquierda —donde
+                    el texto crece en sentido contrario— un número de dos cifras
+                    se comía la primera letra («12ravel»). Juntos los coloca el
+                    navegador y no hay nada que cuadrar a mano.
+
+                    Anclada al BORDE y creciendo hacia el centro: es donde el
+                    sector es ancho, así que todas arrancan alineadas y las largas
+                    se meten hacia dentro en vez de salirse de la rueda. */}
+                {rotular.numero && items.map((item, i) => {
+                  const derecha = centroDelSector(i, items.length) < 180;
+                  const palabra = rotular.palabra
+                    ? (item.length > 20 ? item.slice(0, 19) + '…' : item)
+                    : '';
+                  const numero = <tspan style={{ fontWeight: 700 }}>{i + 1}</tspan>;
+                  return (
+                    <text
+                      key={i}
+                      x="100" y="100"
+                      transform={`rotate(${giro(i)} 100 100) translate(${derecha ? 86 : -86} 0)`}
+                      textAnchor={derecha ? 'end' : 'start'}
+                      dominantBaseline="central"
+                      className="fill-slate-700"
+                      style={{ fontSize: '8px', fontWeight: 600 }}
+                    >
+                      {/* En la mitad derecha el borde queda al final de la línea y
+                          en la izquierda al principio, así que el número cambia de
+                          sitio para quedar siempre pegado al borde. */}
+                      {derecha
+                        ? <>{numero}{palabra ? ' ' + palabra : ''}</>
+                        : <>{palabra ? palabra + ' ' : ''}{numero}</>}
+                    </text>
+                  );
+                })}
                 <circle cx="100" cy="100" r="10" fill="#fff" stroke="#c7d2fe" strokeWidth="2" />
               </svg>
             </div>

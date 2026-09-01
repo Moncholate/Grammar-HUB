@@ -87,7 +87,27 @@ const LETRA = '#1e293b';
 const MARCA = '#818cf8';    /* la solución del profesor, índigo */
 const HALLADA = '#10b981';  /* lo que el curso ya encontró, verde */
 const ANCLA = '#fde68a';    /* la primera letra elegida, esperando la segunda */
-const GROSOR = 0.82;        /* el grueso del trazo, en casillas */
+const GROSOR = 0.82;        /* el grueso de la cápsula, en casillas */
+const RADIO = GROSOR / 2;
+const FILO = 0.09;          /* el grueso del contorno de la cápsula hueca */
+
+/* EL CONTORNO DE LA CÁPSULA, dibujado a mano. Es la forma que se hace en el
+   papel al rodear una palabra: dos rectas paralelas al trazo y un semicírculo
+   en cada punta. Se dibuja como camino y no como línea gruesa porque una línea
+   gruesa solo sabe salir RELLENA, y aquí hace falta poder vaciarla. */
+const capsula = (x1, y1, x2, y2, r) => {
+  const largo = Math.hypot(x2 - x1, y2 - y1) || 1;
+  const dx = (x2 - x1) / largo, dy = (y2 - y1) / largo;
+  const px = -dy * r, py = dx * r;   /* perpendicular, de largo r */
+  return [
+    `M ${x1 + px} ${y1 + py}`,
+    `L ${x2 + px} ${y2 + py}`,
+    `A ${r} ${r} 0 0 1 ${x2 - px} ${y2 - py}`,
+    `L ${x1 - px} ${y1 - py}`,
+    `A ${r} ${r} 0 0 1 ${x1 + px} ${y1 + py}`,
+    'Z',
+  ].join(' ');
+};
 
 const Sopa = ({ lang = 'es', grande = false }) => {
   const es = lang === 'es';
@@ -179,22 +199,12 @@ const Sopa = ({ lang = 'es', grande = false }) => {
     let x1 = a.col + 0.5, y1 = a.fila + 0.5;
     let x2 = z.col + 0.5, y2 = z.fila + 0.5;
 
-    /* EL TRAZO DISCONTINUO NO PUEDE LLEVAR PUNTAS REDONDEADAS. La punta redonda
-       no se la pone el svg a la linea entera: se la pone A CADA TROCITO, y cada
-       casquete sobresale medio grosor. Dos casquetes suman un grosor completo,
-       0.82 de casilla, y se tragan enteros unos huecos de 0.6: la linea sale
-       CONTINUA y la senal de forma se pierde sin dar ningun error.
-       Asi que aqui se alarga la linea medio grosor por cada punta y alla se
-       corta a escuadra: la capsula termina donde terminaba —rodeando la primera
-       y la ultima letra— y los huecos son huecos de verdad. */
-    if (!encontrada) {
-      const largo = Math.hypot(x2 - x1, y2 - y1) || 1;
-      const ex = ((x2 - x1) / largo) * (GROSOR / 2);
-      const ey = ((y2 - y1) / largo) * (GROSOR / 2);
-      x1 -= ex; y1 -= ey; x2 += ex; y2 += ey;
-    }
-
-    return [{ palabra: p.palabra, encontrada, color: encontrada ? HALLADA : MARCA, x1, y1, x2, y2 }];
+    return [{
+      palabra: p.palabra,
+      encontrada,
+      color: encontrada ? HALLADA : MARCA,
+      d: capsula(x1, y1, x2, y2, RADIO),
+    }];
   });
 
   return (
@@ -267,21 +277,24 @@ const Sopa = ({ lang = 'es', grande = false }) => {
                   className="absolute inset-0 w-full h-full"
                   style={{ pointerEvents: 'none', zIndex: 0 }}
                 >
+                  {/* RELLENA lo que el curso encontró, HUECA lo que le falta.
+                      La misma cápsula y el mismo sitio: lo único que cambia es
+                      si está pintada por dentro o solo perfilada.
+                      El color no puede ser la única señal —proyectado, el verde
+                      y el índigo se lavan hasta casi el mismo gris pálido— y el
+                      guion tampoco servía: los cortes caían donde caían respecto
+                      a las casillas y se leían como manchas sueltas en vez de
+                      como una palabra marcada. Relleno contra contorno se ve
+                      entero de una vez, y es lo que se hace en el papel. */}
                   {trazos.map(t => (
-                    <line
+                    <path
                       key={t.palabra}
-                      x1={t.x1} y1={t.y1} x2={t.x2} y2={t.y2}
-                      stroke={t.color} strokeWidth={GROSOR}
-                      /* CONTINUO lo encontrado, DISCONTINUO lo que falta. El
-                         color es la lectura rápida para casi todo el curso, pero
-                         no puede ser la ÚNICA: proyectado, el verde y el índigo
-                         se lavan hasta casi el mismo gris pálido y ahí lo que
-                         queda en pie es la forma del trazo. Punta redonda solo
-                         en el continuo; en el discontinuo, a escuadra, o los
-                         casquetes tapan los huecos (arriba está el porqué). */
-                      strokeLinecap={t.encontrada ? 'round' : 'butt'}
-                      strokeDasharray={t.encontrada ? undefined : '0.7 0.5'}
-                      fill="none" opacity="0.32"
+                      d={t.d}
+                      fill={t.encontrada ? t.color : 'none'}
+                      fillOpacity="0.32"
+                      stroke={t.encontrada ? 'none' : t.color}
+                      strokeWidth={FILO}
+                      strokeOpacity="0.85"
                     />
                   ))}
                 </svg>

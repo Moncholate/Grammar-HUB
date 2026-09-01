@@ -87,6 +87,7 @@ const LETRA = '#1e293b';
 const MARCA = '#818cf8';    /* la solución del profesor, índigo */
 const HALLADA = '#10b981';  /* lo que el curso ya encontró, verde */
 const ANCLA = '#fde68a';    /* la primera letra elegida, esperando la segunda */
+const GROSOR = 0.82;        /* el grueso del trazo, en casillas */
 
 const Sopa = ({ lang = 'es', grande = false }) => {
   const es = lang === 'es';
@@ -175,13 +176,25 @@ const Sopa = ({ lang = 'es', grande = false }) => {
     if (!encontrada && !respuestas) return [];
     const cs = casillasDe(p);
     const a = cs[0], z = cs[cs.length - 1];
-    return [{
-      palabra: p.palabra,
-      encontrada,
-      color: encontrada ? HALLADA : MARCA,
-      x1: a.col + 0.5, y1: a.fila + 0.5,
-      x2: z.col + 0.5, y2: z.fila + 0.5,
-    }];
+    let x1 = a.col + 0.5, y1 = a.fila + 0.5;
+    let x2 = z.col + 0.5, y2 = z.fila + 0.5;
+
+    /* EL TRAZO DISCONTINUO NO PUEDE LLEVAR PUNTAS REDONDEADAS. La punta redonda
+       no se la pone el svg a la linea entera: se la pone A CADA TROCITO, y cada
+       casquete sobresale medio grosor. Dos casquetes suman un grosor completo,
+       0.82 de casilla, y se tragan enteros unos huecos de 0.6: la linea sale
+       CONTINUA y la senal de forma se pierde sin dar ningun error.
+       Asi que aqui se alarga la linea medio grosor por cada punta y alla se
+       corta a escuadra: la capsula termina donde terminaba —rodeando la primera
+       y la ultima letra— y los huecos son huecos de verdad. */
+    if (!encontrada) {
+      const largo = Math.hypot(x2 - x1, y2 - y1) || 1;
+      const ex = ((x2 - x1) / largo) * (GROSOR / 2);
+      const ey = ((y2 - y1) / largo) * (GROSOR / 2);
+      x1 -= ex; y1 -= ey; x2 += ex; y2 += ey;
+    }
+
+    return [{ palabra: p.palabra, encontrada, color: encontrada ? HALLADA : MARCA, x1, y1, x2, y2 }];
   });
 
   return (
@@ -258,12 +271,16 @@ const Sopa = ({ lang = 'es', grande = false }) => {
                     <line
                       key={t.palabra}
                       x1={t.x1} y1={t.y1} x2={t.x2} y2={t.y2}
-                      stroke={t.color} strokeWidth="0.82" strokeLinecap="round"
-                      /* CONTINUO lo encontrado, DISCONTINUO lo que falta: sin
-                         esto, verde e índigo son el par que no distingue el
-                         daltonismo rojo-verde y la marca diría dos cosas con
-                         una sola señal. */
-                      strokeDasharray={t.encontrada ? undefined : '1.5 0.6'}
+                      stroke={t.color} strokeWidth={GROSOR}
+                      /* CONTINUO lo encontrado, DISCONTINUO lo que falta. El
+                         color es la lectura rápida para casi todo el curso, pero
+                         no puede ser la ÚNICA: proyectado, el verde y el índigo
+                         se lavan hasta casi el mismo gris pálido y ahí lo que
+                         queda en pie es la forma del trazo. Punta redonda solo
+                         en el continuo; en el discontinuo, a escuadra, o los
+                         casquetes tapan los huecos (arriba está el porqué). */
+                      strokeLinecap={t.encontrada ? 'round' : 'butt'}
+                      strokeDasharray={t.encontrada ? undefined : '0.7 0.5'}
                       fill="none" opacity="0.32"
                     />
                   ))}

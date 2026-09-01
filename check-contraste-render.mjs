@@ -283,6 +283,32 @@ correr({
       },
     },
     {
+      /* LA SOPA DE LETRAS, con la solución encendida. Estrena un par que no
+         sale en ninguna otra pantalla: la letra sobre el RESALTADO de la
+         solución, que es un tinte índigo claro y no el papel blanco. Es el que
+         se cae fácil — una marca demasiado saturada deja la letra debajo
+         ilegible, y entonces la corrección no se puede leer justo cuando toda
+         la clase la está mirando.
+         La cuadrícula es papel fijo en los dos temas, así que aquí no se mide
+         si la capa oscura la invierte —no debe— sino que lo de encima se lea. */
+      nombre: 'Herramientas · sopa de letras',
+      ir: async (page) => {
+        await entrarDocente(page);
+        await pestana(page, 'Sopa de letras', 'Word search');
+        const cambiar = page.locator('button:visible:has-text("cambiar las palabras"), button:visible:has-text("change the words")').first();
+        if (await cambiar.count()) { await cambiar.click(); await page.waitForTimeout(300); }
+        const caja = page.locator('textarea:visible').first();
+        if (await caja.count()) {
+          await caja.fill('apple\nbanana\ncherry\norange\nlemon\ngrape\nmelon\npeach');
+          await page.waitForTimeout(250);
+        }
+        const armar = page.locator('button:visible:has-text("Armar la sopa"), button:visible:has-text("Build the word search")').first();
+        if (await armar.count()) { await armar.click(); await page.waitForTimeout(450); }
+        const ver = page.locator('button:visible:has-text("Ver las respuestas"), button:visible:has-text("Show answers")').first();
+        if (await ver.count()) { await ver.click(); await page.waitForTimeout(350); }
+      },
+    },
+    {
       /* EL CRUCIGRAMA, con la cuadrícula y las respuestas a la vista. Estrena
          tres pares que no salen en ninguna otra pantalla: el número de casilla
          —minúsculo, en la esquina, sobre la casilla blanca—, la letra de la

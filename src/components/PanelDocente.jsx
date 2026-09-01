@@ -44,6 +44,7 @@ import Ruleta from './Ruleta';
 import Grupos from './Grupos';
 import Temporizador from './Temporizador';
 import Crucigrama from './Crucigrama';
+import Sopa from './Sopa';
 import Semaforo from './Semaforo';
 import Duda from './Duda';
 import Apuesta from './Apuesta';
@@ -137,6 +138,7 @@ const PanelDocente = ({ lang = 'es', nivel = null, onVolver }) => {
            347px y se salía de una pantalla de 360. La herramienta se sigue
            titulando «Temporizador» dentro; esto es solo la pestaña. */
         { id: 'tiempo', rotulo: es ? 'Reloj' : 'Timer' },
+        { id: 'sopa', rotulo: es ? 'Sopa de letras' : 'Word search' },
         { id: 'crucigrama', rotulo: es ? 'Crucigrama' : 'Crossword' },
       ],
     },
@@ -219,6 +221,7 @@ const PanelDocente = ({ lang = 'es', nivel = null, onVolver }) => {
                     nombres={nombres} ausentes={ausentes} origen={origen}
                     onCargar={cargarCurso} onAlternar={alternarAusente} onCambiarLista={cambiarLista} /></div>
         <div className={vista === 'tiempo' ? '' : 'hidden'}><Temporizador lang={lang} grande={presentando} /></div>
+        <div className={vista === 'sopa' ? '' : 'hidden'}><Sopa lang={lang} grande={presentando} /></div>
         <div className={vista === 'crucigrama' ? '' : 'hidden'}><Crucigrama lang={lang} grande={presentando} /></div>
         <div className={vista === 'muro' ? '' : 'hidden'}><Muro lang={lang} grande={presentando} /></div>
         <div className={vista === 'semaforo' ? '' : 'hidden'}><Semaforo lang={lang} grande={presentando} /></div>

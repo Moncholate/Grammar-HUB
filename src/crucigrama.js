@@ -38,59 +38,17 @@
    palabras y tiene que saber que salieron ocho.
 
    Este archivo es PURO —ni React ni DOM— para poder probarlo:
-   `tools/check-crucigrama.mjs`.
+   `tools/check-crucigrama.mjs`. El lector de la lista pegada está en
+   `palabras.js`, que comparte con la sopa de letras.
    ========================================================================== */
 
-/** Lo mínimo que se puede cruzar sin que quede ridículo. */
-export const MIN_LARGO = 2;
-/** Tope: más palabras no caben en una pizarra ni en una hoja. */
-export const MAX_PALABRAS = 40;
-
-/* Separadores admitidos entre palabra y pista. La tabulación va primero porque
-   es lo que llega al pegar desde una planilla; «=» es lo que se escribe a mano;
-   « - » con espacios a los lados para no partir «e-mail». */
-const SEPARADOR = /\t|\s+=\s*|\s+[–—-]\s+/;
-
-/** Solo letras: la respuesta de un crucigrama son casillas, y un espacio o un
-    guion no tiene casilla. «ice cream» entra como ICECREAM, que es como se
-    resuelve en cualquier crucigrama de papel. */
-const soloLetras = (s) => String(s == null ? '' : s)
-  .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-  .toUpperCase().replace(/[^A-Z]/g, '');
-
-/**
- * De lo pegado a la lista de entradas.
- * Se conserva `original` —con sus espacios y tildes— porque es lo que se
- * enseña al corregir; `palabra` es lo que ocupa las casillas.
- */
-export const parsearPalabras = (texto) => {
-  const vistas = new Set();
-  const fuera = [];
-  const lista = [];
-  for (const linea of String(texto == null ? '' : texto).split(/\r?\n/)) {
-    const limpia = linea.replace(/^\s*\d+\s*[.)\-]\s*/, '').trim();
-    if (!limpia) continue;
-    const corte = limpia.split(SEPARADOR);
-    const original = corte[0].trim();
-    const pista = corte.slice(1).join(' ').trim();
-    const palabra = soloLetras(original);
-    if (palabra.length < MIN_LARGO) { fuera.push({ original: limpia, motivo: 'corta' }); continue; }
-    if (vistas.has(palabra)) { fuera.push({ original: limpia, motivo: 'repetida' }); continue; }
-    vistas.add(palabra);
-    if (lista.length >= MAX_PALABRAS) { fuera.push({ original: limpia, motivo: 'sobran' }); continue; }
-    lista.push({ palabra, original, pista });
-  }
-  return { lista, fuera };
-};
-
-const barajar = (l, azar) => {
-  const a = [...l];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(azar() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
-};
+/* El lector de la lista pegada vive en `palabras.js`, compartido con la sopa de
+   letras: dos versiones del mismo lector terminan leyendo distinto, y el día que
+   una acepte la tabulación y la otra no, nadie entenderá por qué la misma lista
+   funciona en una actividad y en la otra no. Es el mismo argumento por el que
+   `lista.js` ya vivía aparte. */
+export { parsearPalabras, MIN_LARGO, MAX_PALABRAS } from './palabras.js';
+import { parsearPalabras, barajar } from './palabras.js';
 
 const k = (f, c) => `${f},${c}`;
 

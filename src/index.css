@@ -48,6 +48,9 @@
      palabras van resaltadas. Ocultar por visibilidad no vale —se llevaría la
      letra, que sí tiene que imprimirse— así que se le devuelve el papel. */
   .gh-hoja .gh-solucion-fondo { background: #fff !important; }
+  /* Y lo que el curso encontró resolviéndola proyectada tampoco: la hoja que se
+     reparte sale limpia, se haya resuelto antes en pantalla o no. */
+  .gh-hoja .gh-hallada { text-decoration: none !important; }
   .gh-no-print { display: none !important; }
   @page { margin: 12mm; }
 }

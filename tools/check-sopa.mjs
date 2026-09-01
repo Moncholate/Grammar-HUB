@@ -19,7 +19,7 @@
         resuelve mirando la textura, sin leer una letra.
 
    Correr:  node tools/check-sopa.mjs        (desde Grammar HUB/) */
-import { generar, ladoPara, NIVELES, DIRECCIONES, casillasDe, MAX_LADO } from '../src/sopa.js';
+import { generar, ladoPara, NIVELES, DIRECCIONES, casillasDe, MAX_LADO, segmentoEntre, palabraEntre } from '../src/sopa.js';
 import { parsearPalabras } from '../src/palabras.js';
 
 let problemas = 0;
@@ -40,6 +40,9 @@ const LISTAS = {
 const entradas = (l) => parsearPalabras(l.join('\n')).lista;
 const sopas = (lista, dif = 'media', veces = 60) =>
   Array.from({ length: veces }, (_, s) => generar({ palabras: entradas(lista), dificultad: dif, azar: azarFijo(s + 1) }));
+
+/** La firma de un conjunto de casillas, para compararlas de un vistazo. */
+const clave = (casillas) => casillas.map(c => `${c.fila},${c.col}`).join('|');
 
 /** Lee la palabra desde sus coordenadas, como la leería un alumno. */
 const leer = (sopa, p) => casillasDe(p).map(({ fila, col }) => sopa.celdas[fila]?.[col]).join('');
@@ -231,5 +234,83 @@ console.log('\nlos bordes no revientan');
   else fallo('una dificultad desconocida usó direcciones de más');
 }
 
+
+console.log('\nSE PUEDE RESOLVER A CLICS, Y TODA PALABRA PUESTA SE PUEDE ENCONTRAR');
+{
+  /* LA PRUEBA QUE IMPIDE EL PEOR FALLO: una palabra colocada que NO se pueda
+     marcar. Proyectando, eso es la clase entera señalando la pantalla mientras
+     la herramienta dice que no — y el profesor sin forma de demostrar que la
+     palabra está ahí. Se prueba marcando cada palabra por sus dos extremos, en
+     los dos sentidos, en todas las dificultades. */
+  let malas = 0, marcadas = 0;
+  for (const [nombre, lista] of Object.entries(LISTAS)) {
+    for (const dif of Object.keys(NIVELES)) {
+      for (const sopa of sopas(lista, dif, 15)) {
+        for (const p of sopa.colocadas) {
+          const cs = casillasDe(p);
+          const primera = cs[0], ultima = cs[cs.length - 1];
+          const alDerecho = palabraEntre(sopa, primera, ultima);
+          const alReves = palabraEntre(sopa, ultima, primera);
+          marcadas += 2;
+          if (alDerecho?.palabra !== p.palabra || alReves?.palabra !== p.palabra) {
+            fallo(`«${nombre}»/${dif}: ${p.palabra} está puesta pero no se puede marcar`);
+            malas++; break;
+          }
+        }
+        if (malas) break;
+      }
+      if (malas) break;
+    }
+    if (malas) break;
+  }
+  if (!malas) ok(`${marcadas} marcados en 180 sopas: toda palabra puesta se encuentra, y también al revés`);
+}
+
+console.log('\nuna selección que no es una palabra no cuela');
+{
+  const sopa = generar({ palabras: entradas(LISTAS.verbos), dificultad: "media", azar: azarFijo(5) });
+  const puestas = new Set(sopa.colocadas.map(p => clave(casillasDe(p))));
+
+  /* Se recorren MUCHOS pares al azar; los que no son una palabra puesta tienen
+     que devolver null, hayan formado o no algo que parezca una palabra. */
+  const rnd = azarFijo(77);
+  let falsos = 0, probados = 0;
+  for (let i = 0; i < 4000; i++) {
+    const a = { fila: Math.floor(rnd() * sopa.lado), col: Math.floor(rnd() * sopa.lado) };
+    const b = { fila: Math.floor(rnd() * sopa.lado), col: Math.floor(rnd() * sopa.lado) };
+    const seg = segmentoEntre(a, b);
+    if (!seg) continue;
+    probados++;
+    const esPuesta = puestas.has(clave(seg)) || puestas.has(clave([...seg].reverse()));
+    const dio = palabraEntre(sopa, a, b);
+    if (!!dio !== esPuesta) { falsos++; break; }
+  }
+  if (falsos) fallo("una selección que no es una palabra puesta se dio por buena (o al revés)");
+  else ok(`${probados} selecciones al azar: solo aceptan las palabras que están puestas de verdad`);
+}
+
+console.log('\nsolo se aceptan selecciones que un lápiz podría trazar');
+{
+  const casos = [
+    [{ fila: 2, col: 2 }, { fila: 2, col: 6 }, 5, "horizontal"],
+    [{ fila: 2, col: 2 }, { fila: 6, col: 2 }, 5, "vertical"],
+    [{ fila: 2, col: 2 }, { fila: 5, col: 5 }, 4, "diagonal exacta"],
+    [{ fila: 5, col: 5 }, { fila: 2, col: 2 }, 4, "diagonal al revés"],
+    [{ fila: 2, col: 2 }, { fila: 4, col: 7 }, null, "diagonal torcida"],
+    [{ fila: 3, col: 3 }, { fila: 3, col: 3 }, null, "la misma casilla dos veces"],
+    [null, { fila: 1, col: 1 }, null, "sin primer clic"],
+  ];
+  for (const [a, b, largo, que] of casos) {
+    const seg = segmentoEntre(a, b);
+    const dio = seg ? seg.length : null;
+    if (dio === largo) ok(`${que} → ${largo === null ? "no vale" : largo + " casillas"}`);
+    else fallo(`${que}: dio ${dio} y se esperaba ${largo}`);
+  }
+
+  /* Y que el segmento pase por casillas de verdad, no por medias casillas. */
+  const d = segmentoEntre({ fila: 0, col: 0 }, { fila: 3, col: 3 });
+  if (d.every((c, i) => c.fila === i && c.col === i)) ok("la diagonal pasa por las casillas enteras, una a una");
+  else fallo("la diagonal se salta casillas");
+}
 console.log(problemas ? `\n✗ ${problemas} problema(s)` : '\nSOPA DE LETRAS OK');
 process.exit(problemas ? 1 : 0);

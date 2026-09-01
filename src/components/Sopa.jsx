@@ -9,6 +9,16 @@
    reconstruirla. La misma lista sirve para Básico I y para Intermedio según
    dónde se ponga esa perilla. El porqué está en `../sopa.js`.
 
+   SE RESUELVE PROYECTADA, A CLICS. Clic en la primera letra y clic en la
+   última: la palabra queda marcada y se tacha de la lista. No se arrastra —
+   proyectando, el profesor maneja el ratón desde el computador y arrastrar en
+   diagonal sobre una cuadrícula es lo que no sale a la primera delante de todo
+   el curso—. Dos clics no fallan, y en una pizarra táctil funcionan igual.
+
+   Lo encontrado va en VERDE y la solución del profesor en índigo: son dos cosas
+   distintas —lo que el curso ya sacó y lo que falta por sacar— y verlas del
+   mismo color al corregir no diría nada.
+
    DOS SALIDAS, LAS MISMAS QUE EL CRUCIGRAMA:
 
      · PROYECTADA se busca entre todos y se van cantando; «ver las respuestas»
@@ -25,7 +35,7 @@
    ========================================================================== */
 import React, { useState } from 'react';
 import { parsearPalabras, MAX_PALABRAS } from '../palabras';
-import { generar, casillasDe, NIVELES } from '../sopa';
+import { generar, casillasDe, palabraEntre, NIVELES } from '../sopa';
 import { ACCION, APAGADO, opcion, ENLACE } from '../ui';
 
 /* La cuadrícula es PAPEL, y va fija en los dos temas — como la del crucigrama y
@@ -35,7 +45,9 @@ import { ACCION, APAGADO, opcion, ENLACE } from '../ui';
 const PAPEL = '#ffffff';
 const TRAZO = '#334155';
 const LETRA = '#1e293b';
-const MARCA = '#c7d2fe';   /* el resaltado de la solución, sobre el papel */
+const MARCA = '#c7d2fe';   /* la solución del profesor, índigo claro */
+const HALLADA = '#bbf7d0';  /* lo que el curso ya encontró, verde claro */
+const ANCLA = '#fde68a';    /* la primera letra elegida, esperando la segunda */
 
 const Sopa = ({ lang = 'es', grande = false }) => {
   const es = lang === 'es';
@@ -44,6 +56,11 @@ const Sopa = ({ lang = 'es', grande = false }) => {
   const [sopa, setSopa] = useState(null);
   const [descartes, setDescartes] = useState([]);
   const [respuestas, setRespuestas] = useState(false);
+  /* Lo que el curso ha ido encontrando, y la primera casilla de la selección en
+     curso. Nada de esto se guarda: muere con la pestaña, como todo aquí. */
+  const [halladas, setHalladas] = useState(() => new Set());
+  const [ancla, setAncla] = useState(null);
+  const [fallo, setFallo] = useState(false);
 
   const { lista, fuera } = parsearPalabras(texto);
 
@@ -51,6 +68,22 @@ const Sopa = ({ lang = 'es', grande = false }) => {
     setSopa(generar({ palabras: lista, dificultad: dif }));
     setDescartes(fuera);
     setRespuestas(false);
+    setHalladas(new Set());
+    setAncla(null);
+    setFallo(false);
+  };
+
+  /* CLIC EN LA PRIMERA LETRA, CLIC EN LA ÚLTIMA. El primero deja el ancla; el
+     segundo cierra la selección y se comprueba. Tocar la misma casilla otra vez
+     cancela: es lo que hace todo el mundo cuando se equivoca al empezar. */
+  const tocar = (fila, col) => {
+    setFallo(false);
+    if (!ancla) { setAncla({ fila, col }); return; }
+    if (ancla.fila === fila && ancla.col === col) { setAncla(null); return; }
+    const p = palabraEntre(sopa, ancla, { fila, col });
+    setAncla(null);
+    if (p) setHalladas(h => new Set([...h, p.palabra]));
+    else setFallo(true);   // no había palabra ahí, y se dice sin castigar a nadie
   };
 
   const NIVEL = [
@@ -67,6 +100,12 @@ const Sopa = ({ lang = 'es', grande = false }) => {
   const marcadas = new Set(
     sopa ? sopa.colocadas.flatMap(p => casillasDe(p).map(({ fila, col }) => `${fila},${col}`)) : []
   );
+  /* Las casillas de lo que el curso YA encontró, aparte de la solución del
+     profesor: son dos cosas distintas y se pintan distinto. */
+  const halladas_celdas = new Set(
+    sopa ? sopa.colocadas.filter(p => halladas.has(p.palabra))
+             .flatMap(p => casillasDe(p).map(({ fila, col }) => `${fila},${col}`)) : []
+  );
 
   return (
     <section className={grande ? 'w-full' : 'w-full max-w-xl mx-auto'}>
@@ -74,8 +113,8 @@ const Sopa = ({ lang = 'es', grande = false }) => {
         <>
           <h2 className="text-lg font-bold text-slate-900 mb-1 gh-no-print">{es ? 'Sopa de letras' : 'Word search'}</h2>
           <p className="text-sm text-muted mb-4 gh-no-print">
-            {es ? 'Pega las palabras de la clase, una por línea, y sale una sopa. Se proyecta o se imprime. No guarda nada.'
-                : 'Paste the words from today’s lesson, one per line, and out comes a word search. Project it or print it. Nothing is stored.'}
+            {es ? 'Pega las palabras de la clase, una por línea. Proyectada se resuelve a clics —primera letra y última—, o se imprime para repartir. No guarda nada.'
+                : 'Paste the words from today’s lesson, one per line. Projected, it is solved by clicking — first letter, then last — or printed to hand out. Nothing is stored.'}
           </p>
         </>
       )}
@@ -129,21 +168,30 @@ const Sopa = ({ lang = 'es', grande = false }) => {
             <div className="overflow-x-auto">
               <div className="mx-auto grid w-max" style={{ gridTemplateColumns: `repeat(${sopa.lado}, ${lado})` }}>
                 {sopa.celdas.map((fila, f) => fila.map((letra, c) => {
-                  const dentro = respuestas && marcadas.has(`${f},${c}`);
+                  const enSolucion = respuestas && marcadas.has(`${f},${c}`);
+                  const encontrada = halladas_celdas.has(`${f},${c}`);
+                  const esAncla = ancla && ancla.fila === f && ancla.col === c;
+                  /* El orden importa: el ancla manda sobre lo encontrado y lo
+                     encontrado sobre la solución, porque es lo que se acaba de
+                     tocar y lo que el curso consiguió. */
+                  const fondo = esAncla ? ANCLA : encontrada ? HALLADA : enSolucion ? MARCA : PAPEL;
                   return (
-                    <div
+                    <button
                       key={`${f},${c}`}
-                      className={dentro ? 'gh-solucion-fondo flex items-center justify-center font-bold' : 'flex items-center justify-center font-bold'}
+                      onClick={() => tocar(f, c)}
+                      aria-label={`${letra}, ${es ? 'fila' : 'row'} ${f + 1}, ${es ? 'columna' : 'column'} ${c + 1}`}
+                      aria-pressed={esAncla || encontrada}
+                      className={`gh-celda flex items-center justify-center font-bold ${(encontrada || enSolucion) ? 'gh-solucion-fondo' : ''}`}
                       style={{
                         width: lado, height: lado,
-                        background: dentro ? MARCA : PAPEL,
+                        background: fondo,
                         border: `1px solid ${TRAZO}`,
                         color: LETRA,
                         fontSize: `calc(${lado} * 0.55)`,
                       }}
                     >
                       {letra}
-                    </div>
+                    </button>
                   );
                 }))}
               </div>
@@ -153,10 +201,26 @@ const Sopa = ({ lang = 'es', grande = false }) => {
                 sus espacios—: nadie quiere leer «ICECREAM» en la lista. */}
             <ul className={`mt-4 flex flex-wrap justify-center gap-x-5 gap-y-1 ${grande ? 'max-w-5xl mx-auto' : ''}`}>
               {sopa.colocadas.map(p => (
-                <li key={p.palabra} className="text-sm font-semibold text-slate-800">{p.original}</li>
+                <li key={p.palabra}
+                    className={`text-sm font-semibold ${halladas.has(p.palabra)
+                      ? 'gh-hallada text-emerald-700 line-through decoration-2'
+                      : 'text-slate-800'}`}>
+                  {p.original}
+                </li>
               ))}
             </ul>
           </div>
+
+          {/* EL MARCADOR, fuera de la hoja: es del momento de resolverla en clase,
+              no de la hoja que se reparte. */}
+          <p className="gh-no-print text-center text-sm font-bold text-slate-900" aria-live="polite">
+            {halladas.size === sopa.colocadas.length && sopa.colocadas.length > 0
+              ? (es ? '¡Están todas!' : 'All of them!')
+              : (es ? `${halladas.size} de ${sopa.colocadas.length} encontradas`
+                    : `${halladas.size} of ${sopa.colocadas.length} found`)}
+            {ancla && <span className="ml-2 font-normal text-muted">{es ? '· ahora la última letra' : '· now the last letter'}</span>}
+            {fallo && <span className="ml-2 font-normal text-amber-800">{es ? '· ahí no hay ninguna, prueba otra vez' : '· nothing there, try again'}</span>}
+          </p>
 
           {(sopa.fuera.length > 0 || descartes.length > 0) && (
             <p className="gh-no-print text-xs text-amber-900 bg-amber-50 border border-amber-200 rounded-lg px-2.5 py-2">
@@ -168,7 +232,12 @@ const Sopa = ({ lang = 'es', grande = false }) => {
           )}
 
           <div className="gh-no-print flex flex-wrap gap-2">
-            <button onClick={() => armar()} className={`flex-1 ${APAGADO}`}>{es ? 'Otra vez' : 'Again'}</button>
+            {halladas.size > 0 && (
+              <button onClick={() => { setHalladas(new Set()); setAncla(null); setFallo(false); }} className={`flex-1 ${APAGADO}`}>
+                {es ? 'Empezar de nuevo' : 'Start over'}
+              </button>
+            )}
+            <button onClick={() => armar()} className={`flex-1 ${APAGADO}`}>{es ? 'Otra sopa' : 'New grid'}</button>
             <button onClick={() => setRespuestas(v => !v)} aria-pressed={respuestas} className={`flex-1 ${APAGADO}`}>
               {respuestas ? (es ? 'Ocultar respuestas' : 'Hide answers') : (es ? 'Ver las respuestas' : 'Show answers')}
             </button>

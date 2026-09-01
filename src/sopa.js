@@ -34,6 +34,22 @@
    frecuencia real. La sopa queda pareja y hay que leerla.
 
    ────────────────────────────────────────────────────────────────────────────
+   Y SE PUEDE RESOLVER PROYECTADA
+   ────────────────────────────────────────────────────────────────────────────
+   Clic en la primera letra, clic en la última. NO se arrastra: proyectando, el
+   profesor maneja el ratón desde el computador y arrastrar en diagonal sobre una
+   cuadrícula es justo lo que no sale a la primera delante de todo el curso. Dos
+   clics no fallan, y en una pizarra táctil funcionan igual.
+
+   SE COMPRUEBA CONTRA DÓNDE ESTÁ PUESTA LA PALABRA, no contra si las letras
+   deletrean algo de la lista. Con veinte palabras y relleno sacado de sus mismas
+   letras, tarde o temprano «PLUM» aparece por accidente en otro sitio; darlo por
+   bueno dejaría la palabra de verdad sin encontrar y la lista sin tachar.
+
+   Y VALE AL DERECHO Y AL REVÉS: quien ve la palabra empezando por el final la
+   marca desde ahí, y no hay ningún motivo para castigarlo.
+
+   ────────────────────────────────────────────────────────────────────────────
    Este archivo es PURO —ni React ni DOM— para poder probarlo:
    `tools/check-sopa.mjs`. El lector de la lista está en `palabras.js`.
    ========================================================================== */
@@ -178,3 +194,39 @@ export const casillasDe = (p) =>
     fila: p.fila + p.df * i,
     col: p.col + p.dc * i,
   }));
+
+/**
+ * Las casillas entre dos, si están en línea recta en una de las ocho
+ * direcciones. Si no —un salto de caballo, o la misma casilla dos veces—,
+ * devuelve `null`: no es una selección posible en una sopa.
+ */
+export const segmentoEntre = (a, b) => {
+  if (!a || !b) return null;
+  const df = Math.sign(b.fila - a.fila);
+  const dc = Math.sign(b.col - a.col);
+  const altoF = Math.abs(b.fila - a.fila);
+  const anchoC = Math.abs(b.col - a.col);
+  /* Recta solo si es horizontal, vertical, o diagonal EXACTA: una diagonal
+     torcida no pasa por casillas enteras y no se puede marcar. */
+  if (altoF && anchoC && altoF !== anchoC) return null;
+  const largo = Math.max(altoF, anchoC) + 1;
+  if (largo < 2) return null;
+  return Array.from({ length: largo }, (_, i) => ({ fila: a.fila + df * i, col: a.col + dc * i }));
+};
+
+const clave = (casillas) => casillas.map(c => `${c.fila},${c.col}`).join('|');
+
+/**
+ * Qué palabra colocada ocupa EXACTAMENTE el segmento entre dos casillas, en
+ * cualquiera de los dos sentidos. `null` si ahí no hay ninguna.
+ */
+export const palabraEntre = (sopa, a, b) => {
+  const seg = segmentoEntre(a, b);
+  if (!seg || !sopa?.colocadas) return null;
+  const k = clave(seg);
+  const kAlReves = clave([...seg].reverse());
+  return sopa.colocadas.find(p => {
+    const suya = clave(casillasDe(p));
+    return suya === k || suya === kAlReves;
+  }) || null;
+};

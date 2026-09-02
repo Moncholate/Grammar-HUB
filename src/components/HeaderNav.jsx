@@ -33,7 +33,16 @@ export function ThemeToggle({ lang = 'es', compacto = false }) {
       aria-label={etiqueta}
     >
       <span className="text-base leading-none">{THEME_ICON[target]}</span>
-      <span>{THEME_NAME[lang][target]}</span>
+      {/* EL RÓTULO SE VA EN TELÉFONO, como ya hacían las otras tres apps. Este
+          era el único que lo llevaba a cualquier ancho, y desde que la barra
+          del iframe junta el «← Hub», la marca de la app y el tema en una sola
+          fila, era lo que más sitio le quitaba al nombre —que es lo que se
+          trunca cuando falta espacio—.
+          El icono se queda porque él solo ya dice a qué modo se va: sol para
+          claro, luna para oscuro. Y el `title` y el `aria-label` siguen
+          diciendo la acción entera, así que no se pierde para quien navega con
+          lector de pantalla ni para quien pasa el ratón. */}
+      <span className="hidden sm:inline">{THEME_NAME[lang][target]}</span>
     </button>
   );
 }

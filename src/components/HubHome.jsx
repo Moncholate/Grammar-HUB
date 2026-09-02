@@ -119,19 +119,47 @@ const HubHome = ({ lang, level, setLevel, onPhraseOpenChange, onAppOpenChange, o
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
-        {/* Barra del iframe. El botón dice a DÓNDE va, no «Volver»: dentro de
-            la app hay sus propios «atrás» y el genérico se llevaba los clics
-            que iban dirigidos a ellos. Y el tema vive acá mientras la app está
-            embebida, para descargar su cabecera en celular. */}
-        <div className="px-4 py-3 border-b border-slate-100 flex-shrink-0 flex items-center justify-between gap-2">
-          <button
-            onClick={() => setSelectedApp(null)}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium text-slate-600 bg-slate-100 active:bg-slate-200 transition-colors touch-manipulation"
-            style={{ WebkitTapHighlightColor: 'transparent' }}
-          >
-            <ArrowLeft size={16} />
-            {t.backToHub}
-          </button>
+        {/* LA ÚNICA BARRA MIENTRAS LA APP ESTÁ EMBEBIDA.
+            ────────────────────────────────────────────────────────────────
+            Antes eran DOS, apiladas: esta —del hub, por fuera del iframe— con
+            el «← Hub» y el tema, y debajo la cabecera propia de la app, por
+            dentro, con su logo, su nombre, su bajada y OTRO botón de tema
+            apuntando al mismo estado. Entre las dos se comían más de cien
+            píxeles de alto en todas las pantallas, y en un teléfono eso es
+            media pantalla antes de que empiece la app. Lo vio el profesor.
+
+            Ahora la identidad vive aquí, que es donde ya estaba el dato: el
+            logo y el nombre de cada app están en `apps`, arriba en este mismo
+            archivo, y no hubo que traer nada nuevo. Cada app deja de pintar su
+            cabecera cuando está embebida (`fromHub`), así que esta fila es
+            todo el marco: de dónde vuelvo, en qué estoy, y el tema.
+
+            EL «← HUB» SE QUEDA FUERA DEL IFRAME a propósito, y no es un detalle
+            de maquetación: es la salida. Si la app de dentro no carga o se
+            rompe, este botón sigue vivo porque no depende de ella. Y dice a
+            DÓNDE va, no «Volver»: dentro de las apps hay sus propios «atrás» y
+            el genérico se llevaba los clics que iban dirigidos a ellos. */}
+        <div className="px-4 py-2 border-b border-slate-100 flex-shrink-0 flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2.5 min-w-0">
+            <button
+              onClick={() => setSelectedApp(null)}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium text-slate-600 bg-slate-100 active:bg-slate-200 transition-colors touch-manipulation shrink-0"
+              style={{ WebkitTapHighlightColor: 'transparent' }}
+            >
+              <ArrowLeft size={16} />
+              {t.backToHub}
+            </button>
+            {/* La marca de la app abierta. `min-w-0` + `truncate`: en un
+                teléfono angosto cede el nombre antes que el botón de volver o
+                el de tema, que son los que hay que poder tocar. */}
+            <img
+              src={currentApp.logo}
+              alt=""
+              aria-hidden="true"
+              className="w-7 h-7 rounded-[22%] shrink-0"
+            />
+            <span className="font-bold text-slate-800 truncate">{currentApp.title}</span>
+          </div>
           <ThemeToggle lang={lang} compacto />
         </div>
 

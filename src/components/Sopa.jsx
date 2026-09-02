@@ -359,11 +359,21 @@ const Sopa = ({ lang = 'es', grande = false }) => {
             </div>
 
             {/* LA LISTA DE PALABRAS A BUSCAR. Va en el original —con sus tildes y
-                sus espacios—: nadie quiere leer «ICECREAM» en la lista. */}
-            <ul className={`mt-4 flex flex-wrap justify-center gap-x-5 gap-y-1 ${grande ? 'max-w-5xl mx-auto' : ''}`}>
+                sus espacios—: nadie quiere leer «ICECREAM» en la lista.
+
+                IBA FIJA EN 14PX EN LOS DOS MODOS: en el teléfono, en la mano,
+                se lee bien; proyectada desde el fondo de la sala, no — y es el
+                contenido que el curso está buscando, no un pie de página.
+                `clamp()` para que crezca con la pantalla de verdad y no solo
+                con un número de Tailwind más grande, que en un computador
+                sigue siendo chico. Mismo truco que el lado de la casilla. */}
+            <ul
+              className={`mt-4 flex flex-wrap justify-center gap-x-5 gap-y-1 ${grande ? 'max-w-5xl mx-auto' : ''}`}
+              style={{ fontSize: grande ? 'clamp(1.25rem, 2.2vw, 2.5rem)' : undefined }}
+            >
               {sopa.colocadas.map(p => (
                 <li key={p.palabra}
-                    className={`text-sm font-semibold ${halladas.has(p.palabra)
+                    className={`font-semibold ${grande ? '' : 'text-sm'} ${halladas.has(p.palabra)
                       ? 'gh-hallada text-emerald-700 line-through decoration-2'
                       : 'text-slate-800'}`}>
                   {p.original}
@@ -373,8 +383,12 @@ const Sopa = ({ lang = 'es', grande = false }) => {
           </div>
 
           {/* EL MARCADOR, fuera de la hoja: es del momento de resolverla en clase,
-              no de la hoja que se reparte. */}
-          <p className="gh-no-print text-center text-sm font-bold text-slate-900" aria-live="polite">
+              no de la hoja que se reparte. Mismo motivo que la lista de arriba. */}
+          <p
+            className={`gh-no-print text-center font-bold text-slate-900 ${grande ? '' : 'text-sm'}`}
+            style={{ fontSize: grande ? 'clamp(1.1rem, 1.8vw, 2rem)' : undefined }}
+            aria-live="polite"
+          >
             {halladas.size === sopa.colocadas.length && sopa.colocadas.length > 0
               ? (es ? '¡Están todas!' : 'All of them!')
               : (es ? `${halladas.size} de ${sopa.colocadas.length} encontradas`

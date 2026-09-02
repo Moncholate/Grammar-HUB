@@ -154,9 +154,19 @@ const Crucigrama = ({ lang = 'es', grande = false }) => {
         <h3 className="text-sm font-bold uppercase tracking-wider text-muted mb-2">{titulo}</h3>
         {/* LAS PISTAS SE LEEN DESDE LEJOS. Iban a 12px, que es tamaño de nota al
             pie: proyectadas desde el fondo de la sala no se leen, y son el
-            contenido de la actividad, no su letra pequeña. En pantalla completa
-            crecen otra vez, porque ahí la sala es más grande todavía. */}
-        <ol className={`space-y-1.5 ${grande ? 'text-xl' : 'text-base'}`}>
+            contenido de la actividad, no su letra pequeña.
+
+            EN PANTALLA COMPLETA NO BASTA CON UN TAMAÑO FIJO MÁS GRANDE. Un
+            `text-xl` (20px) se ve bien en el teléfono —ahí 20px es mucho— pero
+            en un computador proyectado 20px sigue siendo nada: no crece con la
+            pantalla. `clamp()` sí: crece con el ancho de VERDAD, con un piso
+            para que no encoja de más y un techo para que no desborde la
+            columna, que aquí es angosta —dos listas lado a lado—. Mismo truco
+            que ya usa el lado de la casilla, un poco más abajo. */}
+        <ol
+          className={`space-y-1.5 ${grande ? '' : 'text-base'}`}
+          style={{ fontSize: grande ? 'clamp(1.25rem, 2vw, 2.5rem)' : undefined }}
+        >
           {items.map(p => (
             /* CADA PISTA ES UN BOTÓN, y es el camino accesible de lo mismo que
                hace el número en la cuadrícula: destapar ESA palabra. La

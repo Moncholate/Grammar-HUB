@@ -1,6 +1,13 @@
 import { useState, useEffect } from 'react';
+import { Sun, Moon } from 'lucide-react';
 
-const THEME_ICON = { light: '☀️', dark: '🌙' };
+/* ICONO DE LÍNEA, NO EMOJI. Era ☀️/🌙 y en la barra del iframe quedó siendo el
+   único emoji al lado de la marca de la app: un dibujo con color y volumen,
+   hecho por el sistema operativo, junto a controles que ya no lo son. Con
+   lucide comparte grosor, caja y `currentColor` con el resto de la suite —los
+   mismos iconos que las tres barras de navegación— y además se tiñe con el
+   botón en vez de quedarse de su color de emoji pase lo que pase. */
+const THEME_ICON = { light: Sun, dark: Moon };
 const THEME_NAME = { es: { light: 'Claro', dark: 'Oscuro' }, en: { light: 'Light', dark: 'Dark' } };
 
 /* El toggle de tema, exportado aparte: además de la cabecera del Hub lo usa la
@@ -32,7 +39,7 @@ export function ThemeToggle({ lang = 'es', compacto = false }) {
       title={etiqueta}
       aria-label={etiqueta}
     >
-      <span className="text-base leading-none">{THEME_ICON[target]}</span>
+      {(() => { const Icono = THEME_ICON[target]; return <Icono className="w-4 h-4 shrink-0" strokeWidth={2} aria-hidden="true" />; })()}
       {/* EL RÓTULO SE VA EN TELÉFONO, como ya hacían las otras tres apps. Este
           era el único que lo llevaba a cualquier ancho, y desde que la barra
           del iframe junta el «← Hub», la marca de la app y el tema en una sola

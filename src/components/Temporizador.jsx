@@ -77,12 +77,26 @@ const Temporizador = ({ lang = 'es', grande = false }) => {
 
   const pausar = () => { clearInterval(tick.current); setCorriendo(false); };
   const reiniciar = () => { clearInterval(tick.current); setCorriendo(false); setRestante(total); };
-  const poner = (minutos) => {
+
+  /* EL RELOJ SIEMPRE GUARDÓ SEGUNDOS POR DENTRO — `total` ya estaba en
+     segundos, `poner(minutos)` solo multiplicaba por 60 antes de guardarlos.
+     Lo que faltaba no era soporte a segundos, era una FORMA de pedirlos: el
+     único campo libre era «otro ___ min», con piso de 1 minuto. El profesor
+     probó 30 segundos en clase y el piso se lo impedía: no había ningún
+     control que bajara de 60. */
+  const aplicar = (segundos) => {
     clearInterval(tick.current);
     setCorriendo(false);
-    const s = Math.max(1, Math.round(minutos * 60));
+    const s = Math.max(1, Math.min(5400, Math.round(segundos)));   // 1 s a 90 min
     setTotal(s);
     setRestante(s);
+  };
+  const minRef = useRef(null);
+  const segRef = useRef(null);
+  const aplicarOtro = () => {
+    const m = Number(minRef.current?.value) || 0;
+    const s = Number(segRef.current?.value) || 0;
+    aplicar(m * 60 + s);
   };
 
   const estado = estadoReloj(restante);
@@ -100,22 +114,37 @@ const Temporizador = ({ lang = 'es', grande = false }) => {
         {PRESETS.map(m => (
           <button
             key={m}
-            onClick={() => poner(m)}
+            onClick={() => aplicar(m * 60)}
             aria-pressed={total === m * 60}
             className={opcion(total === m * 60)}
           >
             {m} min
           </button>
         ))}
-        <label className="flex items-center gap-1.5 text-sm text-slate-600">
+        {/* «OTRO» EN DOS CAMPOS, NO UNO. Con un solo campo en minutos, 30
+            segundos no tenía forma de escribirse: el piso era 1 minuto. Min y
+            seg se leen juntos en `aplicarOtro` y se combinan en un solo total,
+            así que dejar el de minutos en blanco y poner «30» en segundos
+            alcanza exactamente lo que se pidió en clase. */}
+        <div className="flex items-center gap-1 text-sm text-slate-600">
           <span>{es ? 'otro' : 'other'}</span>
           <input
-            type="number" min="1" max="90"
-            onChange={(e) => poner(Math.max(1, Math.min(90, Number(e.target.value) || 1)))}
+            ref={minRef}
+            type="number" min="0" max="90" placeholder="0"
+            onChange={aplicarOtro}
             aria-label={es ? 'minutos' : 'minutes'}
             className={NUMERO}
           />
-        </label>
+          <span>{es ? 'min' : 'min'}</span>
+          <input
+            ref={segRef}
+            type="number" min="0" max="59" placeholder="0"
+            onChange={aplicarOtro}
+            aria-label={es ? 'segundos' : 'seconds'}
+            className={NUMERO}
+          />
+          <span>{es ? 'seg' : 'sec'}</span>
+        </div>
       </div>
 
       {/* El número, que es todo lo que hay que ver desde el fondo de la sala. */}

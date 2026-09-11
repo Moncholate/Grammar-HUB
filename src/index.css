@@ -71,8 +71,15 @@
 :root[data-theme="dark"] input,
 :root[data-theme="dark"] textarea,
 :root[data-theme="dark"] select { background-color: #141826 !important; color: #eceff8 !important; }
+/* #6c7488 daba 3,78:1 sobre #141826 y no pasaba AA (pide 4,5): no lo cazó
+   ningún campo hasta que el temporizador dejó un placeholder de un solo
+   carácter («0») visible en reposo, sin nada escrito encima. Los demás campos
+   de la suite casi siempre llevan texto o se miden con algo ya tecleado, así
+   que el placeholder solo no había quedado nunca a la vista de la sonda.
+   #828aa0 da 5,13:1, muy cerca de lo apagado que ya es el placeholder en modo
+   claro (4,76:1): mismo carácter visual, pasando AA con margen. */
 :root[data-theme="dark"] input::placeholder,
-:root[data-theme="dark"] textarea::placeholder { color: #6c7488 !important; }
+:root[data-theme="dark"] textarea::placeholder { color: #828aa0 !important; }
 :root[data-theme="dark"] .applogo { background-image: none !important; background-color: #1a1f2e !important; }
 :root[data-theme="dark"] .bg-\[\#f5f6fb\] { background-color: #0c0e15 !important; }
 :root[data-theme="dark"] .bg-gray-50, :root[data-theme="dark"] .bg-slate-50 { background-color: #1a1f2e !important; }

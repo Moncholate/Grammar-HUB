@@ -103,6 +103,10 @@
    abajo: sin el fondo, la tinta clara cae sobre el rosa claro y es peor.
    Los valores son los que Grammaster ya usa para su rosa, para que el mismo
    aviso no se vea de dos maneras según la app. */
+/* Las notas: aprobada en azul y reprobada en rojo, como se anotan a mano.
+   Los -700 sobre el fondo oscuro quedan bajo 3:1; los -400 pasan de 6:1. */
+:root[data-theme="dark"] .text-blue-700 { color: #60a5fa !important; }
+:root[data-theme="dark"] .text-red-700 { color: #f87171 !important; }
 :root[data-theme="dark"] .bg-rose-50 { background-color: #331520 !important; }
 :root[data-theme="dark"] .border-rose-200 { border-color: #572635 !important; }
 :root[data-theme="dark"] .bg-rose-50.text-rose-700,

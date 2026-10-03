@@ -50,6 +50,7 @@ import Duda from './Duda';
 import Apuesta from './Apuesta';
 import AntesAhora from './AntesAhora';
 import Muro from './Muro';
+import Notas from './Notas';
 import { CAPSULA, pestana } from '../ui';
 import { translations } from '../i18n';
 
@@ -153,6 +154,15 @@ const PanelDocente = ({ lang = 'es', nivel = null, onVolver }) => {
         { id: 'antes', rotulo: es ? 'Antes / Ahora' : 'Then / Now' },
       ],
     },
+    /* El tercer momento no es de la clase: es DESPUÉS, con la pila de pruebas.
+       Va último por eso, y aparte para que no se lea como una actividad más. */
+    {
+      id: 'corregir',
+      rotulo: es ? 'Corregir' : 'Marking',
+      items: [
+        { id: 'notas', rotulo: es ? 'Notas' : 'Grades' },
+      ],
+    },
   ];
 
   return (
@@ -230,6 +240,7 @@ const PanelDocente = ({ lang = 'es', nivel = null, onVolver }) => {
                     curso={presentes} origen={origen} onCargar={cargarCurso} onCambiarLista={cambiarLista} /></div>
         <div className={vista === 'antes' ? '' : 'hidden'}><AntesAhora lang={lang} grande={presentando}
                     curso={presentes} origen={origen} onCargar={cargarCurso} onCambiarLista={cambiarLista} /></div>
+        <div className={vista === 'notas' ? '' : 'hidden'}><Notas lang={lang} grande={presentando} /></div>
 
       </div>
       </div>

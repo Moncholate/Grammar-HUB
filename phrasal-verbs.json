@@ -31,7 +31,7 @@
   "$prepParticles": "Partículas que TAMBIÉN son preposiciones. Cuando una de estas encabeza un adverbial de tiempo o lugar («came in the morning», «went on holiday», «in 2020») la palabra es preposición, no partícula. Las partículas puramente adverbiales (up, down, off, out, back, away…) no tienen esa ambigüedad y por eso no están aquí.",
   "prepParticles": ["in", "on", "at", "into", "after", "to", "for"],
 
-  "$adverbialHeads": "Sustantivos que, justo detrás de una `prepParticle`, marcan la frase como adverbial y no como objeto del frasal. Deliberadamente CORTA: si crece, empieza a comerse objetos legítimos como «look at the board», «get on the bus» o «look after the kids». Un año de cuatro cifras cuenta igual, y eso va en el código.",
+  "$adverbialHeads": "Sustantivos que, justo detrás de una `prepParticle`, marcan la frase como adverbial y no como objeto del frasal. Deliberadamente CORTA: si crece, empieza a comerse objetos legítimos como «look at the board», «get on the bus» o «look after the kids». Un año de cuatro cifras cuenta igual, y eso va en el código. Los plurales de días y partes del día van escritos aparte («on Fridays», «in the mornings»), como ya iban «holidays» y «vacations»: son la forma de los hábitos, y sin ellos «Where do you eat on Fridays?» dejaba el lugar detrás del tiempo en Question Lab. No aumentan el riesgo de arriba: nada es objeto de un frasal en «on Mondays».",
 
   "$porQueSeparados": "Van en dos listas porque hay DOS preguntas distintas que responder con ellas. Para los frasales da igual de qué tipo sea el adverbial: cualquiera basta para que la partícula sea preposición, y ahí se usa la unión de las dos. Pero el orden de la respuesta modelo en Question Lab necesita saber si es de TIEMPO en concreto: el inglés ordena objeto, después lugar, después tiempo, y por eso «I ate at home today» va así y no «I ate today at home». Una sola lista no puede contestar las dos cosas, y dos listas sueltas se desincronizan.",
 
@@ -41,7 +41,10 @@
     "january", "february", "march", "april", "may", "june", "july",
     "august", "september", "october", "november", "december",
     "weekend", "week", "weekday", "holiday", "holidays", "vacation", "vacations",
-    "day", "summer", "winter", "spring", "autumn", "fall", "easter", "christmas"
+    "day", "summer", "winter", "spring", "autumn", "fall", "easter", "christmas",
+    "mornings", "afternoons", "evenings", "nights",
+    "mondays", "tuesdays", "wednesdays", "thursdays", "fridays", "saturdays", "sundays",
+    "weekends", "weekdays"
   ],
 
   "$adverbialHeadsOtros": "Ni de tiempo ni de lugar del todo: «at home» es lugar, «on time» y «on foot» son modo. Sirven para los frasales y NO para el orden lugar-tiempo, que es justo por lo que están aparte.",

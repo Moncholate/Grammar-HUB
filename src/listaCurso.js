@@ -127,14 +127,19 @@ export const leerHistorico = (texto, { fecha = null } = {}) => {
   if (!fClases || !fTomadas) return { error: ERRORES.sinFechas };
 
   const clases  = fClases.slice(c0).map(c => String(c).trim());
-  const tomadas = fTomadas.slice(c0).map(c => String(c).trim()).filter(Boolean);
-  if (!tomadas.length) return { error: ERRORES.sinListasTomadas };
+  /* POR POSICIÓN, CON HUECOS. Una clase en la que no se pasó lista deja su
+     celda de registro vacía, y las siguientes sí traen fecha. Compactar los
+     vacíos corría todo una columna: se leía la clase anterior y el curso salía
+     con presentes y ausentes cambiados. Cada celda se queda en su columna. */
+  const registro = fTomadas.slice(c0).map(c => String(c == null ? '' : c).trim());
+  const conLista = clases.map((_, k) => k).filter(k => registro[k]);
+  if (!conLista.length) return { error: ERRORES.sinListasTomadas };
 
-  let i = tomadas.length - 1;
+  let i = conLista[conLista.length - 1];
   if (fecha) {
     const j = clases.indexOf(String(fecha).trim());
     if (j < 0) return { error: ERRORES.fechaSinClase, fecha };
-    if (j >= tomadas.length) return { error: ERRORES.fechaSinLista, fecha };
+    if (!registro[j]) return { error: ERRORES.fechaSinLista, fecha };
     i = j;
   }
 
@@ -170,9 +175,9 @@ export const leerHistorico = (texto, { fecha = null } = {}) => {
     clase: i + 1,
     /* Para poder avisar «estás mirando el viernes pasado»: si el profesor pidió
        una fecha anterior, esta dice cuál es la última que hay. */
-    ultimaTomada: tomadas[tomadas.length - 1],
+    ultimaTomada: clases[conLista[conLista.length - 1]],
     /* Las fechas con lista pasada, por si se quiere ofrecer elegir otra. */
-    fechasTomadas: clases.slice(0, tomadas.length),
+    fechasTomadas: conLista.map(k => clases[k]),
     alumnos,
     presentes: alumnos.filter(a => a.presente),
     ausentes: alumnos.filter(a => !a.presente),

@@ -193,6 +193,25 @@ console.log('\naguanta que la plantilla cambie un poco');
   else fallo('se leyó por posición: una columna extra lo descuadró');
 }
 
+console.log('\nuna clase sin lista en medio no corre las columnas');
+{
+  /* Lo que pasó en clase: un día sin lista dejó su celda de registro vacía y
+     las clases siguientes sí la traían. Compactar los vacíos hacía leer la
+     clase anterior, con presentes y ausentes cambiados. Aquí la clase 3 queda
+     sin registro y la última leída tiene que seguir siendo la 10. */
+  const conHueco = armar().split('\n').map(l => {
+    if (!l.includes('Fecha Registro de Asistencia')) return l;
+    const c = l.split(T);
+    c[c.indexOf(CLASES[2])] = '';
+    return c.join(T);
+  }).join('\n');
+  const r = leerHistorico(conHueco);
+  igual(r.fecha, '31-08-26', 'sigue leyendo la última clase con lista, no la anterior');
+  igual(r.presentes.map(a => a.nombre), ['Carla', 'Dario', 'Felipe', 'Gabriela'], 'los presentes son los de ese día');
+  igual(r.fechasTomadas.length, TOMADAS - 1, 'la clase sin lista no se ofrece como fecha');
+  igual(leerHistorico(conHueco, { fecha: CLASES[2] }).error, ERRORES.fechaSinLista, 'pedir la clase sin lista lo dice');
+}
+
 console.log('\nse distingue un histórico de la lista de siempre');
 {
   if (pareceHistorico(PEGADO)) ok('reconoce el histórico');

@@ -3,44 +3,44 @@
   "short_name": "Grammar HUB",
   "description": "Plataforma integrada para aprender inglés. Construye oraciones y analiza partes de la oración.",
   "id": "/Grammar-HUB/",
-  "start_url": "/Grammar-HUB/",
-  "scope": "/Grammar-HUB/",
+  "start_url": "/grammar-hub/",
+  "scope": "/grammar-hub/",
   "display": "standalone",
   "orientation": "portrait-primary",
   "theme_color": "#1e40af",
   "background_color": "#ffffff",
   "icons": [
     {
-      "src": "/Grammar-HUB/favicon-96x96.png",
+      "src": "/grammar-hub/favicon-96x96.png",
       "sizes": "96x96",
       "type": "image/png"
     },
     {
-      "src": "/Grammar-HUB/web-app-manifest-192x192.png",
+      "src": "/grammar-hub/web-app-manifest-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/Grammar-HUB/web-app-manifest-512x512.png",
+      "src": "/grammar-hub/web-app-manifest-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/Grammar-HUB/maskable-192x192.png",
+      "src": "/grammar-hub/maskable-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "/Grammar-HUB/maskable-512x512.png",
+      "src": "/grammar-hub/maskable-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "/Grammar-HUB/apple-touch-icon.png",
+      "src": "/grammar-hub/apple-touch-icon.png",
       "sizes": "180x180",
       "type": "image/png",
       "purpose": "any"
@@ -50,7 +50,7 @@
   "related_applications": [
     {
       "platform": "webapp",
-      "url": "https://moncholate.github.io/Grammar-HUB/manifest.json"
+      "url": "https://moncholate.github.io/grammar-hub/manifest.json"
     }
   ]
 }

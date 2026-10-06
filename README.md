@@ -6,8 +6,8 @@ Una PWA (Progressive Web App) que funciona como hub de navegación para acceder 
 
 Grammar HUB es un **centro de acceso centralizado** a dos aplicaciones independientes:
 
-- **[Grammaster](https://moncholate.github.io/GramMaster/)** - Constructor interactivo de oraciones en inglés
-- **[DesGramatizador](https://moncholate.github.io/DesGramatizador/)** - Análisis automático de partes de la oración (POS)
+- **[Grammaster](https://moncholate.github.io/grammaster/)** - Constructor interactivo de oraciones en inglés
+- **[DesGramatizador](https://moncholate.github.io/desgramatizador/)** - Análisis automático de partes de la oración (POS)
 
 Cada app se abre en una nueva pestaña desde sus repositorios en GitHub Pages.
 
@@ -64,11 +64,11 @@ Las URLs de las aplicaciones están configuradas en `src/components/HubHome.jsx`
 ```javascript
 const apps = [
   {
-    url: 'https://moncholate.github.io/GramMaster/',
+    url: 'https://moncholate.github.io/grammaster/',
     // ...
   },
   {
-    url: 'https://moncholate.github.io/DesGramatizador/',
+    url: 'https://moncholate.github.io/desgramatizador/',
     // ...
   }
 ];

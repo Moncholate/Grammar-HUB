@@ -1,6 +1,6 @@
 const CACHE_VERSION = 'v2';
 const CACHE_NAME = `grammar-hub-${CACHE_VERSION}`;
-const BASE = '/Grammar-HUB/';
+const BASE = '/grammar-hub/';
 
 const urlsToCache = [
   BASE,

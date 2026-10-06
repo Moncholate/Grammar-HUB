@@ -44,12 +44,12 @@ Las URLs de las aplicaciones se encuentran en `src/components/HubHome.jsx`:
 const apps = [
   {
     title: 'Grammaster',
-    url: 'https://moncholate.github.io/GramMaster/',
+    url: 'https://moncholate.github.io/grammaster/',
     // ...
   },
   {
     title: 'DesGramatizador',
-    url: 'https://moncholate.github.io/DesGramatizador/',
+    url: 'https://moncholate.github.io/desgramatizador/',
     // ...
   }
 ];
